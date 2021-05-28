@@ -1,0 +1,142 @@
+.PrimaryCard {
+  width: 200px;
+  height: 350px;
+  cursor: pointer;
+
+}
+
+.SecondaryCard {
+  width: 100%;
+  height: 340px;
+  background-color: white;
+  transition: all 0.5s ease;
+
+}
+.ThirdCard {
+  height: 310px;
+  width: 100%;
+
+}
+.imageProduct {
+  height: 60%;
+  width: 100%;
+  position: relative;
+}
+.contentProduct {
+  height: 40%;
+  width: 100%;
+  padding-left: 12px;
+}
+.oldPrice {
+  font-size: 0.8rem;
+  text-decoration: line-through;
+  color: rgba(0, 0, 0, 0.5);
+}
+.titleCard {
+  transition: all 0.5s ease;
+  font-size: 1em;
+  margin: 0;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.PrimaryCard:hover .titleCard {
+  -webkit-line-clamp: 2;
+}
+.priceCard {
+  font-size: 1.2rem;
+  color: #4a00ff;
+  margin: 0;
+}
+.subPrice {
+  font-size: 0.7em;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+}
+.DecimalPrice {
+  font-size: 0.8rem;
+  color: #4a00ff;
+}
+
+.rating {
+  margin-top: .3rem;
+}
+.star {
+  color: #ffb000;
+  font-size: 1.2em;
+}
+.amountRating {
+  margin-left: 10px;
+  font-size: 0.9em;
+}
+
+
+@media screen and (min-width: 991px) {
+  .PrimaryCard:hover .SecondaryCard {
+    height: 350px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
+  }
+}
+/*
+*
+*   Mobile Config
+*
+*/
+
+@media screen and (max-width: 991px) {
+  .rating {
+    margin-top: 0.5em;
+  }
+  .titleCard {
+    -webkit-line-clamp: 2;
+  }
+  .PrimaryCard {
+    height: 360px;
+  }
+  .SecondaryCard {
+    height: 380px;
+  }
+  .ThirdCard {
+    height: 360px;
+  }
+
+}
+
+
+
+/*
+*
+* ===============  All classes =============
+*
+*/
+
+.BiggerWidth {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.BiggerHeight {
+  height: 100%;
+  width: auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+hr {
+  margin: 0;
+}
+
+
+/*
+*  Responsive cards
+*/
+
+@media screen and (max-width: 500px) {
+  .PrimaryCard {
+    width: 50%;
+  }
+}

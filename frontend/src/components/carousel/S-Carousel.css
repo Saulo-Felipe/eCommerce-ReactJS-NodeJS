@@ -1,0 +1,73 @@
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+.PrimaryCarousel {
+  position: relative;
+}
+
+.carouselStore {
+  display: -webkit-box;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  padding-right: 20px;
+  scroll-behavior: smooth;
+}
+.PrimaryCarousel:hover .prev-carousel {
+  opacity: 1;
+  left: -0.8%;
+}
+.PrimaryCarousel:hover .next-carousel {
+  opacity: 1;
+  left: 101%;
+}
+.carouselStore::-webkit-scrollbar {
+  display: none;
+}
+.endCarousel {
+  padding-left: .5rem;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.mov-carousel {
+  display: none;
+}
+@media screen and (min-width: 991px) {
+  .mov-carousel {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    text-align: center;
+    line-height: 50px;
+    z-index: 80;
+    box-shadow: 0 0 5px black;
+    border: none;
+    transition: all 0.5s ease;
+  }
+  .next-carousel {
+    left: 100%;
+    top: 50%;
+    opacity: 0;
+    transform: translate(-100%, -50%);
+  }
+
+  .prev-carousel {
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    left: 0;
+  }
+
+}
+@media screen and (max-width: 991px) {
+  .PrimaryCarousel {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}

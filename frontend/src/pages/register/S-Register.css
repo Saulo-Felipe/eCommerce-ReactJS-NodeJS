@@ -1,0 +1,15 @@
+.RegisterForm {
+  width: 50%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5%;
+  background-color: white;
+  padding: 30px;
+}
+
+@media screen and (max-width: 991px) {
+  .RegisterForm {
+    width: 100%;
+  }
+}

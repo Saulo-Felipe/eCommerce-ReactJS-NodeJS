@@ -1,0 +1,114 @@
+.item-category {
+  width: 150px;
+  height: 150px;
+  border-left: solid 1px rgba(1, 3, 1, 0.2);
+  border-top: solid 1px rgba(1, 3, 1, 0.2);
+  text-align: center;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+.item-category:hover {
+  background-color: #005890;
+}
+.item-category:hover .icon-category {
+  color: white;
+}
+.item-category:hover > .centralize-category > div {
+  color: white;
+}
+.icon-category {
+  font-size: 4em;
+  color: #005890;
+  line-height: 80px;
+}
+.centralize-category {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.big-card {
+  background-color: white;
+  border-radius: 10px;
+  margin-left: .5rem;
+}
+.second-big-card {
+  margin-left: 0;
+  margin-right: .5rem;
+}
+.card-part-text {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.align-card {
+  padding: 20px;
+  padding-left: 40px;
+  width: 60%;
+}
+.card-part-image {
+  width: 40%;
+  background-image: url('https://images.vexels.com/media/users/3/142890/isolated/preview/4ea2d7c4bf3cad23a4f18ee58752deb8-high-tech-rings-logo-by-vexels.png');
+  background-size: 270px;
+  background-position-y: -30px;
+  background-position-x: 70px;
+  background-repeat: no-repeat;
+}
+
+
+/*
+*
+* all classes
+*
+*/
+
+.left-radius {
+  border-bottom-left-radius: 10px;
+}
+.right-radius {
+  border-bottom-right-radius: 10px;
+}
+.border-top-left-radius {
+  border-top-left-radius: 10px;
+}
+.border-top-right-radius {
+  border-top-right-radius: 10px;
+}
+
+.w-70 {
+  width: 70%;
+}
+.w-29 {
+  width: 29%;
+}
+
+
+/*
+*   Moile configs
+*/
+
+@media screen and (max-width: 785px) {
+  .card-size {
+    width: 100%;
+  }
+  .item-category {
+    width: 50%;
+  }
+  .big-card {
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 0;
+  }
+  .align-card {
+    width: 75%;
+    padding-left: 20px;
+    padding-right: 0px;
+  }
+  .card-part-image {
+    width: 25%;
+    background-position-x: 0px;
+  }
+  .card-options-two {
+    margin-top: .5rem;
+  }
+}

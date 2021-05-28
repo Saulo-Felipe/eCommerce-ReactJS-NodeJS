@@ -1,0 +1,40 @@
+/*
+
+#467E84
+#08bbb7
+#212529
+
+*/
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+  background-image: none;
+  background-color: white;
+  color: #212529;
+  border-radius: 50%;
+  width: auto;
+  height: auto;
+  padding: 10px;
+  transition: all 0.5s;
+}
+@media screen and (min-width: 991px) {
+  .carousel-control-next-icon {
+    margin-right: 50%;
+    opacity: 0;
+  }
+  .carousel-control-prev-icon {
+    margin-left: 50%;
+    opacity: 0;
+  }
+  .carousel-control-next, .carousel-control-prev {
+    opacity: 1;
+  }
+  #carouselExampleIndicators:hover .carousel-control-prev-icon {
+    margin: 0;
+    opacity: 1;
+  }
+  #carouselExampleIndicators:hover .carousel-control-next-icon {
+    margin: 0;
+    opacity: 1;
+  }
+
+}

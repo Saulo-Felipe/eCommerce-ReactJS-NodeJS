@@ -1,0 +1,7 @@
+body {
+  background-color: rgba(139, 139, 139, 0.3);
+  overflow-x: hidden;
+}
+#root {
+  overflow-x: hidden;
+}

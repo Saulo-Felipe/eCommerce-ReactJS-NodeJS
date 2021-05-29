@@ -1,6 +1,6 @@
-import express from 'express'
+const express = require('express')
 const admin = express.Router()
-import { Product } from '../models/Product.js'
+const Product = require('../models/Product.js')
 
 
 admin.post('/new-product', async (request, response) => {
@@ -9,4 +9,4 @@ admin.post('/new-product', async (request, response) => {
   return response.json({produto})
 })
 
-export {admin}
+module.exports = admin

@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "type": "module",
   "scripts": {
-    "dev": "nodemon --experimental-json-modules src/index.js"
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",

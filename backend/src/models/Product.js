@@ -1,6 +1,5 @@
-import pkg from 'sequelize';
-const { Model, DataTypes } = pkg
-import { sequelize } from '../database/connect.js'
+const { Model, DataTypes } = require('sequelize')
+const sequelize = require('../database/connect.js')
 
 const Product = sequelize.define('Product', {
   Title: {
@@ -14,4 +13,4 @@ const Product = sequelize.define('Product', {
   tableName: 'products'
 })
 
-export { Product }
+module.exports = Product

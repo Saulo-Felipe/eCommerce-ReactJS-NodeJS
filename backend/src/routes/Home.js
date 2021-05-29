@@ -1,10 +1,10 @@
-import express from 'express'
+const express = require('express')
 const router = express.Router()
 
-import bcrypt from 'bcrypt'
+const bcrypt = require('bcrypt')
 
-import { User } from '../models/User.js'
-import { Product } from '../models/Product.js'
+const User = require('../models/User.js')
+const Product = require('../models/Product.js')
 
 
 router.get('/', async (request, response) => {
@@ -65,4 +65,4 @@ router.post("/teste", (request, response) => {
   return response.send({ message: "ok" })
 })
 
-export {router}
+module.exports = router

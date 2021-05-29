@@ -1,7 +1,6 @@
-import pkg from 'sequelize';
-const { Model, DataTypes } = pkg
+const { Model, DataTypes } = require('sequelize')
 
-import { sequelize } from '../database/connect.js'
+const sequelize = require('../database/connect.js')
 
 const User = sequelize.define('User', {
   name: {
@@ -18,4 +17,4 @@ const User = sequelize.define('User', {
 }
 )
 
-export { User }
+module.exports = User

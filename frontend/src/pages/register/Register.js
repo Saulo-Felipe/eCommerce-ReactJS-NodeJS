@@ -18,7 +18,7 @@ export default function Register() {
         alert("preencha todos os dados")
       } else {
         if (inputValue.password == inputValue.passwordTwo) {
-          await api.post('/new-user', inputValue)
+          await api.post('/register', inputValue)
           console.log("dados enviados")
         } else {
           alert("as senhas não estão iguais")

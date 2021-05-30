@@ -5,21 +5,34 @@ const cors = require('cors')
 const passport = require('passport')
 const session = require('express-session')
 
-require('./config/auth.js')(passport)
-
 const app = express()
+
+
+
+app.use(express.json())
+
+//Configs de sessão
+app.use(session({
+  secret: "dc1b859c6c5d92073cb0ec8cf9bdb6f6",
+  resave: true,
+  saveUninitialized: true
+}))
 
 app.use(cors())
 
-app.use(express.json())
-app.use(session({
-  secret: 'Programando todos os dias',
-  resave: true,
-  saveUninitialized: true,
 
-}))
-app.use('/', router)
-app.use('/admin', admin)
+
+//Middlewares
+    app.use((req, res, next) => {
+
+      // res.locals.user = req.user || null
+
+      next()
+    })
+
+//Routes
+  app.use('/', router)
+  app.use('/admin', admin)
 
 
 

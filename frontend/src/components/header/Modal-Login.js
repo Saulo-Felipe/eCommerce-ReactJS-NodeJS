@@ -3,22 +3,22 @@ import api from '../../services/api'
 
 export default function Modal() {
   const [login, setLogin] = useState({
-    email_login: null,
-    password_login: null
+    email: null,
+    password: null
   })
 
   function handleChangeInput(inputValue) {
     setLogin({
-      email_login: inputValue.target.id == "email_login" ? inputValue.target.value : login.email_login,
-      password_login: inputValue.target.id == "password_login" ? inputValue.target.value : login.password_login
+      email: inputValue.target.id == "email_login" ? inputValue.target.value : login.email,
+      password: inputValue.target.id == "password_login" ? inputValue.target.value : login.password
     })
   }
 
   async function handleSubmitForm() {
-    if (login.email_login == null || login.password_login == null)
+    if (login.email == null || login.email == null)
       alert("preencha todos os campos")
     else
-      if (login.email_login.length == 0 || login.password_login.length == 0)
+      if (login.email.length == 0 || login.password.length == 0)
         alert("preencha todos os dados")
       else
         await api.post("/login", login)

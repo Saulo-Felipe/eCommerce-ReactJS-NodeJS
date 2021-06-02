@@ -22,6 +22,7 @@ export default function Modal() {
         alert("preencha todos os dados")
       else
         await api.post("/login", login)
+
   }
 
 

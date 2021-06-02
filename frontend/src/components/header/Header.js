@@ -1,47 +1,63 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './S-Header.css'
 import { Link } from 'react-router-dom'
 import Modal from './Modal-Login'
 
 function Header() {
   useEffect(() => {
-    if (window.matchMedia("(min-width: 991px)").matches) {
+    // Verificar focus do input de pesquisa
+    document.querySelector(".input-search").addEventListener("focus", () => {
+      document.querySelector(".submit-search").style.borderColor = "gray"
+    })
+    document.querySelector(".input-search").addEventListener("blur", () => {
+      document.querySelector(".submit-search").style.borderColor = "#ced4da"
+    })
 
-      var primaryNavbar = document.querySelector(".primary-navbar")
-      var secondaryNavbar = document.querySelector(".navbar-secondary")
-      var menuBar = document.querySelector(".menuBar-desktop")
-      var body = document.querySelector("body")
+    if (window.matchMedia('(min-width: 991px)').matches) {
 
-      document.addEventListener("scroll", () => {
+      var primaryNavbar = document.querySelector('.primary-navbar')
+      var secondaryNavbar = document.querySelector('.navbar-secondary')
+      var menuBar = document.querySelector('.menuBar-desktop')
+      var body = document.querySelector('body')
 
+      document.addEventListener('scroll', () => {
         if (window.scrollY >= 300) {
-          menuBar.style.display = "list-item"
+          menuBar.style.display = 'list-item'
           primaryNavbar.classList.add('fixed-top')
           body.style.paddingTop = `${ primaryNavbar.getBoundingClientRect().height }px`
 
         } else {
-          menuBar.style.display = "none"
+          menuBar.style.display = 'none'
           primaryNavbar.classList.remove('fixed-top')
-          body.style.paddingTop = `0px`
+          body.style.paddingTop = '0px'
 
-          secondaryNavbar.classList.remove("fixed-top")
-          secondaryNavbar.style.marginTop = `0px`
+          secondaryNavbar.classList.remove('fixed-top')
+          secondaryNavbar.style.marginTop = '0px'
         }
       })
 
-      menuBar.addEventListener("click", () => {
-        if (secondaryNavbar.classList.contains("fixed-top")) {
+      menuBar.addEventListener('click', () => {
+        if (secondaryNavbar.classList.contains('fixed-top')) {
           body.style.paddingTop = `${primaryNavbar.getBoundingClientRect().height}px`
-          secondaryNavbar.classList.remove("fixed-top")
+          secondaryNavbar.classList.remove('fixed-top')
           secondaryNavbar.style.marginTop = `0px`
         } else {
           body.style.paddingTop = `${primaryNavbar.getBoundingClientRect().height + secondaryNavbar.getBoundingClientRect().height}px`
-          secondaryNavbar.classList.add("fixed-top")
+          secondaryNavbar.classList.add('fixed-top')
           secondaryNavbar.style.marginTop = `${primaryNavbar.getBoundingClientRect().height}px`
         }
       })
     }
+
   }, [])
+
+  const [search, setSearch] = useState()
+
+  function changedSearch(InputValueSearch) {
+    setSearch(InputValueSearch.target.value)
+  }
+
+  var input = document.querySelector('.input-search')
 
 
 
@@ -50,14 +66,14 @@ function Header() {
       <header>
         <nav className="navbar primary-navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
-            <a className="navbar-brand" href="/admin">LogoTipo</a>
+            <Link to="/" className="navbar-brand">LogoTipo</Link>
             <div className="d-flex flex-row item-mobile">
               <div className="" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="material-icons-outlined menu-mobile">
                   menu
                 </span>
               </div>
-              <span className="material-icons-outlined icon-user">
+              <span className="material-icons-outlined icon-user" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 person
               </span>
               <a href="/admin" className="cart-href">
@@ -68,12 +84,14 @@ function Header() {
               </a>
             </div>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-              <form className="d-flex form-search">
-                <input className="form-control input-search" type="search" placeholder="Pesquise por Categorias, produtos e etc..." aria-label="Search"/>
-                <button className="btn btn-outline-success submit-search" type="submit">
-                  <span className="material-icons">search</span>
-                </button>
-              </form>
+              <div className="d-flex form-search">
+                <input className="form-control input-search" type="search" placeholder="Pesquise por Categorias, produtos e etc..." aria-label="Search" onChange={changedSearch}/>
+                <Link to={`/search/`+`${search}`}>
+                  <button className="btn btn-outline-success submit-search">
+                    <span className="material-icons">search</span>
+                  </button>
+                </Link>
+              </div>
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li className="nav-item menuBar-desktop">
@@ -210,7 +228,7 @@ function Header() {
                 </li>
 
                 <li className="nav-item ms-2">
-                  <Link to="/admin" className="nav-link active color-hover">Dashboard (admin)</Link>
+                  <Link to="/admin/dashboard" className="nav-link active color-hover">Dashboard (admin)</Link>
                 </li>
 
               </ul>

@@ -1,0 +1,45 @@
+label {
+  display: block;
+}
+.inputValid:invalid {
+  border: solid 1px red;
+}
+.inputValid:valid {
+  border: solid 1px green;
+}
+input:focus, textarea:focus {
+  box-shadow: 0 0 0 0 transparent !important;
+  border-color:  gray !important;
+}
+.obs {
+  font-size: 0.8em;
+}
+
+.newProduct {
+  background-color: white;
+  width: 60%;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+@media screen and (max-width: 991px) {
+  .newProduct {
+    width: 100%;
+  }
+  .validation-form {
+    display: block !important;
+  }
+}
+.logo-form-AddProduct {
+  height: 30%;
+}
+.logo-form-AddProduct > img {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.form-controler {
+  height: 70%;
+}

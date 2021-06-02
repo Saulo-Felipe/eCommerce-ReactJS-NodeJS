@@ -1,5 +1,6 @@
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
+  /*Fui eu que modifiquei*/
 }
 .PrimaryCarousel {
   position: relative;
@@ -34,21 +35,23 @@ h1, h2, h3, h4, h5, h6 {
 
 .mov-carousel {
   display: none;
+  position: absolute;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  text-align: center;
+  line-height: 50px;
+  z-index: 80;
+  box-shadow: 0 0 5px black;
+  border: none;
+  transition: all 0.5s ease;
 }
+
+
 @media screen and (min-width: 991px) {
   .mov-carousel {
     display: block;
-    position: absolute;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    background-color: white;
-    text-align: center;
-    line-height: 50px;
-    z-index: 80;
-    box-shadow: 0 0 5px black;
-    border: none;
-    transition: all 0.5s ease;
   }
   .next-carousel {
     left: 100%;
@@ -65,9 +68,31 @@ h1, h2, h3, h4, h5, h6 {
   }
 
 }
-@media screen and (max-width: 991px) {
+
+@media screen and (max-width: 990px) {
   .PrimaryCarousel {
     padding-right: 0;
     padding-left: 0;
+  }
+  .mov-carousel {
+    display: block
+  }
+  .next-carousel {
+    left: 103%;
+    top: 50%;
+    opacity: 1;
+    transform: translate(-100%, -50%);
+  }
+
+  .prev-carousel {
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 1;
+    left: -3%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .mov-carousel {
+    display: none;
   }
 }

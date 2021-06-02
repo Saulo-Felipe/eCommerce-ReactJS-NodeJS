@@ -134,9 +134,14 @@ hr {
 /*
 *  Responsive cards
 */
-
 @media screen and (max-width: 500px) {
   .PrimaryCard {
     width: 50%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .PrimaryCard {
+    width: 60%;
   }
 }

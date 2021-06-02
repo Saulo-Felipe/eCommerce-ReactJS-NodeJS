@@ -4,10 +4,8 @@ import Home from './pages/home/Home'
 import AddProduct from './pages/admin/AddProduct/AddProduct'
 import Header from './components/header/Header'
 import Register from './pages/register/Register'
-
-function Teste() {
-  return <h1>Teste</h1>
-}
+import Dashboard from './pages/admin/dashboard/Dashboard'
+import Search from './pages/search/Search'
 
 function App() {
   return (
@@ -16,9 +14,10 @@ function App() {
         <Header/>
         <Switch>
           <Route path="/" component={Home} exact></Route>
-          <Route path="/admin/Dashboard" component={Teste}></Route>
-          <Route path="/register" component={Register}/>
+          <Route path="/admin/dashboard" component={Dashboard}></Route>
           <Route path="/admin/new-product" component={AddProduct}></Route>
+          <Route path="/register" component={Register}/>
+          <Route path="/search/:value" component={Search} />
         </Switch>
       </BrowserRouter>
     </>

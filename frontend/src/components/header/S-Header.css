@@ -21,11 +21,7 @@
   border-bottom-right-radius: 0px;
   border-right: none;
 }
-.input-search:focus, .submit-search:focus {
-  box-shadow: 0 0 0;
-  border-color: #ced4da;
-  outline: 0;
-}
+
 .submit-search {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;

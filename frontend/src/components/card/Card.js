@@ -21,6 +21,9 @@ export default function Card(props) {
     <div className="PrimaryCard ms-2">
       <div className="SecondaryCard">
         <div className="ThirdCard">
+        <div className="heartLike">
+          <span class="material-icons-outlined ">favorite_border</span>
+        </div>
 
           <div className="imageProduct">
             <img className="imgOriginal" src={notebook} />
@@ -28,8 +31,8 @@ export default function Card(props) {
           <hr/>
           <div className="contentProduct">
             <span className="oldPrice">R$ 1999</span>
-            <div className="titleCard">notebook link de marca boa com uma qualidade superior</div>
-            <div className="priceCard">R$ 9111.<span className="DecimalPrice">00</span></div>
+            <div className="titleCard">{props.title}</div>
+            <div className="priceCard">R$ {props.price}.<span className="DecimalPrice">00</span></div>
             <span className="subPrice">ou 10x de 24,90</span>
             <div className="d-flex flex-row rating">
               <div className="stars">

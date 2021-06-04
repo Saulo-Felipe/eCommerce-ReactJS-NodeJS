@@ -5,7 +5,6 @@ h1, h2, h3, h4, h5, h6 {
 .PrimaryCarousel {
   position: relative;
 }
-
 .carouselStore {
   display: -webkit-box;
   padding-top: 10px;
@@ -16,14 +15,6 @@ h1, h2, h3, h4, h5, h6 {
   padding-right: 20px;
   scroll-behavior: smooth;
 }
-.PrimaryCarousel:hover .prev-carousel {
-  opacity: 1;
-  left: -0.8%;
-}
-.PrimaryCarousel:hover .next-carousel {
-  opacity: 1;
-  left: 101%;
-}
 .carouselStore::-webkit-scrollbar {
   display: none;
 }
@@ -32,13 +23,12 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   box-sizing: border-box;
 }
-
 .mov-carousel {
-  display: none;
+  opacity: 0;
   position: absolute;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   background-color: white;
   text-align: center;
   line-height: 50px;
@@ -47,51 +37,34 @@ h1, h2, h3, h4, h5, h6 {
   border: none;
   transition: all 0.5s ease;
 }
-
-
-@media screen and (min-width: 991px) {
-  .mov-carousel {
-    display: block;
-  }
-  .next-carousel {
-    left: 100%;
-    top: 50%;
-    opacity: 0;
-    transform: translate(-100%, -50%);
-  }
-
-  .prev-carousel {
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    left: 0;
-  }
-
+.mov-carousel:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+}
+.next-carousel {
+  left: 100%;
+  top: 50%;
+  transform: translate(-100%, -50%);
+}
+.prev-carousel {
+  top: 50%;
+  transform: translateY(-50%);
+  left: 1%;
+}
+.PrimaryCarousel:hover .next-carousel {
+  opacity: 1;
+  left: 102%;
+}
+.PrimaryCarousel:hover .prev-carousel {
+  opacity: 1;
+  left: -1%;
 }
 
-@media screen and (max-width: 990px) {
+@media screen and (max-width: 991px) {
   .PrimaryCarousel {
+    max-width: 100%;
+    margin-right: 0;
     padding-right: 0;
-    padding-left: 0;
   }
-  .mov-carousel {
-    display: block
-  }
-  .next-carousel {
-    left: 103%;
-    top: 50%;
-    opacity: 1;
-    transform: translate(-100%, -50%);
-  }
-
-  .prev-carousel {
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 1;
-    left: -3%;
-  }
-}
-@media screen and (max-width: 600px) {
   .mov-carousel {
     display: none;
   }

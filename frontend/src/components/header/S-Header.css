@@ -6,7 +6,7 @@
 
 */
 
-* {
+header > nav {
   box-sizing: border-box;
   color: #212529;
 }
@@ -41,7 +41,7 @@
 
 .navbar-secondary {
   display: none;
-  z-index: 99;
+  z-index: 130;
 }
 .item-page-favorites {
   padding-left: 10px;

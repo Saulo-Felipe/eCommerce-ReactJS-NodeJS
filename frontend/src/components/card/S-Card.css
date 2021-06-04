@@ -15,7 +15,25 @@
 .ThirdCard {
   height: 310px;
   width: 100%;
+  position: relative;
 
+}
+.heartLike {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 44px;
+  color: rgba(0, 0, 0, 0.6);
+  left: 98%;
+  top: 1%;
+  transform: translateX(-100%);
+  z-index: 100;
+}
+.heartLike:hover {
+  color: rgba(255, 0, 0, 0.8);
 }
 .imageProduct {
   height: 60%;

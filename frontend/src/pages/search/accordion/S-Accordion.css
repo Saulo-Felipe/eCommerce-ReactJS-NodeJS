@@ -1,0 +1,29 @@
+.LeftSearch > * {
+  color: black ;
+}
+
+/* ================| Bootstrap */
+  .accordion-item {
+    border: none;
+  }
+  .accordion-button {
+    padding: 7px;
+  }
+  .accordion-button:hover {
+    color: blue !important;
+  }
+  .accordion-button {
+    box-shadow: 0 0 0 !important;
+    background-color: white !important;
+  }
+  .accordion-button::after {
+    border-radius: 50%;
+    background-color: rgba(15, 90, 136, 0.1);
+    width: 25px;
+    height: 25px;
+    background-size: 18px;
+    background-position: center;
+
+  }
+
+/* ================| Bootstrap*/

@@ -20,10 +20,22 @@ router.post('/search', async (request, response)=> {
   const Op = Sequelize.Op
   const query = `%${request.body.search}%`
 
-  const SearchProducts = await Product.findAll({where: {Title: { [Op.like]: query }}})
+  var minPrice = request.body.Filters.minPrice
+  var maxPrice = request.body.Filters.maxPrice === 0 ? 1999999 : request.body.Filters.maxPrice
 
-  return response.status(200).json({SearchProducts})
+  if (minPrice > maxPrice)
+    return response.json({ error: "Insira uma faixa de preço válida" })
+    
+  const SearchProducts = await Product.findAll({
+    where: {
+      [Op.and] : [
+        {Title: { [Op.iLike]: query }},
+        {Price: { [Op.between]: [minPrice, maxPrice] }}
+      ]
+    }
+  })
 
+  return response.status(200).json({result: SearchProducts})
 })
 
 router.post('/register', (request, response) => {

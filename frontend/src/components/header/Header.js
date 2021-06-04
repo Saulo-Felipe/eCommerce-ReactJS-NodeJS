@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react'
 import './S-Header.css'
 import { Link } from 'react-router-dom'
 import Modal from './Modal-Login'
+import LogoTipo from './logo-example.png'
 
 function Header() {
   useEffect(() => {
+    var input = document.querySelector('.input-search')
+
     // Verificar focus do input de pesquisa
-    document.querySelector(".input-search").addEventListener("focus", () => {
+    input.addEventListener("focus", () => {
       document.querySelector(".submit-search").style.borderColor = "gray"
     })
-    document.querySelector(".input-search").addEventListener("blur", () => {
+    input.addEventListener("blur", () => {
       document.querySelector(".submit-search").style.borderColor = "#ced4da"
     })
 
@@ -57,16 +60,16 @@ function Header() {
     setSearch(InputValueSearch.target.value)
   }
 
-  var input = document.querySelector('.input-search')
-
-
 
   return (
     <>
       <header>
         <nav className="navbar primary-navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
-            <Link to="/" className="navbar-brand">LogoTipo</Link>
+            <Link to="/" className="navbar-brand me-4 ms-3">
+              <img src={LogoTipo} alt="Logotipo" width="30" height="24" className="d-inline-block align-text-top" />
+              E-Commerce
+            </Link>
             <div className="d-flex flex-row item-mobile">
               <div className="" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="material-icons-outlined menu-mobile">
@@ -212,7 +215,7 @@ function Header() {
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li className="nav-item ms-3">
-                  <a className="nav-link active color-hover" aria-current="page" href="/admin">Home</a>
+                  <Link className="nav-link active color-hover" aria-current="page" to="/">Home</Link>
                 </li>
 
                 <li className="nav-item ms-2">

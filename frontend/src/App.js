@@ -13,10 +13,10 @@ function App() {
       <BrowserRouter>
         <Header/>
         <Switch>
-          <Route path="/" component={Home} exact></Route>
-          <Route path="/admin/dashboard" component={Dashboard}></Route>
-          <Route path="/admin/new-product" component={AddProduct}></Route>
-          <Route path="/register" component={Register}/>
+          <Route path="/" component={Home} exact />
+          <Route path="/admin/dashboard" component={Dashboard} />
+          <Route path="/admin/new-product" component={AddProduct} />
+          <Route path="/register" component={Register} />
           <Route path="/search/:value" component={Search} />
         </Switch>
       </BrowserRouter>

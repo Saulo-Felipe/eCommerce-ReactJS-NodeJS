@@ -10,6 +10,30 @@
   padding-top: 20px;
   padding-left: 4%;
 }
+.error_msgSearch {
+  color: red;
+  font-size: 0.7em;
+  text-align: center;
+  width: 100%;
+  margin-top: 10px;
+}
+.see-filter-mobile {
+  display: none;
+  font-size: 1.1em;
+}
+.close-menu-filter-search {
+  display: none;
+}
+@media screen and (max-width:  991px) {
+  .desktop {
+    display: none !important;
+  }
+}
+@media screen and (min-width: 992px) {
+  .mobile {
+    display: none !important;
+  }
+}
 
 /* ============| Left Filters */
   .LeftSearch {
@@ -39,6 +63,7 @@
     width: min-content;
     margin: auto;
     row-gap: 10px;
+    margin-bottom: 100px !important;
   }
   .noResult {
     width: 600px;
@@ -73,6 +98,95 @@
 
 /* ============| Left Result Search */
 
+
+/*====================| Responsive Search Page |===================*/
+
+  @media screen and (max-width: 1124px) {
+    .LeftSearch {
+      position: fixed;
+      z-index: 101;
+      width: 100%;
+      margin-left: -100%;
+      height: 100vh;
+      margin-top: -261px;
+      transition: all 0.5s;
+      overflow: auto;
+    }
+    .open-menu-filter-search {
+      margin-left: 0;
+      width: 100%;
+      padding-left: 20%;
+      margin-left: -15%;
+    }
+    .close-menu-filter-search {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width:  991px) {
+    .see-filter-mobile {
+      display: block;
+    }
+    .FilterTop {
+      margin-bottom: 50px;
+    }
+    .ResultProducts {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-gap: 7px;
+      row-gap: 27px;
+    }
+    .ResultProducts  {
+      margin: 0;
+      width: auto;
+    }
+    .ResultProducts > .PrimaryCard {
+      width: 100%;
+      margin: 0 !important;
+    }
+
+    .ContentSearch > .container {
+      padding: 0;
+      margin: 0;
+    }
+    .container-fluid {
+      padding-right: 0 !important;
+    }
+    .header-page-search {
+      display: block !important;
+      margin-top: 10px !important;
+    }
+    .iconsNavigate {
+      margin-bottom: 10px;
+    }
+    .details-quant-search {
+      display: none;
+    }
+    .monitor-pages-search {
+      padding-left: 10px !important;
+      width: 100%;
+    }
+    .searchContentResult {
+      margin: auto !important;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    .ResultProducts {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .ContentSearch > .container {
+      max-width: none;
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    .ResultProducts {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+
+
+/*====================| Responsive Search Page |===================*/
 
 
 /*|=======================||  Page Search  ||=========================|*/

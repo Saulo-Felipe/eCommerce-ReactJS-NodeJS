@@ -26,7 +26,7 @@ export default function Home() {
       <Carousel>
         {
           products.map((item) => {
-            return (<Card key={item.id} title={item.Title} price={item.Price}/>)
+            return (<Card key={item.id} title={item.product_name} price={item.price}/>)
           })
         }
       </Carousel>

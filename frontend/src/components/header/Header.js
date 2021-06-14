@@ -8,12 +8,16 @@ function Header() {
   useEffect(() => {
     var input = document.querySelector('.input-search')
 
-    // Verificar focus do input de pesquisa
-    input.addEventListener("focus", () => {
-      document.querySelector(".submit-search").style.borderColor = "gray"
+    input.addEventListener('keyup', (event) => {
+      if (event.keyCode === 13) document.querySelector('.search-header-href').click()
     })
-    input.addEventListener("blur", () => {
-      document.querySelector(".submit-search").style.borderColor = "#ced4da"
+
+    // Verificar focus do input de pesquisa
+    input.addEventListener('focus', () => {
+      document.querySelector('.submit-search').style.borderColor = "gray"
+    })
+    input.addEventListener('blur', () => {
+      document.querySelector('.submit-search').style.borderColor = "#ced4da"
     })
 
     if (window.matchMedia('(min-width: 991px)').matches) {
@@ -89,7 +93,7 @@ function Header() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <div className="d-flex form-search">
                 <input className="form-control input-search" type="search" placeholder="Pesquise por Categorias, produtos e etc..." aria-label="Search" onChange={changedSearch}/>
-                <Link to={`/search/`+`${search}`}>
+                <Link to={`/search/`+`${search}`} className="search-header-href">
                   <button className="btn btn-outline-success submit-search">
                     <span className="material-icons">search</span>
                   </button>

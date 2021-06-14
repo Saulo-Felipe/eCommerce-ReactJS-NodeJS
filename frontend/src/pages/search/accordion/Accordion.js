@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import './S-Accordion.css'
+import api from '../../../services/api'
 
 export default function Accordion() {
+  const [categories, setCategory] = useState([])
+
+  async function handleSearchCategory(Value) {
+    var categorySearch = await api.post('/search/filter-category', { inputValue: Value.target.value })
+    setCategory([categorySearch])
+  }
+
   return (
     <>
       <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -14,7 +22,14 @@ export default function Accordion() {
           </h2>
           <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
             <div class="accordion-body">
-              <input className="form-control" type="text" placeholder="Pesquise uma por categorias"/>
+              <input className="form-control" type="text" placeholder="Pesquise uma por categorias" onChange={handleSearchCategory} />
+              {
+                categories.length === 0
+                ? <div>Nenhuma Categoria Enocntrada</div>
+                : categories.map((category) => {
+                  return (<div>{category.data.result[0].category_name}</div>)
+                })
+              }
             </div>
           </div>
         </div>

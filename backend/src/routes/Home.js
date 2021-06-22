@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const Sequelize = require('sequelize')
 const sequelize = require('../database/connect')
 
 const bcrypt = require('bcrypt')
@@ -23,34 +22,44 @@ router.post('/search', async (request, response)=> {
     if (minPrice >= maxPrice) return response.json({ error: 'Insira uma faixa de preço válida' })
 
     const [countPage, ot] = await sequelize.query(`SELECT * FROM products WHERE product_name iLIKE '%${request.body.search}%' AND price >= ${minPrice} AND price <= ${maxPrice}`)
-    const [result, others] = await sequelize.query( 
-       `SELECT * FROM products 
+    const [result, others] = await sequelize.query(`
+        SELECT * FROM products 
         WHERE product_name iLIKE '%${request.body.search}%' 
         AND price >= ${minPrice} 
         AND price <= ${maxPrice} 
-        OFFSET ${pagePositon * 5} 
-        LIMIT 5`
-    )
+        OFFSET ${pagePositon * 9} 
+        LIMIT 9
+    `)
     
     return response.status(200).json({result: result, countPage: countPage.length})
 })
 
 router.post('/search/filter-category', async (request, response) => {
-    const [result, others] = await sequelize.query(`SELECT * FROM categories WHERE category_name iLike '%${ request.body.inputValue.length === 0 ? '%%' : request.body.inputValue }%'`)
+    const [result, others] = await sequelize.query(`
+        SELECT * FROM categories 
+        WHERE category_name 
+        iLike '%${ request.body.inputValue.length === 0 ? '' : request.body.inputValue }%'
+    `)
 
     return response.status(200).json({ result })
 })
 
 
-router.post('/register', (request, response) => {
+router.post('/register', async (request, response) => {
     const { name, email, password } = request.body
+
+    const [verifyInfo] = await sequelize.query(`SELECT * FROM users WHERE email = '${email}'`)
+
+    if (verifyInfo && verifyInfo.length > 0) {
+        return response.json({ error: "Esse email já pertence a outra conta" })
+    }
 
     bcrypt.hash(password, 10, async (err, hash) => {
         if (err) {
             return response.status(401).send({ error: "Error interno" })
 
         } else  {
-            const user = await User.create({ name: name, email: email, password: hash })
+            const [user] = await sequelize.query(`INSERT INTO users (user_name, email, password) VALUES ('${name}', '${email}', '${hash}')`)
 
             return response.json({user})
         }
@@ -58,19 +67,32 @@ router.post('/register', (request, response) => {
 })
 
 router.post('/login', async(request, response) => {
-    const user = request.body
-    const userDataBase = await User.findAll({where: {email: user.email}})
+    const {email, password} = request.body
 
-    if (userDataBase.length === 0) {
-        console.log("Este Usuário não existe")
+    var [user] = await sequelize.query(`SELECT * FROM users WHERE email = '${email}'`)
+
+    console.log(user)
+
+    if (user.length === 0) {
+        return response.json({ error: "Não existe nenhuma conta associada a este email." })
     } else {
-        const match = await bcrypt.compare(user.password, userDataBase[0].password)
+        const match = await bcrypt.compare(password, user[0].password)
 
-        if (match) {
-            // If match
-        } else
-            console.log("Senha incorreta")
+        if (match)
+            return response.json({ id: user[0].id })
+        else
+            return response.json({ error: 'Senha Incorreta' })
     }
+})
+
+router.post('/get-user', async(request, response) => {
+    const { type, id } = request.body
+
+    if (type && type === 'header') {
+        const [user] = await sequelize.query(`SELECT user_name FROM users WHERE id = ${id}`)
+        return response.json({userName: user[0].user_name})
+    }
+
 })
 
 

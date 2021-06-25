@@ -31,6 +31,10 @@
   background-color: white;
   border-radius: 10px;
   margin-left: .5rem;
+  transition: all 0.3s;
+}
+.big-card:hover {
+  box-shadow: 0px 0px 10px #0000007d;
 }
 .second-big-card {
   margin-left: 0;
@@ -54,7 +58,15 @@
   background-position-x: 70px;
   background-repeat: no-repeat;
 }
-
+.card-part-image-house {
+  background-image: url('https://http2.mlstatic.com/D_NQ_NP628289-MLA41424408861_042020-B.jpg');
+  width: 40%;
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+  height: 90%;
+  padding: 10px;
+}
 
 /*
 *
@@ -95,7 +107,7 @@
     width: 50%;
   }
   .big-card {
-    width: 100%;
+    width: 100% !important;
     margin-top: 10px;
     margin-left: 0;
   }
@@ -110,5 +122,12 @@
   }
   .card-options-two {
     margin-top: .5rem;
+  }
+  .card-part-image-house {
+    height: auto;
+    width: 60%;
+  }
+  .second-big-card {
+    padding-bottom: 20px;
   }
 }

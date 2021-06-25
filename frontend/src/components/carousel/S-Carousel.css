@@ -69,3 +69,12 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
   }
 }
+
+@media screen and (min-width: 991px) {
+  .endCarousel {
+    padding: 0;
+  }
+  .carouselStore {
+    padding-right: 0px;
+  }
+}

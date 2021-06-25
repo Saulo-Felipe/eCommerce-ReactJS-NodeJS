@@ -4,6 +4,7 @@ import './S-Search.css'
 import api from '../../services/api'
 import Card from '../../components/card/Card'
 import Accordion from './accordion/Accordion'
+import LoadingGIF from './images/loading.gif'
 
 export default function Search() {
   const search = useParams()
@@ -12,22 +13,28 @@ export default function Search() {
   const [Erros, setError] = useState([])
   const [searchResult, setSearch] = useState([])
   const [Filters, setFilters] = useState({ minPrice: 0, maxPrice: 0 })
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(1)
   const [countPages, setCountPages] = useState()
 
 
-  useEffect(async () => {
-    const resultSearch = await api.post('/search', { search: value, Filters, position: count, pageCountPages: countPages })
+  useEffect(() => {
+    (async function search() {
 
-    setCountPages(resultSearch.data.countPage)
-    console.log(resultSearch.data.result)
+      document.querySelector('.search-loading').style.display = "block"
+      document.querySelector('.search-loading-page').style.display = "block"
+      const resultSearch = await api.post('/search', { search: value, Filters, position: count, pageCountPages: countPages })
+      document.querySelector('.search-loading').style.display = "none"
+      document.querySelector('.search-loading-page').style.display = "none"
 
-    if (resultSearch.data.error)
-      setError([resultSearch.data.error])
-    else {
-      setSearch(resultSearch.data.result)
-      setError([])
-    }
+      setCountPages(resultSearch.data.countPage)
+
+      if (resultSearch.data.error)
+        setError([resultSearch.data.error])
+      else {
+        setSearch(resultSearch.data.result)
+        setError([])
+      }
+    })()
   }, [search, Filters, count])
 
   useEffect(() => { setCount(1) }, [search, Filters])
@@ -57,7 +64,7 @@ export default function Search() {
 
   //Pagination with React
   function next() {
-    if (count < Math.ceil(countPages/5)) setCount(count + 1)
+    if (count < Math.ceil(countPages/9)) setCount(count + 1)
   }
   function prev() {
     if (count > 1) setCount(count - 1)
@@ -69,9 +76,9 @@ export default function Search() {
       <div className="TopFilter">
         <div className="d-flex flex-row mt-4 header-page-search">
           <div className="text-white pe-5 d-flex iconsNavigate mobile">
-            <span class="material-icons-outlined iconNavigateSearch">home</span> Home
-            <span class="material-icons-two-tone iconNavigateSearch">navigate_next</span> Pesquisa
-            <span class="material-icons-two-tone iconNavigateSearch">navigate_next</span> { value }
+            <span className="material-icons-outlined iconNavigateSearch">home</span> Home
+            <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> Pesquisa
+            <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> { value }
           </div>
           
           <h4 className="text-white titleSearch w-100">
@@ -79,9 +86,9 @@ export default function Search() {
           </h4>
 
           <div className="text-white pe-5 d-flex iconsNavigate desktop">
-            <span class="material-icons-outlined iconNavigateSearch">home</span> Home
-            <span class="material-icons-two-tone iconNavigateSearch">navigate_next</span> Pesquisa
-            <span class="material-icons-two-tone iconNavigateSearch">navigate_next</span> { value }
+            <span className="material-icons-outlined iconNavigateSearch">home</span> Home
+            <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> Pesquisa
+            <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> { value }
           </div>
         </div>
       </div>
@@ -89,7 +96,7 @@ export default function Search() {
 
       <div className="ContentSearch d-flex flex-box">
         <div className="LeftSearch">
-        <div class="material-icons-outlined close-menu-filter-search text-end w-100">close</div>
+        <div className="material-icons-outlined close-menu-filter-search text-end w-100">close</div>
           
           <h3>Use Filtros personalizados para sua busca</h3>
 
@@ -139,25 +146,26 @@ export default function Search() {
 
             <div className=" d-flex ps-5 monitor-pages-search">
               <span className="material-icons-outlined backPageSearch" onClick={() => prev()}>arrow_back_ios</span>
-              <span className="pageSearchIndex"> {count} / {Math.ceil(countPages/5)} </span>
+              <span className="pageSearchIndex"> {count} / {Math.ceil(countPages/9)} </span>
               <span className="material-icons-outlined nextPageSearch" onClick={() => next()}>arrow_forward_ios</span>
             </div>
           </div>
           <div className="see-filter-mobile container">Ver filtros</div>
-          <div className="ResultProducts ">
+          <div className="ResultProducts">
             {
-              searchResult.length == 0
+              searchResult.length === 0
                 ? <h1 className="noResult">Nenhum Result encontrado para Pesquisa: {value}</h1>
                 : searchResult.map((product) => {
                   return(
-                    <Card title={product.product_name} price={product.price}/>
+                    <Card title={product.product_name} price={product.price} cover={product.cover} key={product.id} id={product.id}/>
                   )
                 })
             }
           </div>
+          <div className="search-loading"><img src={ LoadingGIF } alt="Loading GIF" /></div>
         </div>
-
       </div>
+      <div className="search-loading-page"></div>
     </div>
   )
 }

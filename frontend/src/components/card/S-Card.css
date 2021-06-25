@@ -39,6 +39,9 @@
   height: 60%;
   width: 100%;
   position: relative;
+  background-size: contain;
+  background-position: center;  
+  background-repeat: no-repeat;
 }
 .contentProduct {
   height: 40%;
@@ -130,6 +133,9 @@
 *
 */
 
+.text-red {
+  color: red;
+}
 .BiggerWidth {
   width: 100%;
   height: auto;

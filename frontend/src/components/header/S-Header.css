@@ -21,6 +21,9 @@ header > nav {
   border-bottom-right-radius: 0px;
   border-right: none;
 }
+.input-search::-webkit-input-placeholder {
+    color: #00000061;
+}
 
 .submit-search {
   border-top-left-radius: 0px;
@@ -195,6 +198,14 @@ abbr[title] {
 * All classes
 */
 
+.toYourProfile {
+  text-decoration: none;
+  color: black;
+}
+.toYourProfile:hover {
+  color: rgba(0, 0, 0, 0.7);
+}
+
 .width-bigger {
   position: absolute;
   top: 50%;
@@ -207,4 +218,8 @@ abbr[title] {
   left: 50%;
   transform: translateX(-50%);
   height: 100%;
+}
+
+.header-profile-img {
+  border-radius: 50%;
 }

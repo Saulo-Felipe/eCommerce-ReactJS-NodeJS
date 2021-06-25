@@ -1,0 +1,36 @@
+.AddCategory > .container {
+	max-width: 720px;
+}
+
+.SeeAllCategory > .card, .AddCategory > .card {
+	padding: 30px;
+}
+
+.SeeAllCategory h5 {
+	margin-bottom: 20px !important;
+}
+
+.category-submit-sucess {
+	width: max-content;
+}
+
+.ListCategoryLine {
+	padding: 10px;
+}
+.category-container {
+	max-height: 500px;
+	overflow: scroll;
+	background-color: whitesmoke;
+	padding: 10px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	border-radius: 10px;
+}
+.search-Category::-webkit-input-placeholder {
+  font-size: 15px;
+}
+.search-Category {
+	border: solid 1px #0000001f;
+	padding: 7px 11px 7px;
+	font-size: 17px;
+}

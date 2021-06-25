@@ -8,7 +8,7 @@ export default function Dashboard() {
     var menu = document.querySelector(".menuDashboard")
 
     OpenMenu.addEventListener("click", () => {
-      if (getComputedStyle(menu, null).marginLeft == "-300px") {
+      if (getComputedStyle(menu, null).marginLeft === "-300px") {
         menu.style.marginLeft = "0px"
       } else {
         menu.style.marginLeft = "-300px"

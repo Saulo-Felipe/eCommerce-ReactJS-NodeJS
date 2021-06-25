@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './S-Register.css'
 import api from '../../services/api'
 
@@ -11,15 +11,20 @@ export default function Register() {
   })
 
   async function NewUser() {
-    if (inputValue.name == null || inputValue.email == null || inputValue.password == null || inputValue.passwordTwo == null) {
+    if (inputValue.name === null || inputValue.email === null || inputValue.password === null || inputValue.passwordTwo === null) {
       alert("Preencha todos os campos")
     } else {
-      if (inputValue.name.length == 0 || inputValue.email.length == 0 || inputValue.password.length == 0 || inputValue.passwordTwo.length == 0) {
+      if (inputValue.name.length === 0 || inputValue.email.length === 0 || inputValue.password.length === 0 || inputValue.passwordTwo.length === 0) {
         alert("preencha todos os dados")
       } else {
-        if (inputValue.password == inputValue.passwordTwo) {
-          await api.post('/register', inputValue)
-          console.log("dados enviados")
+        if (inputValue.password === inputValue.passwordTwo) {
+          var response = await api.post('/register', inputValue)
+          console.log('response: ', response)
+          if (response.data.error) {
+            alert(response.data.error)
+          } else {
+            alert('Cadastro realizado com sucesso!')
+          }
         } else {
           alert("as senhas não estão iguais")
         }
@@ -28,10 +33,10 @@ export default function Register() {
   }
   function handleChangeInput(values) {
     SetInputValue({
-      name: values.target.id == "name" ? values.target.value : inputValue.name,
-      email: values.target.id == "email" ? values.target.value : inputValue.email,
-      password: values.target.id == "password" ? values.target.value : inputValue.password,
-      passwordTwo: values.target.id == "password-two" ? values.target.value : inputValue.passwordTwo
+      name: values.target.id === "name" ? values.target.value : inputValue.name,
+      email: values.target.id === "email" ? values.target.value : inputValue.email,
+      password: values.target.id === "password" ? values.target.value : inputValue.password,
+      passwordTwo: values.target.id === "password-two" ? values.target.value : inputValue.passwordTwo
     })
   }
   return (

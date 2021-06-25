@@ -2,6 +2,10 @@
   color: black ;
 }
 
+.accordion-search-page-body {
+  max-height: 300px;
+  overflow: scroll;
+}
 /* ================| Bootstrap */
   .accordion-item {
     border: none;

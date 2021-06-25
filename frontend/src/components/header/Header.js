@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import './S-Header.css'
 import { Link } from 'react-router-dom'
-import Modal from './Modal-Login'
+import { Modal } from '../../pages/login/Login'
 import LogoTipo from './logo-example.png'
+import { isAuthenticated } from '../../services/isAuthenticated'
+import api from '../../services/api'
+
 
 function Header() {
+
+  const [user, setUserName] = useState()
+  const [profile_photo, setProfilePhoto] = useState()
+
   useEffect(() => {
     var input = document.querySelector('.input-search')
 
@@ -56,6 +63,18 @@ function Header() {
       })
     }
 
+    async function getUser() {
+
+      if (isAuthenticated != null) {
+        const response = await api.post('/get-user', {type: "header", id: isAuthenticated })
+        setUserName(response.data.userName)
+        setProfilePhoto(<img className="header-profile-img" src={require(`../../pages/userProfile/profile-images/${response.data.photo_profile}`).default} alt="User Image" width="35" height="35"/>)
+      } else {
+        setProfilePhoto(<img className="header-profile-img" src={require(`../../pages/userProfile/profile-images/user.png`).default} alt="User Image" width="35" height="35"/>)
+      }
+    }
+    getUser()
+
   }, [])
 
   const [search, setSearch] = useState()
@@ -64,6 +83,9 @@ function Header() {
     setSearch(InputValueSearch.target.value)
   }
 
+  function logout() {
+    localStorage.removeItem('id')
+  }
 
   return (
     <>
@@ -80,9 +102,9 @@ function Header() {
                   menu
                 </span>
               </div>
-              <span className="material-icons-outlined icon-user" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                person
-              </span>
+              <div className="navbar-brand">
+                {profile_photo}
+              </div>
               <a href="/admin" className="cart-href">
                 <span className="quant-cart">24</span>
                 <span className="material-icons-outlined cart-mobile">
@@ -93,7 +115,7 @@ function Header() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <div className="d-flex form-search">
                 <input className="form-control input-search" type="search" placeholder="Pesquise por Categorias, produtos e etc..." aria-label="Search" onChange={changedSearch}/>
-                <Link to={`/search/`+`${search}`} className="search-header-href">
+                <Link to={`/search/${search}`} className="search-header-href">
                   <button className="btn btn-outline-success submit-search">
                     <span className="material-icons">search</span>
                   </button>
@@ -121,20 +143,40 @@ function Header() {
                   </abbr>
                 </li>
 
-                <li className="nav-item item-desktop">
+                {
+                  isAuthenticated
+                  ? 
+                    <li className="nav-item item-desktop">
+                      <div className="nav-link active d-flex flex-row ">
+                        <div>
+                          <div className="navbar-brand">
+                            {profile_photo}
+                          </div>
+                        </div>
+                        <Link to={`/profile/${isAuthenticated}`} className="toYourProfile">
+                          <div className="my-account">
+                            <small className="login-small">{ user }</small>
+                            <div className="">Minha Conta</div>
+                          </div>
+                        </Link>
+                      </div>
+                    </li>
+                  :
+                   <li className="nav-item item-desktop">
+                      <a className="nav-link active d-flex flex-row " aria-current="page" href="/" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <div>
+                          <div className="navbar-brand">
+                            {profile_photo}
+                          </div>
+                        </div>
+                        <div className="my-account">
+                          <small className="login-small">Olá, faça login!</small>
+                          <div className="">Minha Conta</div>
+                        </div>
+                      </a>
+                    </li>
 
-                  <a className="nav-link active d-flex flex-row " aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <div>
-                      <span className="material-icons-outlined icon-user">
-                        person
-                      </span>
-                    </div>
-                    <div className="my-account">
-                      <small className="login-small">Olá, faça login!</small>
-                      <div className="">Minha Conta</div>
-                    </div>
-                  </a>
-                </li>
+                }
 
                 <li className="nav-item dropdown item-desktop">
 
@@ -237,6 +279,15 @@ function Header() {
                 <li className="nav-item ms-2">
                   <Link to="/admin/dashboard" className="nav-link active color-hover">Dashboard (admin)</Link>
                 </li>
+
+                {
+                  isAuthenticated ?
+                  <li className="nav-item ms-2">
+                    <a href="/" className="nav-link active color-hover" onClick={logout}>Logout</a>
+                  </li>
+                  : ""                   
+                }
+
 
               </ul>
 

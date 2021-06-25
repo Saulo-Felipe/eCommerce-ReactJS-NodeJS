@@ -1,33 +1,58 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './S-Card.css'
-import notebook from './images/notebook.png'
+import api from '../../services/api'
 
 export default function Card(props) {
 
-  useEffect(() => {
-    var IMGproduct = document.querySelectorAll(".imgOriginal")
+  const [likeIcon, setLikeIcon] = useState()
 
-    for (let c=0; c < IMGproduct.length; c++) {
-      if (IMGproduct[c].height > IMGproduct[c].width) {
-        IMGproduct[c].classList.add("BiggerHeight")
+  useEffect(() => {
+    (async () => {
+      var idUser = localStorage.getItem('id')
+      if (idUser != null) {
+        var response = await api.post('/likes', { idUser: idUser, idProduct: props.id })
+
+        if (response.data.like === true) {
+          setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
+        } else {
+          setLikeIcon(<span className="material-icons-outlined ">favorite_border</span>)
+          console.log('deslikancod')
+        }
       } else {
-        IMGproduct[c].classList.add("BiggerWidth")
+        setLikeIcon(<span className="material-icons-outlined ">favorite_border</span>)
+      }
+    })()
+  }, [])
+
+  async function LikeOrDeslike() {
+    var idUser = localStorage.getItem('id')
+    if (idUser === null) {
+      alert("Você precisa estar logado para dar like em produtos.")
+    } else {
+      var response = await api.post('/likes', { idUser: idUser, idProduct: props.id })
+
+      if (response.data.like === false) {
+        await api.post('/new-like', { idUser: idUser, idProduct: props.id, type: 'like' })
+        setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
+      } else {
+        await api.post('/new-like', { idUser: idUser, idProduct: props.id, type: 'dislike' })
+        setLikeIcon(<span className="material-icons-outlined">favorite_border</span>)
       }
     }
-
-  }, [])
+  }
 
   return (
     <div className="PrimaryCard ms-2">
       <div className="SecondaryCard">
         <div className="ThirdCard">
-        <div className="heartLike">
-          <span class="material-icons-outlined ">favorite_border</span>
-        </div>
 
-          <div className="imageProduct">
-            <img className="imgOriginal" src={notebook} />
+          <div className="heartLike" onClick={LikeOrDeslike}>
+            {likeIcon}
           </div>
+
+          <div className="imageProduct" style={{backgroundImage: `url(${require(`../../coversProduct/${props.cover}`).default})`}}>
+          </div>
+
           <hr/>
           <div className="contentProduct">
             <span className="oldPrice">R$ 1999</span>
@@ -36,11 +61,11 @@ export default function Card(props) {
             <span className="subPrice">ou 10x de 24,90</span>
             <div className="d-flex flex-row rating">
               <div className="stars">
-                <span class="material-icons-outlined star">star</span>
-                <span class="material-icons-outlined star">star</span>
-                <span class="material-icons-outlined star">star</span>
-                <span class="material-icons-outlined star">star</span>
-                <span class="material-icons-outlined star">star_half</span>
+                <span className="material-icons-outlined star">star</span>
+                <span className="material-icons-outlined star">star</span>
+                <span className="material-icons-outlined star">star</span>
+                <span className="material-icons-outlined star">star</span>
+                <span className="material-icons-outlined star">star_half</span>
               </div>
               <div className="amountRating">4.5mil</div>
             </div>

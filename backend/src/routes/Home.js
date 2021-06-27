@@ -2,104 +2,137 @@ const express = require('express')
 const router = express.Router()
 const sequelize = require('../database/connect')
 const multer = require('multer')
-
 const bcrypt = require('bcrypt')
 
 
 router.get('/', async(request, response) => {
+    try {
+        var [AllProducts, others] = await sequelize.query('SELECT * FROM products LIMIT 9')
 
-    var [AllProducts, others] = await sequelize.query('SELECT * FROM products LIMIT 9')
-
-    return response.json(AllProducts)
+        return response.json(AllProducts)
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro na home principal." })
+    }
 })
 
 router.post('/search', async(request, response)=> {
-    //Filter
-        var minPrice = request.body.Filters.minPrice
-        var maxPrice = request.body.Filters.maxPrice === 0 ? 1999999 : request.body.Filters.maxPrice
+    try {
+        //Filter
+            var minPrice = request.body.Filters.minPrice
+            var maxPrice = request.body.Filters.maxPrice === 0 ? 1999999 : request.body.Filters.maxPrice
 
-    var pagePositon = request.body.position === 1 ? 0 : request.body.position -1
+        var pagePositon = request.body.position === 1 ? 0 : request.body.position -1
 
-    if (minPrice >= maxPrice) return response.json({ error: 'Insira uma faixa de preço válida' })
+        if (minPrice >= maxPrice) return response.json({ error: 'Insira uma faixa de preço válida' })
 
-    const [countPage] = await sequelize.query(`
-        SELECT * FROM 
-        products WHERE 
-        "product_name" iLIKE 
-        '%${request.body.search}%' 
-        AND price >= ${minPrice} 
-        AND price <= ${maxPrice} 
-    `)
-    const [result] = await sequelize.query(`
-        SELECT * FROM products 
-        WHERE "product_name" iLIKE '%${request.body.search}%' 
-        AND price >= ${minPrice} 
-        AND price <= ${maxPrice} 
-        OFFSET ${pagePositon * 9} 
-        LIMIT 9 
-    `)
-    
-    return response.status(200).json({result: result, countPage: countPage.length})
+        const [countPage] = await sequelize.query(`
+            SELECT * FROM 
+            products WHERE 
+            "product_name" iLIKE 
+            '%${request.body.search}%' 
+            AND price >= ${minPrice} 
+            AND price <= ${maxPrice} 
+        `)
+        const [result] = await sequelize.query(`
+            SELECT * FROM products 
+            WHERE "product_name" iLIKE '%${request.body.search}%' 
+            AND price >= ${minPrice} 
+            AND price <= ${maxPrice} 
+            OFFSET ${pagePositon * 9} 
+            LIMIT 9 
+        `)
+        
+        return response.status(200).json({result: result, countPage: countPage.length})
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: 'Erro ao selecionar produtos e likes.' })
+    }
 })
 
 router.post('/search/filter-category', async(request, response) => {
-    const [result, others] = await sequelize.query(`
-        SELECT * FROM categories 
-        WHERE category_name 
-        iLike '%${ request.body.inputValue.length === 0 ? '' : request.body.inputValue }%'
-    `)
+    try {
+        const [result, others] = await sequelize.query(`
+            SELECT * FROM categories 
+            WHERE category_name 
+            iLike '%${ request.body.inputValue.length === 0 ? '' : request.body.inputValue }%'
+        `)
 
-    return response.status(200).json({ result })
+        return response.status(200).json({ result })
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro ao selecionar categorias." })
+    }
 })
 
 router.post('/register', async(request, response) => {
-    const { name, email, password } = request.body
+    try {
+        const { name, email, password } = request.body
 
-    const [verifyInfo] = await sequelize.query(`SELECT * FROM clients WHERE email = '${email}'`)
+        const [verifyInfo] = await sequelize.query(`SELECT * FROM clients WHERE email = '${email}'`)
 
-    if (verifyInfo && verifyInfo.length > 0) {
-        return response.json({ error: "Esse email já pertence a outra conta" })
-    }
-
-    bcrypt.hash(password, 10, async (err, hash) => {
-        if (err) {
-            return response.status(401).send({ error: "Error interno" })
-
-        } else  {
-            const [user] = await sequelize.query(`INSERT INTO clients (user_name, email, password) VALUES ('${name}', '${email}', '${hash}')`)
-
-            return response.json({user})
+        if (verifyInfo && verifyInfo.length > 0) {
+            return response.json({ error: "Esse email já pertence a outra conta" })
         }
-    })
+
+        bcrypt.hash(password, 10, async (err, hash) => {
+            if (err) {
+                return response.status(401).send({ error: "Error interno" })
+
+            } else  {
+                const [user] = await sequelize.query(`INSERT INTO clients (user_name, email, password) VALUES ('${name}', '${email}', '${hash}')`)
+                const [theLastUser] = await sequelize.query(`SELECT id from clients WHERE email = '${email}'`)
+                await sequelize.query(`INSERT INTO client_adress (client_id) VALUES (${theLastUser[0].id})`)
+                return response.json({user})
+            }
+        })
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro ao realizar cadastro." })
+    }
 })
 
 router.post('/login', async(request, response) => {
-    const {email, password} = request.body
+    try {
+        const {email, password} = request.body
 
-    var [user] = await sequelize.query(`SELECT * FROM clients WHERE email = '${email}'`)
+        var [user] = await sequelize.query(`SELECT * FROM clients WHERE email = '${email}'`)
 
-    console.log(user)
+        console.log(user)
 
-    if (user.length === 0) {
-        return response.json({ error: "Não existe nenhuma conta associada a este email." })
-    } else {
-        const match = await bcrypt.compare(password, user[0].password)
+        if (user.length === 0) {
+            return response.json({ error: "Não existe nenhuma conta associada a este email." })
+        } else {
+            const match = await bcrypt.compare(password, user[0].password)
 
-        if (match)
-            return response.json({ id: user[0].id })
-        else
-            return response.json({ error: 'Senha Incorreta' })
+            if (match)
+                return response.json({ id: user[0].id })
+            else
+                return response.json({ error: 'Senha Incorreta' })
+        }
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "erro ao realizar Login." })
     }
 })
 
 router.post('/get-user', async(request, response) => {
-    const { type, id } = request.body
-
-    if (type && type === 'header') {
-        const [user] = await sequelize.query(`SELECT * FROM clients WHERE id = ${id}`)
-        return response.json({userName: user[0].user_name, photo_profile: user[0].profile_photo})
+    try {
+        const { type, id } = request.body
+        if (type && type === 'header') {
+            const [user] = await sequelize.query(`SELECT * FROM clients WHERE id = ${id}`)
+            return response.json({userName: user[0].user_name, photo_profile: user[0].profile_photo})
+        }
     }
-
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: 'Error ao listar cliente.' })
+    }
 })
 
 router.post('/likes', async(request, response) => {
@@ -121,8 +154,8 @@ router.post('/likes', async(request, response) => {
         console.log(result)
     }
     catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
         return response.json({ error: "Erro interno, por favor tente novamente mais tarde. Error: "+error })
-        console.log(error)
     }
 })
 
@@ -147,8 +180,8 @@ router.post('/new-like', async(request, response) => {
         }
     }
     catch(error) {
-        return response.json({ error: "Erro interno, por favor tente novamente mais tarde. Error: "+error })
-        console.log(error)
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })
     }
 })
 
@@ -160,13 +193,14 @@ router.post('/profile', async(request, response) => {
 
         console.log('result: ', result)
         if (result.length === 0) {
-            return response.json({ error: "erro ao procurar usuario, tenta novamente mais tarde" })
+            return response.json({ error: "erro ao procurar usuario." })
         } else {        
             return response.json({ result: result[0] })
         }
     }
     catch(error) {
-        return response.json({ error: "erro ao procurar usuario, tenta novamente mais tarde. Error: "+error })
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "erro ao procurar usuario." })
     }
 })
 
@@ -188,8 +222,60 @@ router.post('/change-profile-photo', upload, async(request, response) => {
         return response.json({ ok: 'ok' })
     }
     catch(error) {
-        return response.json({ error: 'erro interno ao tentar alterar imagem de perfil' })
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: 'Erro ao alterar imagem de perfil' })
     }
 })
+
+router.post('/get-adress', async(request, response) => {
+    try {
+        const { id } = request.body
+        const [result] = await sequelize.query(`
+            SELECT user_name, client_adress.* FROM clients
+            INNER JOIN client_adress ON client_adress.client_id = clients.id
+            WHERE clients.id = ${id}
+        `)
+        return response.json({ result: result[0] }) 
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: 'Erro ao pesquisar endereço' })
+    }
+})
+
+router.post('/edit/profile', async(request, response) => {
+    try {
+        const { 
+            id, user_name, email, phone, cpf, //Update personal information
+            street, district, city, state, country, cep, house_number //Update personal adress
+        } = request.body
+
+        await sequelize.query(`
+            UPDATE clients SET
+            user_name = '${user_name}',
+            email = '${email}',
+            phone = ${phone},
+            cpf = ${cpf}
+            WHERE id = ${id}
+        `)
+
+        await sequelize.query(`
+            UPDATE client_adress SET 
+            house_number = ${house_number},
+            street = '${street}',
+            district = '${district}',
+            city = '${city}',
+            state = '${state}',
+            country = '${country}',
+            cep = ${cep}
+            WHERE client_id = ${id}
+        `)
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: 'Erro ao editar clients' })
+    }
+})
+
 
 module.exports = router

@@ -50,7 +50,11 @@
 	padding: 20px;
 	border-radius: 10px;
 }
+.body-modal-profile {
+	min-width: 700px !important;
+		margin-top: 0 !important;
 
+}
 .one-info-userProfile {
 	color: #6b6b6bde;
 }
@@ -59,6 +63,16 @@
 	display: none;
 }
 
+.profile-edit-modal-body {
+	overflow: scroll;
+	max-height: 78vh;
+}
+.profile-title-information {
+	line-height: 35px;
+}
+.background-blue-transparent {
+	background-color: ghostwhite;
+}
 @media screen and (max-width: 770px) {
 	.profile > .container {
 		display: block;

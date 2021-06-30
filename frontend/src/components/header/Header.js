@@ -6,9 +6,10 @@ import LogoTipo from './logo-example.png'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import api from '../../services/api'
 import SubHeader from './SubHeader'
-
+import { useLike } from '../context/Likes'
 
 function Header() {
+  const { setLike, like } = useLike()
 
   const [user, setUserName] = useState()
   const [profile_photo, setProfilePhoto] = useState()
@@ -74,7 +75,21 @@ function Header() {
         setProfilePhoto(<img className="header-profile-img" src={require(`../../pages/userProfile/profile-images/user.png`).default} alt="User Image" width="35" height="35"/>)
       }
     }
-    getUser()
+    getUser();
+
+
+    //Get Liked Products
+
+    (async () => {
+      if (isAuthenticated != null) {
+        const response = await api.post('/likes', { type: "get all likes", id: isAuthenticated })
+        if (!response.data.error) {
+          setLike(response.data.result.length)
+        } else {
+          alert(response.data.error)
+        }
+      }
+    })();
 
   }, [])
 
@@ -130,13 +145,12 @@ function Header() {
                   </abbr>
                 </li>
 
-                <li className="nav-item item-page-favorites">
+                <li className="nav-item item-page-favorites pe-0">
                   <abbr title="Favoritos">
-                    <a className="nav-link active icon-favorite-href" aria-current="page" href="/admin">
-                      <span className="material-icons">
-                        favorite_border
-                      </span>
-                    </a>
+                    <Link to={'/client_dashboard/favorites/'} className="nav-link active icon-favorite-href d-flex no-href-decoration" aria-current="page">
+                      <div className="material-icons">favorite_border</div>
+                      <div className="header-amountLikes">{like}</div>
+                    </Link>
                   </abbr>
                 </li>
 
@@ -172,7 +186,6 @@ function Header() {
                         </div>
                       </a>
                     </li>
-
                 }
 
                 <li className="nav-item dropdown item-desktop">
@@ -188,7 +201,6 @@ function Header() {
                       <div className="dropdown-toggle">$299,99</div>
                     </div>
                   </a>
-
 
                   <ul className="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                     <li><a className="dropdown-item" href="/admin">Action</a></li>
@@ -230,8 +242,6 @@ function Header() {
                 <li className="nav-item ps-2 item-mobile options-menu-mobile">
                   <a className="nav-link active color-hover" aria-current="page" href="/admin">Contato</a>
                 </li>
-
-
               </ul>
 
             </div>

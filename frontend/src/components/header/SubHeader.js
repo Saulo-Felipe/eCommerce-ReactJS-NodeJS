@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom'
 
 
 export default function SubHeader(props) {
-		const isAuthenticated = props.isAuthenticated
-		
-	  function logout() {
-    	localStorage.removeItem('id')
-  	}
+	const isAuthenticated = props.isAuthenticated
+	
+
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light navbar-secondary">
 		  <div className="container-fluid">
@@ -52,7 +50,7 @@ export default function SubHeader(props) {
 		        {
 		          isAuthenticated ?
 		          <li className="nav-item ms-2">
-		            <a href="/" className="nav-link active color-hover" onClick={logout}>Logout</a>
+		            <a href="/" className="nav-link active color-hover" onClick={() => localStorage.removeItem('id')}>Logout</a>
 		          </li>
 		          : ""                   
 		        }

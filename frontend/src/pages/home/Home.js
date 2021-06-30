@@ -6,17 +6,19 @@ import './S-Home.css'
 import PopCategory from './PopularCategory/PopCategory'
 import LeftPopCategory from './PopularCategory/Left-PopCategory'
 import Carousel from '../../components/carousel/Carousel'
+import { useLike } from '../../components/context/Likes'
+import { isAuthenticated } from '../../services/isAuthenticated'
 
 
 export default function Home() {
   const [products, setProduct] = useState([])
+  const { like, setLike } = useLike()
 
   useEffect(() => {
-    api.get('/').then((response) => {
+    (async () => {
+      var response = await api.get('/')
       setProduct(response.data)
-    }).catch((error) => {
-      console.log('erro:'+error)
-    })
+    })()
   }, [])
 
   return (

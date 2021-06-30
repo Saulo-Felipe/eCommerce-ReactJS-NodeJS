@@ -137,21 +137,28 @@ router.post('/get-user', async(request, response) => {
 
 router.post('/likes', async(request, response) => {
     try {
-        const {idUser, idProduct} = request.body
-
-        var [result] = await sequelize.query(`
-            SELECT clients.id AS userId, products.id AS productId FROM clients
+        if (request.body.type && request.body.type === "get all likes") {
+            const { id } = request.body
+            var [result] = await sequelize.query(`SELECT products.id AS productId FROM clients
             INNER JOIN userliked_product ON clients.id = userliked_product.id_user
             INNER JOIN products ON products.id = userliked_product.id_product_like
-            WHERE userliked_product.id_user = ${idUser} AND userliked_product.id_product_like = ${idProduct}
-        `)
-        console.log('length: ', result.length)
-        if (result.length === 0)
-            return response.json({ like: false })
+            WHERE userliked_product.id_user = ${id}`)
 
-        return response.json({ like: true })
+            return response.json({ result: result })
+        } else {
+            const {idUser, idProduct} = request.body
 
-        console.log(result)
+            var [result] = await sequelize.query(`
+                SELECT clients.id AS userId, products.id AS productId FROM clients
+                INNER JOIN userliked_product ON clients.id = userliked_product.id_user
+                INNER JOIN products ON products.id = userliked_product.id_product_like
+                WHERE userliked_product.id_user = ${idUser} AND userliked_product.id_product_like = ${idProduct}
+            `)
+            if (result.length === 0)
+                return response.json({ like: false })
+
+            return response.json({ like: true })
+        }
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)

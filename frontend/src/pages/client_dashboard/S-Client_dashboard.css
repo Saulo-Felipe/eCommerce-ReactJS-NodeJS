@@ -1,0 +1,129 @@
+.favorite-page > * {
+	font-family: "Rubik", sans-serif;
+}
+.search-content-container {
+	background-color: white;
+}
+.LeftSearch-favorite {
+	box-shadow: 0px 0px 10px black;
+	z-index: 1;
+	padding: 0 !important;
+}
+.LeftSearch-favorite {
+	width: 500px !important;
+}
+.card-line-image {
+	background-size: cover;
+	background-position: center;
+	width: 160px;
+	height: 160px;
+}
+.card-line-content {
+	padding: 20px;
+}
+.mini-title-products {
+	color: #373f50;
+	font-weight: 700;
+	font-size: 1.1rem;
+}
+.mini-price-products {
+	color: #4e54c8;
+	font-weight: 600;
+	margin-top: 10px;
+}
+.remove-container {
+	width: 350px;
+	text-align: right;
+	padding: 20px;
+}
+.btn-remove-favorite > div{
+	float: left;
+}
+.remove-favorite-icon {
+	font-size: 1.2em;
+}
+.remove-favorite-txt {
+	font-size: 0.8em;
+}
+/*   Cards     */
+
+.card-line {
+	border: solid 1px gray;
+} 
+
+
+.option-category-favorite {
+	color: #7d879c !important;
+}
+.result-category-favorite {
+	color: #4b566b;
+}
+
+
+.favorite-perfil-photo {
+	border-radius: 50%;
+	width: 100px;
+	height: 100px;
+	background-position: center;
+	background-size: cover;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	margin: auto;
+}
+
+.border-on-image-profile-favorite {
+	border: 1px solid #6A6D70;
+	width: 110px;
+	height: 110px;
+	border-radius: 50%;
+}
+.header-top-favorite {
+	height: 110px;
+	padding: 20px;
+}
+.informations-favorite-page {
+	width: max-content;
+	height: min-content;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	padding-left: 10px;
+}
+.favorite-name {
+	width: max-content;
+}
+.favorite-email {
+	font-size: 0.8em;
+	color: #4e54c8;
+}
+
+/*  Alternatives  */
+
+.fixed-alternative {
+	background-color: ghostwhite;
+	padding: 10px;
+	padding-left: 15px;
+
+}
+.normal-alternative {
+	padding: 10px;
+	padding-left: 15px;
+}
+.icon-normal-alternative {
+	float: left;
+	font-weight: 400 !important;
+	color: #868686;
+}
+.title-norma-alternative {
+	line-height: 30px;
+	padding-left: 30px;
+}
+
+.active-here {
+	color: #4e54c8;
+}
+
+.normal-alternative {
+	cursor: pointer;
+}

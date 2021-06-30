@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './S-Card.css'
 import api from '../../services/api'
+import { useLike } from '../context/Likes'
 
 export default function Card(props) {
 
   const [likeIcon, setLikeIcon] = useState()
+
+  const { like, setLike } = useLike()
 
   useEffect(() => {
     (async () => {
@@ -34,9 +37,11 @@ export default function Card(props) {
       if (response.data.like === false) {
         await api.post('/new-like', { idUser: idUser, idProduct: props.id, type: 'like' })
         setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
+        setLike(like+1)
       } else {
         await api.post('/new-like', { idUser: idUser, idProduct: props.id, type: 'dislike' })
         setLikeIcon(<span className="material-icons-outlined">favorite_border</span>)
+        setLike(like-1)
       }
     }
   }

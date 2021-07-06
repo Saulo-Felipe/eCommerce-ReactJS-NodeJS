@@ -10,8 +10,10 @@ import Search from './pages/search/Search'
 import Footer from './components/footer/Footer'
 import UserProfile from './pages/userProfile/UserProfile'
 import Client_dashboard from './pages/client_dashboard/Client_dashboard'
+import Favorite from './pages/client_dashboard/favorites/Favorite'
 import { PrivateRoutes } from './services/PrivateRoutes'
 import { Like } from './components/context/Likes'
+
 
 function App() {
   return (
@@ -25,7 +27,17 @@ function App() {
             <PrivateRoutes path="/admin/new-product" component={AddProduct} />
             <PrivateRoutes path="/admin/new-category" component={AddCategory} />
             <PrivateRoutes path="/profile/:id" component={UserProfile}/>
-            <PrivateRoutes path="/client_dashboard" component={Client_dashboard} />
+
+            {/*Client Dashboard*/}
+            <PrivateRoutes path="/client_dashboard/Compras">
+              <Client_dashboard child_component={"Purchases"} />
+            </PrivateRoutes>
+
+            <PrivateRoutes path="/client_dashboard/favorites">
+              <Client_dashboard child_component={"Favorite"} />
+            </PrivateRoutes>
+            {/*Client Dashboard*/}
+
             <Route path="/register" component={Register} />
             <Route path="/search/:value" component={Search} />
           </Switch>

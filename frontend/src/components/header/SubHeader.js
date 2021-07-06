@@ -46,16 +46,6 @@ export default function SubHeader(props) {
 		        <li className="nav-item ms-2">
 		          <Link to="/admin/dashboard" className="nav-link active color-hover">Dashboard (admin)</Link>
 		        </li>
-
-		        {
-		          isAuthenticated ?
-		          <li className="nav-item ms-2">
-		            <a href="/" className="nav-link active color-hover" onClick={() => localStorage.removeItem('id')}>Logout</a>
-		          </li>
-		          : ""                   
-		        }
-
-
 		      </ul>
 
 		    </div>

@@ -6,27 +6,33 @@ import {Link} from 'react-router-dom'
 import Favorite from './favorites/Favorite'
 import Purchases from './purchases/Purchases'
 
-export default function Client_dashboard() {
+export default function Client_dashboard(props) {
 
-  var location = useLocation()
-
-
-  useEffect(() => {
-    console.log('mudou')
-    console.log(location.pathname)
-  }, [location])
-
-
-  var href = window.location.href
+  const Child_component = props.child_component === "Favorite" 
+  ? Favorite
+  : Purchases
 
   useEffect(() => {
-    if (href.indexOf('favorite') != -1) {
 
-    } 
+    document.querySelector("#root > header > nav.navbar.primary-navbar.navbar-expand-lg.navbar-light.bg-light > div > div.d-flex.flex-row.item-mobile > div.navbar-brand").addEventListener('click', () => {
+      document.querySelector('.LeftSearch-favorite').style.left = "0"
+      //document.querySelector('#root').style.overflow = "hidden"
+    })
+
+    document.querySelector('.close-menu-filter-search').addEventListener('click', () => {
+      document.querySelector('.LeftSearch-favorite').style.left = "-110%"
+    })
+
   }, [])
 
+
+  const [configs, setConfigs] = useState({
+    PagePosigion: '',
+    TitleOne: '', 
+    TitleTwo: ''
+  })
+
   return (
-    <BrowserRouter>
       <div className="SearchPage favorite-page">
         <div className="TopFilter">
           <div className="d-flex flex-row mt-4 header-page-search">
@@ -37,21 +43,21 @@ export default function Client_dashboard() {
             </div>
             
             <h4 className="text-white titleSearch w-100">
-              Meus Favoritos
+              {configs.TitleOne}
             </h4>
 
             <div className="text-white pe-5 d-flex iconsNavigate desktop">
               <span className="material-icons-outlined iconNavigateSearch">home</span> Home
               <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> Dashboard
-              <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> 
+              <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> {configs.PagePosigion}
             </div>
           </div>
         </div>
 
 
         <div className="ContentSearch d-flex flex-box">
-          <div className="LeftSearch LeftSearch-favorite ms-5">
-            <div className="material-icons-outlined close-menu-filter-search text-end w-100">close</div>
+          <div className="LeftSearch-favorite ms-5 menu-dashboard-client">
+            <div className="material-icons-outlined close-menu-filter-search text-end w-100 pe-1 mt-2">close</div>
 
             <div className="d-flex header-top-favorite">
               <div className="border-on-image-profile-favorite ">
@@ -71,10 +77,10 @@ export default function Client_dashboard() {
 
               {/*=================| Alternatives Menu |===================*/}
 
-              <Link to={"/client_dashboard/purchases"} className="no-href-decoration">
+              <Link to={"/client_dashboard/Compras"} className="no-href-decoration">
                 <div className="normal-alternative">
-                  <div class="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">shopping_bag</div>
-                  <div className="title-norma-alternative title-buy icon-dashboard"> Compras</div>
+                  <div class="material-icons-outlined icon-normal-alternative alternative-icon-buy icon-dashboard">shopping_bag</div>
+                  <div className="title-norma-alternative alternative-title-buy icon-dashboard"> Compras</div>
                 </div>
               </Link>
 
@@ -82,8 +88,8 @@ export default function Client_dashboard() {
 
               <Link to={"/client_dashboard/favorites"} className="no-href-decoration">
                 <div className="normal-alternative">
-                  <div class="material-icons-outlined icon-normal-alternative icon-favorite icon-dashboard">volunteer_activism</div>
-                  <div className="title-norma-alternative active-favorite title-favorite icon-dashboard"> Favoritos</div>
+                  <div class="material-icons-outlined icon-normal-alternative alternative-icon-favorite icon-dashboard">volunteer_activism</div>
+                  <div className="title-norma-alternative active-favorite alternative-title-favorite icon-dashboard"> Favoritos</div>
                 </div>
               </Link>
 
@@ -122,17 +128,14 @@ export default function Client_dashboard() {
 
           <div className="container search-content-container">
             <div className="FilterTop d-flex">
-              <h5 className="text-white">Lista de produtos salvos: </h5>
+              <h5 className="text-white w-100">{configs.TitleTwo} </h5>
+              <div className="text-end w-100"><button className="btn btn-outline-danger me-4">Sair</button></div>
             </div>
-            
-              <Switch>
-                <Route path="/client_dashboard/favorites" component={Favorite}/>
-                <Route path="/client_dashboard/purchases" component={Purchases}/>
-              </Switch>
+
+            <Child_component hooks={{configs, setConfigs}} />
 
           </div>
         </div>
       </div>
-    </BrowserRouter>
 	)
 }

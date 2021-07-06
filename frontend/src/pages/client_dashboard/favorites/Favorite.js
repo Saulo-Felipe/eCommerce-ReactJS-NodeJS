@@ -1,79 +1,63 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import api from '../../../services/api'
+import { isAuthenticated } from '../../../services/isAuthenticated'
 
-export default function Favorite() {
-
-  var location = useLocation()
+export default function Favorite(props) {
+  const [FavoriteProducts, setFavoriteProducts] = useState([])
 
   useEffect(() => {
-    if (location.pathname === "/client_dashboard/favorites") {
-      var icons = document.querySelectorAll('.icon-dashboard')
+    props.hooks.setConfigs({
+      PagePosigion: 'Favoritos',
+      TitleOne: 'Favoritos',
+      TitleTwo: 'Lista de Produtos salvos: '
+    })
+    var icons = document.querySelectorAll('.icon-dashboard')
 
-      for (var c=0; c < icons.length; c++) {
-        icons[c].classList.remove('active-here')
-      }
-      document.querySelector('.icon-favorite').classList.add('active-here')
-      document.querySelector('.title-favorite').classList.add('active-here')
+    for (var c=0; c < icons.length; c++) {
+      icons[c].classList.remove('active-here')
     }
+    
+    document.querySelector('.alternative-icon-favorite').classList.add('active-here')
+    document.querySelector('.alternative-title-favorite').classList.add('active-here');
+
+    (async() => {
+      const response = await api.post('/likes', { id: isAuthenticated, type: 'get all likes' })
+
+      setFavoriteProducts(response.data.result)
+    })()
   }, [])
 
 	return (
 		<div className="favorite-content ms-4">
-      <div className="card-line d-flex mb-3">
-        <div className="card-line-image" style={{backgroundImage: `url(${require('../../../components/header/logo-example.png').default})`}}>
-        </div>
-        <div className="card-line-content">
-          <div className="mini-title-products">Notebook 64GB RAM</div>
-          <div>
-            <span className="option-category-favorite">Categorias:</span>
-            <span className="result-category-favorite"> notebooks, informatica, celulares</span>
+      {
+        FavoriteProducts.length === 0 
+        ? <h1>Nenhum Produto Salvo</h1>
+        : FavoriteProducts.map((product) => 
+          <div className="card-line d-flex mb-3">
+            <div className="card-line-image" style={{backgroundImage: `url(${require(`../../../coversProduct/${product.cover}`).default})`}}>
+            </div>
+            <div className="card-line-content">
+              <div className="mini-title-products">{product.product_name}</div>
+              <div>
+                <span className="option-category-favorite">Categorias:</span>
+                <span className="result-category-favorite"> notebooks, informatica, celulares</span>
+              </div>
+              <div>
+                <span className="option-category-favorite">Cores:</span>
+                <span className="result-category-favorite"> Azul, Vermelho, Verde</span>
+              </div>
+              <div className="mini-price-products">R$ {product.price}</div>
+            </div>
+            <div className="remove-container">
+              <button className="btn btn-outline-danger btn-remove-favorite">
+                <div className="material-icons remove-favorite-icon">delete_forever</div>
+                <div className="remove-favorite-txt">Remover</div>
+              </button>
+            </div>
           </div>
-          <div>
-            <span className="option-category-favorite">Cores:</span>
-            <span className="result-category-favorite"> Azul, Vermelho, Verde</span>
-          </div>
-          <div className="mini-price-products">R$ 59,90</div>
-        </div>
-        <div className="remove-container">
-          <button className="btn btn-outline-danger btn-remove-favorite">
-            <div className="material-icons remove-favorite-icon">delete_forever</div>
-            <div className="remove-favorite-txt">Remover</div>
-          </button>
-        </div>
-      </div>
-
-
-      <div className="card-line d-flex mb-3">
-        <div className="card-line-image" style={{backgroundImage: `url(${require('../../../components/header/logo-example.png').default})`}}>
-        </div>
-        <div className="card-line-content">
-          <div className="mini-title-products">aNotebook 64GB RAM</div>
-          <div>
-            <span className="option-category-favorite">Categorias:</span>
-            <span className="result-category-favorite"> notebooks, informatica, celulares</span>
-          </div>
-          <div>
-            <span className="option-category-favorite">Cores:</span>
-            <span className="result-category-favorite"> Azul, Vermelho, Verde</span>
-          </div>                
-        </div>
-      </div>
-
-      <div className="card-line d-flex mb-3">
-        <div className="card-line-image" style={{backgroundImage: `url(${require('../../../components/header/logo-example.png').default})`}}>
-        </div>
-        <div className="card-line-content">
-          <div className="mini-title-products">Notebook 64GB RAM</div>
-          <div>
-            <span className="option-category-favorite">Categorias:</span>
-            <span className="result-category-favorite"> notebooks, informatica, celulares</span>
-          </div>
-          <div>
-            <span className="option-category-favorite">Cores:</span>
-            <span className="result-category-favorite"> Azul, Vermelho, Verde</span>
-          </div>                
-        </div>
-      </div>
+        )
+      }
     </div>
 	)
 }

@@ -137,15 +137,17 @@ router.post('/get-user', async(request, response) => {
 
 router.post('/likes', async(request, response) => {
     try {
+        //Pega a quantidade total de likes
         if (request.body.type && request.body.type === "get all likes") {
             const { id } = request.body
-            var [result] = await sequelize.query(`SELECT products.id AS productId FROM clients
+            var [result] = await sequelize.query(`SELECT products.product_name, products.price, products.cover FROM clients
             INNER JOIN userliked_product ON clients.id = userliked_product.id_user
             INNER JOIN products ON products.id = userliked_product.id_product_like
             WHERE userliked_product.id_user = ${id}`)
 
             return response.json({ result: result })
         } else {
+            //Verifica se um produto especifico tem um like que veio de um usuario especifico
             const {idUser, idProduct} = request.body
 
             var [result] = await sequelize.query(`

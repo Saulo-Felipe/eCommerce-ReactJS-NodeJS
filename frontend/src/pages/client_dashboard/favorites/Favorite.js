@@ -12,14 +12,16 @@ export default function Favorite(props) {
       TitleOne: 'Favoritos',
       TitleTwo: 'Lista de Produtos salvos: '
     })
-    var icons = document.querySelectorAll('.icon-dashboard')
 
+    // ==========| Active color on actual page |==========
+    var icons = document.querySelectorAll('.icon-dashboard')
     for (var c=0; c < icons.length; c++) {
       icons[c].classList.remove('active-here')
     }
-    
     document.querySelector('.alternative-icon-favorite').classList.add('active-here')
     document.querySelector('.alternative-title-favorite').classList.add('active-here');
+    // ==========| Active color on actual page |==========
+    
 
     (async() => {
       const response = await api.post('/likes', { id: isAuthenticated, type: 'get all likes' })

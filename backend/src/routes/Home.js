@@ -126,7 +126,9 @@ router.post('/get-user', async(request, response) => {
         const { type, id } = request.body
         if (type && type === 'header') {
             const [user] = await sequelize.query(`SELECT * FROM clients WHERE id = ${id}`)
-            return response.json({userName: user[0].user_name, photo_profile: user[0].profile_photo})
+            delete user[0].password
+            console.log(user)
+            return response.json(user[0])
         }
     }
     catch(error) {
@@ -216,7 +218,7 @@ router.post('/profile', async(request, response) => {
 var storage = multer.diskStorage({
   destination: async (request, file, callback) => {
     //await sequelize.query
-    callback(null, '../frontend/src/pages/userProfile/profile-images/')
+    callback(null, '../frontend/src/pages/client_dashboard/configs/profile-images')
   },
   filename: (request, file, callback) => {
     callback(null, file.originalname)

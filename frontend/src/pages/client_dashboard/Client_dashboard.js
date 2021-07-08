@@ -5,32 +5,37 @@ import {BrowserRouter, Switch, Route, useLocation} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import Favorite from './favorites/Favorite'
 import Purchases from './purchases/Purchases'
+import UserProfile from './configs/User_Configs'
+import {isAuthenticated} from '../../services/isAuthenticated'
+import api from '../../services/api'
 
 export default function Client_dashboard(props) {
 
-  const Child_component = props.child_component === "Favorite" 
-  ? Favorite
-  : Purchases
+  const [configs, setConfigs] = useState({ PagePosigion: '', TitleOne: '', TitleTwo: '' })
+  const [userInformations, setUserInformations] = useState({profileImage: '', email: ''})
+
+  var Child_component
+  if (props.child_component === "Favorite") Child_component = Favorite
+  else if (props.child_component === "Purchases") Child_component = Purchases
+  else if (props.child_component === "UserProfile") Child_component = UserProfile
 
   useEffect(() => {
 
-    document.querySelector("#root > header > nav.navbar.primary-navbar.navbar-expand-lg.navbar-light.bg-light > div > div.d-flex.flex-row.item-mobile > div.navbar-brand").addEventListener('click', () => {
-      document.querySelector('.LeftSearch-favorite').style.left = "0"
-      //document.querySelector('#root').style.overflow = "hidden"
-    })
+    (async () => {
+      const response = await api.post('get-user', {type: 'header', id: isAuthenticated})
 
-    document.querySelector('.close-menu-filter-search').addEventListener('click', () => {
-      document.querySelector('.LeftSearch-favorite').style.left = "-110%"
-    })
+      if (response.data.error) return alert('Erro ao listar dados de usuario!')
+
+      setUserInformations({
+        user_name: response.data.user_name,
+        profileImage: response.data.profile_photo,
+        email: response.data.email,
+      })
+    })();
 
   }, [])
 
 
-  const [configs, setConfigs] = useState({
-    PagePosigion: '',
-    TitleOne: '', 
-    TitleTwo: ''
-  })
 
   return (
       <div className="SearchPage favorite-page">
@@ -39,12 +44,8 @@ export default function Client_dashboard(props) {
             <div className="text-white pe-5 d-flex iconsNavigate mobile">
               <span className="material-icons-outlined iconNavigateSearch">home</span> Home
               <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> Dashboard
-              <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> 
+              <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> {configs.TitleOne}
             </div>
-            
-            <h4 className="text-white titleSearch w-100">
-              {configs.TitleOne}
-            </h4>
 
             <div className="text-white pe-5 d-flex iconsNavigate desktop">
               <span className="material-icons-outlined iconNavigateSearch">home</span> Home
@@ -61,14 +62,14 @@ export default function Client_dashboard(props) {
 
             <div className="d-flex header-top-favorite">
               <div className="border-on-image-profile-favorite ">
-                <div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./UserProfile.jpg`).default})`}}>
+                <div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./configs/profile-images/${userInformations.profileImage || 'user.png'}`).default})`}}>
 
                 </div>
               </div>
 
               <div className="informations-favorite-page">
-                <div className="favorite-name">Jubileu Amarelo</div>
-                <div className="favorite-email">jubileuAmarelo@gmail.com</div>
+                <div className="favorite-name">{userInformations.user_name}</div>
+                <div className="favorite-email">{userInformations.email}</div>
               </div>
             </div>
             
@@ -95,16 +96,18 @@ export default function Client_dashboard(props) {
 
               <hr/>
 
-              <div className="normal-alternative">
-                <div class="material-icons-outlined icon-normal-alternative">support</div>
-                <div className="title-norma-alternative"> Suporte</div>
-              </div>
+              <Link to={"/client_dashboard/user-profile"} className="no-href-decoration">
+                <div className="normal-alternative">
+                  <div class="material-icons-outlined icon-normal-alternative alternative-icon-manage icon-dashboard">manage_accounts</div>
+                  <div className="title-norma-alternative icon-dashboard alternative-title-manage"> Meus dados pessoais</div>
+                </div>
+              </Link>              
 
               <div className="alternative-dashboard fixed-alternative">Configurações</div>
 
               <div className="normal-alternative">
-                <div class="material-icons-outlined icon-normal-alternative">manage_accounts</div>
-                <div className="title-norma-alternative"> Meus dados pessoais</div>
+                <div class="material-icons-outlined icon-normal-alternative">support</div>
+                <div className="title-norma-alternative"> Suporte</div>
               </div>
 
               <hr/>
@@ -129,7 +132,11 @@ export default function Client_dashboard(props) {
           <div className="container search-content-container">
             <div className="FilterTop d-flex">
               <h5 className="text-white w-100">{configs.TitleTwo} </h5>
-              <div className="text-end w-100"><button className="btn btn-outline-danger me-4">Sair</button></div>
+              <div className="text-end w-100">
+                <a href="/" onClick={() => localStorage.removeItem('id')}>
+                  <button className="btn btn-outline-danger me-4">Sair</button>
+                </a>
+              </div>
             </div>
 
             <Child_component hooks={{configs, setConfigs}} />

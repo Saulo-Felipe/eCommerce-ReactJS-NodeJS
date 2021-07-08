@@ -13,6 +13,7 @@
 	height: 100vh;
 	border-radius: 10px;
 	margin-top: -80px;
+	transition: all 0.5s;
 }
 .card-line-image {
 	background-size: cover;
@@ -81,15 +82,12 @@
 	border-radius: 50%;
 }
 .header-top-favorite {
-	height: 110px;
 	padding: 20px;
+	display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .informations-favorite-page {
-	width: max-content;
-	height: min-content;
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
 	padding-left: 10px;
 }
 .favorite-name {

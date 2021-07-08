@@ -62,10 +62,10 @@ function Modal() {
                 <input type="password" id="password_login" className="form-control mb-3" onChange={handleChangeInput}/>
 
               </form>
+              <small>
+                Não tem uma conta? <Link to="/register" onClick={closeModal}>Cadastre-se</Link>
+              </small>
             </div>
-            <small>
-              Não tem uma conta? <Link to="/register" onClick={closeModal}>Cadastre-se</Link>
-            </small>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary close-modal" data-bs-dismiss="modal">Fechar</button>
               <button type="button" className="btn btn-primary" onClick={handleSubmitForm}>Fazer Login</button>

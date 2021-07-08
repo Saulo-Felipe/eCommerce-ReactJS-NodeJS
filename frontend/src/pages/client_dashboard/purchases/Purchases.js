@@ -9,15 +9,14 @@ export default function Purchases(props) {
 			TitleTwo: 'Lista de todas as minhas compras: '
 		})
 
+	    // ==========| Active color on actual page |==========
 	    var icons = document.querySelectorAll('.icon-dashboard')
-
 	    for (var c=0; c < icons.length; c++) {
 	      icons[c].classList.remove('active-here')
 	    }
-
-
 	    document.querySelector('.alternative-icon-buy').classList.add('active-here')
 	    document.querySelector('.alternative-title-buy').classList.add('active-here')
+	    // ==========| Active color on actual page |==========
 	}, [])
 
 

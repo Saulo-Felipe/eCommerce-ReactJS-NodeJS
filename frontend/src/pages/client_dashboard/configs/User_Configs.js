@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import './S-UserProfile.css'
+import './S-User_Profile.css'
 import { useParams } from 'react-router-dom'
-import api from '../../services/api'
-import temporaryProfileImg from './change-photo.png'
+import api from '../../../services/api'
+import { isAuthenticated } from '../../../services/isAuthenticated'
 
-export default function UserProfile() {
+export default function UserProfile(props) {
 
+	const id = isAuthenticated
 	const [saveImageProfile, setSaveProfileImage] = useState()
 	const [imageRequire, setImageRequire] = useState()
 	const [informations, setInformations] = useState({})
@@ -19,18 +20,24 @@ export default function UserProfile() {
 		state: '',
 	})
 
-	const {id} = useParams()
 	
 	useEffect(() => {
+
+	    props.hooks.setConfigs({
+	      PagePosigion: 'Configurações',
+	      TitleOne: 'Minha Conta',
+	      TitleTwo: 'Edite suas informações aqui: '
+	    });
+
 		(async () => {
 			var response = await api.post('/profile', { id })
 			setImageRequire(<img src={require(`./profile-images/${response.data.result.profile_photo}`).default} alt="Profile image" id="image-profile" />)
 			setInformations(response.data.result)
-			if (response.data.error) alert(response.data.error)
+			if (response.data.error) return alert(response.data.error)
 
 			//Adress
 			var response = await api.post('/get-adress', { id })
-			if (response.data.error) alert(response.data.error)
+			if (response.data.error) return alert(response.data.error)
 
 			var adress = response.data.result
 			setEditAdress({
@@ -42,8 +49,17 @@ export default function UserProfile() {
 				city: adress.city,
 				state: adress.state
 			})
+		})();
 
-		})()
+	    // ==========| Active color on actual page |==========
+	    var icons = document.querySelectorAll('.icon-dashboard')
+	    for (var c=0; c < icons.length; c++) {
+	      icons[c].classList.remove('active-here')
+	    }
+	    document.querySelector('.alternative-icon-manage').classList.add('active-here')
+	    document.querySelector('.alternative-title-manage').classList.add('active-here');
+	    // ==========| Active color on actual page |==========
+
 	}, [])
 
 	async function refreshProfileImage (image) {
@@ -176,18 +192,6 @@ export default function UserProfile() {
 	return (
 		<div className="profile">
 			<div className="container">
-
-				<div className="primary-container-profile">
-						<label htmlFor="new-profile-image">
-							<div className="photo-profile">
-								{imageRequire}
-								<div className="change-photo-profile"></div>
-							</div>
-						</label>
-					  <input type="file" id="new-profile-image" className="hidden-input" onChange={(changes) => {changeProfilePhoto(changes.target.files[0])}}/>
-					<h4 className="text-center mt-3">{informations.user_name}</h4>
-					{saveImageProfile}
-				</div>
 
 				<div className="Secondary-container-profile">
 

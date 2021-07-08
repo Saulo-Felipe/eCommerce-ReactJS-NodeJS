@@ -10,7 +10,9 @@ header > nav {
   box-sizing: border-box;
   color: #212529;
 }
-
+.navbar-brand {
+  padding-top: 0;
+}
 .form-search {
   margin: auto;
   width: 100%;

@@ -1,5 +1,4 @@
 .profile {
-	padding-top: 50px;
 }
 .profile > .container {
 	display: flex;
@@ -45,9 +44,10 @@
 
 .Secondary-container-profile {
 	height: 500px;
-	width: 63%;
+	width: 100%;
 	background-color: white;
 	padding: 20px;
+	padding-left: 50px;
 	border-radius: 10px;
 }
 .body-modal-profile {
@@ -81,7 +81,6 @@
 		width: 100%;
 	}
 	.Secondary-container-profile {
-		width: 100%;
 		margin-top: 30px;
 	}
 	.change-photo-profile {

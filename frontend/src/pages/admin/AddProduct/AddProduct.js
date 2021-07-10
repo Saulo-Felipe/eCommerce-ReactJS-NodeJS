@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './S-AddProduct.css'
-import logoReact from './react-logo.png'
 import api from '../../../services/api'
 
 export default function AddProduct() {
@@ -22,7 +21,7 @@ export default function AddProduct() {
     if (id === "name")
       productInfo.name = values.target.value
     else if (id === "amountProduct")
-      productInfo.amount = values.target.value
+      productInfo.amount = parseInt(values.target.value)
     else if (id === "cover")
       productInfo.cover = values.target.files[0]
     else if (id === "descriptionProduct")
@@ -48,7 +47,7 @@ export default function AddProduct() {
       }
 
       for (let c in productInfo) {
-        if (c != "images" && c != "cover" ) {
+        if (c !== "images" && c !== "cover" ) {
           formData.append(c, productInfo[c])
         }
       }
@@ -61,6 +60,7 @@ export default function AddProduct() {
 
       var response = await api.post('/admin/relationship', { CategoriesToProducts: CategoriesToProducts })
       
+      if (response.data.error) alert('Erro interno, por favor tente mais tarde.')
     }
 
   }
@@ -80,7 +80,7 @@ export default function AddProduct() {
   useEffect(() => {
     (async () => {
       var response = await api.post('/admin/products')
-      console.log(response)
+      if (response.data.error) return alert('Error encontrado')
       setCategories(response.data.result)
     })()
   }, [])
@@ -97,10 +97,8 @@ export default function AddProduct() {
   async function addCategory(changes, id) {
     if (changes.target.checked === true) {
       CategoriesToProducts.push(id)
-      console.log(CategoriesToProducts)
     } else {
       CategoriesToProducts.splice(CategoriesToProducts.indexOf(id), 1)
-      console.log(CategoriesToProducts)
     }
   }
 
@@ -112,17 +110,17 @@ export default function AddProduct() {
           <h5 className="mt-3 mb-3">Criar um novo produto</h5>
           <div className="form-controler">
             <label htmlFor="name">Nome do Produto</label>
-            <input id="name" className="formProduct form-control" onChange={handleChangeFom} required/>
+            <input autoComplete="off" id="name" className="formProduct form-control" onChange={handleChangeFom} required/>
 
             <div className="validation-form d-flex flex-box mt-2">
               <div className="validade me-2">
                 <label htmlFor="amountProduct">Quantidade do Produto: </label>
-                <input id="amountProduct" type="number" className="form-control" required pattern="[1-99999]+$" onChange={handleChangeFom}/>
+                <input autoComplete="off" id="amountProduct" type="number" className="form-control" required pattern="[1-99999]+$" onChange={handleChangeFom}/>
               </div>
               <div className="validade">
                 <label htmlFor="amountProduct">Capa do produto: </label>
-                <input id="cover" type="file" className="form-control " onChange={InputFileChange, handleChangeFom} required />
-                <div className="text-center"><img id="FilePreview" width="50%" /></div>
+                <input autoComplete="off" id="cover" type="file" className="form-control " onChange={() => {InputFileChange(); handleChangeFom()}} required />
+                <div className="text-center"><img id="FilePreview" width="50%" alt="preview"/></div>
               </div>
             </div>
 
@@ -130,21 +128,21 @@ export default function AddProduct() {
             <textarea id="descriptionProduct" className="form-control " onChange={handleChangeFom} required></textarea>
 
             <label htmlFor="multipleImages" className="mt-2">Imagens do produto: </label>
-            <input type="file" id="multipleImages" className="form-control " onChange={handleChangeFom} multiple required/>
+            <input autoComplete="off" type="file" id="multipleImages" className="form-control " onChange={handleChangeFom} multiple required/>
             <small className="obs">*Você pode selecionar mais de uma imagem</small>
 
 
             <label htmlFor="price" className="mt-2">Preço do produto: </label>
             <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1">R$</span>
-              <input type="number" className="form-control " id="price" min="0" onChange={handleChangeFom} required aria-describedby="basic-addon1"></input>
+              <input autoComplete="off" type="number" className="form-control " id="price" min="0" onChange={handleChangeFom} required aria-describedby="basic-addon1"></input>
             </div>
 
           </div>
 
           <div className="d-flex flex-row">
             <h5 className="w-100 mb-3">Adicione categorias ao seu produto</h5>
-            <div><input type="text" onChange={searchCategory} placeholder="Pesquise por uma categoria..." /></div>
+            <div><input autoComplete="off" type="text" onChange={searchCategory} placeholder="Pesquise por uma categoria..." /></div>
           </div>
           <div className="container-categories-addProducts">
             {
@@ -152,7 +150,7 @@ export default function AddProduct() {
               <h5>Nenhuma categoria encontrada</h5> :
               categories.map((item) => {
                 return <div className="">
-                  <input type="checkbox" className="checkbox-all-categories d-inline me-2" id={`${item.id}`} onChange={(changes) => addCategory(changes, item.id)}/> 
+                  <input autoComplete="off" type="checkbox" className="checkbox-all-categories d-inline me-2" id={`${item.id}`} onChange={(changes) => addCategory(changes, item.id)}/> 
                   <label htmlFor={`${item.id}`} className="d-inline">{item.category_name}</label>
                 </div>
               })

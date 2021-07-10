@@ -9,6 +9,9 @@
 .SeeAllCategory h5 {
 	margin-bottom: 20px !important;
 }
+.SeeAllCategory {
+	margin-bottom: 50px !important;
+}
 
 .category-submit-sucess {
 	width: max-content;
@@ -33,4 +36,21 @@
 	border: solid 1px #0000001f;
 	padding: 7px 11px 7px;
 	font-size: 17px;
+}
+
+@media screen and (max-width: 991px) {
+	.AddCategory {
+		max-width: 90%;
+		margin: auto;
+	}
+	.input-title-search-category-add {
+		display: block !important;
+	}
+	.container-input-search-category-add {
+		text-align: left !important;
+		margin-top: 10px;
+	}
+	.category-name-add {
+		align-self: center;
+	}
 }

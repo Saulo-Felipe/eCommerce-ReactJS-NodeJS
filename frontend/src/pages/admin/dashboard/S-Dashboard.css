@@ -1,72 +1,66 @@
-#Dashboard {
-  background-color: #2e3442;
+/*text color #aeb2b7*/
+/*active color #28282e*/
+.admin-menu-left {
+  background-color: #32323a;
+  height: 100vh;
+  width: 25vw;
+  display: flex;
+  margin-left: -21vw;
+  transition: all 0.3s ease;
+  display: inline-flex;
 }
-#controlerMenuDashboard {
-  float: left;
-}
-#Dashboard {
-  float: left;
-}
-#Dashboard > * {
-  color: white;
-}
-.LogotTipoDashboard {
-  font-size: 2em;
-  color: white;
-  margin-bottom: 50px;
-}
-.Options {
-  padding: 0;
-  list-style-type: none; /* Remove margem a esquerda do ul*/
-}
-.Options > li {
-  background-color: #778ec2;
+.menu-admin {
   list-style-type: none;
-  margin: 5px;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 0;
+  flex: auto;
 }
-.menuDashboard {
-  height: 100vh;
-  width: 350px;
-  margin-left: -300px;
-  transition: all 0.5s ease;
-}
-.configs {
-  float: left;
-  width: 50px;
-  background-color: #071c4d;
-  height: 100vh;
+.toggle-admin-menu {
+  background-color: #28282e;
+  padding: 1.5%;
+  color: white;
+  width: 4vw;
   text-align: center;
-  border-left: solid 1px #07256a;
 }
-.open-menu {
-  cursor: pointer;
-  font-size: 3em;
+.admin-menu-alternative {
+  border-bottom: solid 1px #46464E;
+  padding: 0.75em;
+  color: #aeb2b7;
 }
-.menu-open {
-  transition: all 0.5s ease;
+.admin-menu-alternative:hover {
+  background-color: #28282e;
+}
+.admin-icon-close {
+  font-size: 1.4em;
+  color: white !important;
+}
+.admin-icon-close:focus {
+  border: 0;
+  box-shadow: 0 0 0 0 transparent;
+}
+.admin-content-dashboard {
+  display: inline-flex;
+  vertical-align: top;
+  width: 96vw;
   height: 100vh;
-  width: 300px;
-  float: left;
-  background-color: #071c4d;
-  color: white;
+  border:  solid 1px red;
+  transition: all 0.3s ease;
+  margin-bottom: 50px;
+  overflow: scroll;
 }
-.iconsDashboard {
-  position: relative;
-  top: 90%;
-  transform: translateY(-100%);
-}
-.iconsDashboard > * {
-  color: white;
-  font-size: 2.5em;
-  margin-top: 20px;
-}
-.DashboardSaulo {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  text-align: center;
-  color: white;
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=| Responsive |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+@media screen and (max-width: 991px) {
+  .admin-menu-left {
+    height: auto;
+    width: auto; 
+    display: block;
+    margin-left: 0;
+  }
+  .toggle-admin-menu {
+    display: none;
+  }
+  .admin-content-dashboard {
+    width: 100vw;
+  }
 }

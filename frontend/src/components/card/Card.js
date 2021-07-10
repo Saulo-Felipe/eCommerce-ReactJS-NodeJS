@@ -19,13 +19,12 @@ export default function Card(props) {
           setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
         } else {
           setLikeIcon(<span className="material-icons-outlined ">favorite_border</span>)
-          console.log('deslikancod')
         }
       } else {
         setLikeIcon(<span className="material-icons-outlined ">favorite_border</span>)
       }
     })()
-  }, [])
+  }, [props])
 
   async function LikeOrDeslike() {
     var idUser = localStorage.getItem('id')

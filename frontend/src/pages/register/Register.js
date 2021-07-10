@@ -47,16 +47,16 @@ export default function Register() {
         <form className="mt-3">
 
           <label htmlFor="name">Nome</label>
-          <input type="text" id="name" className="form-control mb-2" placeholder="Digite seu nome completo" onChange={handleChangeInput} required/>
+          <input autoComplete="off" type="text" id="name" className="form-control mb-2" placeholder="Digite seu nome completo" onChange={handleChangeInput} required/>
 
           <label htmlFor="email ">Email</label>
-          <input type="text" id="email" className="form-control mb-2" placeholder="Digite um email válido" onChange={handleChangeInput} required/>
+          <input autoComplete="off" type="text" id="email" className="form-control mb-2" placeholder="Digite um email válido" onChange={handleChangeInput} required/>
 
           <label htmlFor="password ">Senha</label>
-          <input type="password" id="password" className="form-control mb-2" onChange={handleChangeInput} required/>
+          <input autoComplete="off" type="password" id="password" className="form-control mb-2" onChange={handleChangeInput} required/>
 
           <label htmlFor="password-two ">Repita a senha</label>
-          <input type="password" id="password-two" className="form-control mb-2" onChange={handleChangeInput} required/>
+          <input autoComplete="off" type="password" id="password-two" className="form-control mb-2" onChange={handleChangeInput} required/>
 
           <button type="button" className="btn btn-success mt-2" onClick={() => {NewUser()}}>Finalizar Cadastro</button>
         </form>

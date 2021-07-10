@@ -24,7 +24,7 @@ export default function Accordion() {
           </h2>
           <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
             <div className="accordion-body">
-              <input className="form-control mb-2" type="text" placeholder="Pesquise uma por categorias" onChange={handleSearchCategory} />
+              <input autoComplete="off" className="form-control mb-2" type="text" placeholder="Pesquise uma por categorias" onChange={handleSearchCategory} />
               <div className="accordion-search-page-body">
                 {
                   categories.length === 0
@@ -32,7 +32,7 @@ export default function Accordion() {
                   : categories.map((category) => {
                     return (
                       <div key={category.id}>
-                        <input className="d-inline me-2" type="checkbox" />
+                        <input autoComplete="off" className="d-inline me-2" type="checkbox" />
                         <div className="d-inline">{category.category_name}</div>                        
                       </div>
                     )

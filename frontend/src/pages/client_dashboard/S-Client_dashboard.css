@@ -1,6 +1,9 @@
 .favorite-page > * {
 	font-family: "Rubik", sans-serif;
 }
+.favorite-page {
+	background-color: white;
+}
 .search-content-container {
 	background-color: white;
 }
@@ -80,6 +83,29 @@
 	width: 110px;
 	height: 110px;
 	border-radius: 50%;
+	position: relative;
+}
+.changePhoto-client {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: 2;
+	text-align: center;
+	color: white;
+	border-radius: 110px;
+	background-color: #00000096;
+	transition: all 0.2s;
+	opacity: 0;
+	cursor: pointer;
+}
+.changePhoto-client:hover {
+	opacity: 1;
+}
+.changePhoto-client > div {
+	position: relative;
+	text-align: center;
+	top: 50%;
+	transform: translateY(-50%);
 }
 .header-top-favorite {
 	padding: 20px;
@@ -127,6 +153,11 @@
 .normal-alternative {
 	cursor: pointer;
 }
+.container-btn-save-or-remove-image {
+	padding: 20px;
+	padding-top: 0px;
+}
+
 
 /* ===============| Responsive |=============== */
 
@@ -144,5 +175,8 @@
 	}
 	.menu-dashboard-client {
 		display: none;
+	}
+	.hangePhoto-client {
+		opacity: 1;
 	}
 }

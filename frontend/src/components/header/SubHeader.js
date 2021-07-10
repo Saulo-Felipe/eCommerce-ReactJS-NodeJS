@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom'
 
 
 export default function SubHeader(props) {
-	const isAuthenticated = props.isAuthenticated
 	
-
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light navbar-secondary">
 		  <div className="container-fluid">

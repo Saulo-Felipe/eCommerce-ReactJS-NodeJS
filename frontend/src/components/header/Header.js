@@ -70,9 +70,9 @@ function Header() {
       if (isAuthenticated != null) {
         const response = await api.post('/get-user', {type: "header", id: isAuthenticated })
         setUserName(response.data.user_name)
-        setProfilePhoto(<img className="header-profile-img" src={require(`../../pages/client_dashboard/configs/profile-images/${response.data.profile_photo}`).default} alt="User Image" width="40" height="40"/>)
+        setProfilePhoto(<img className="header-profile-img" src={require(`../../pages/client_dashboard/configs/profile-images/${response.data.profile_photo}`).default} alt="User" width="40" height="40" />)
       } else {
-        setProfilePhoto(<img className="header-profile-img" src={require('../../pages/client_dashboard/configs/profile-images/user.png').default} alt="User Image" width="40" height="40"/>)
+        setProfilePhoto(<img className="header-profile-img" src={require('../../pages/client_dashboard/configs/profile-images/user.png').default} alt="User" width="40" height="40"/>)
       }
     }
     getUser();
@@ -92,7 +92,7 @@ function Header() {
 
 
 
-  }, [])
+  }, [setLike, like])
 
   const [search, setSearch] = useState()
 
@@ -127,7 +127,7 @@ function Header() {
             </div>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <div className="d-flex form-search">
-                <input className="form-control input-search" type="search" placeholder="Pesquise por Categorias, produtos e etc..." aria-label="Search" onChange={changedSearch}/>
+                <input autoComplete="off" className="form-control input-search" type="search" placeholder="Pesquise por Categorias, produtos e etc..." aria-label="Search" onChange={changedSearch}/>
                 <Link to={`/search/${search}`} className="search-header-href">
                   <button className="btn btn-outline-success submit-search">
                     <span className="material-icons">search</span>
@@ -173,11 +173,11 @@ function Header() {
                         </Link>
                       </div>
 
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><Link class="dropdown-item" to="/client_dashboard/user-profile">Minha Conta</Link></li>
-                        <li><Link class="dropdown-item" to="/">Carrinho</Link></li>
-                        <li><Link class="dropdown-item" to="/client_dashboard/user-profile">Configurações</Link></li>
-                        <li><a class="dropdown-item" href="/" onClick={() => localStorage.removeItem('id')}>Sair</a></li>
+                      <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><Link className="dropdown-item" to="/client_dashboard/user-profile">Minha Conta</Link></li>
+                        <li><Link className="dropdown-item" to="/">Carrinho</Link></li>
+                        <li><Link className="dropdown-item" to="/client_dashboard/user-profile">Configurações</Link></li>
+                        <li><a className="dropdown-item" href="/" onClick={() => localStorage.removeItem('id')}>Sair</a></li>
                       </ul>
                     </li>
                   :

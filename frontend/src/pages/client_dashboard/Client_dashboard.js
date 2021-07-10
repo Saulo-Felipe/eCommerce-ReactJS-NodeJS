@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 import './S-Client_dashboard.css'
-import {BrowserRouter, Switch, Route, useLocation} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import Favorite from './favorites/Favorite'
 import Purchases from './purchases/Purchases'
@@ -13,11 +11,13 @@ export default function Client_dashboard(props) {
 
   const [configs, setConfigs] = useState({ PagePosigion: '', TitleOne: '', TitleTwo: '' })
   const [userInformations, setUserInformations] = useState({profileImage: '', email: ''})
+  const [editImage, setEditImage] = useState(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./configs/profile-images/${userInformations.profileImage || 'user.png'}`).default})`}}></div>)
+  const [saveEditImage, setSaveEditImage] = useState()
 
-  var Child_component
-  if (props.child_component === "Favorite") Child_component = Favorite
-  else if (props.child_component === "Purchases") Child_component = Purchases
-  else if (props.child_component === "UserProfile") Child_component = UserProfile
+  var ChildComponent
+  if (props.ChildComponent === "Favorite") ChildComponent = Favorite
+  else if (props.ChildComponent === "Purchases") ChildComponent = Purchases
+  else if (props.ChildComponent === "UserProfile") ChildComponent = UserProfile
 
   useEffect(() => {
 
@@ -31,14 +31,49 @@ export default function Client_dashboard(props) {
         profileImage: response.data.profile_photo,
         email: response.data.email,
       })
+
+      setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./configs/profile-images/${response.data.profile_photo || 'user.png'}`).default})`}}></div>)    
+
     })();
 
+
   }, [])
+
+  async function ChangeProfilePhoto(file) {
+    console.log('entrei')
+    var preview = URL.createObjectURL(file)
+    console.log('preview: ', preview)
+    setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${preview})`}}></div>)
+    setSaveEditImage(<div className="container-btn-save-or-remove-image d-flex" onClick={() => saveChanges(file)}><button className="btn btn-secondary me-2" onClick={() => discardChanges()}>Descartar alterações</button><button className="btn btn-success">Salvar</button></div>)
+  }
+
+  async function saveChanges(file) {
+
+    var formData = new FormData()
+
+    formData.append('id', isAuthenticated)
+    formData.append('image-profile', file)
+
+    var response = await api.post('/change-profile-photo', formData, {
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
+      }
+    })
+
+    if (response.data.error) return alert('Error encontrado')
+
+  }
+
+  async function discardChanges() {
+    setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./configs/profile-images/${userInformations.profileImage || 'user.png'}`).default})`}}></div>)
+    setSaveEditImage("")
+    document.querySelector('#change-photo-profile-input').value = ""
+  }
 
 
 
   return (
-      <div className="SearchPage favorite-page">
+      <div className="SearchPage favorite-page pb-5">
         <div className="TopFilter">
           <div className="d-flex flex-row mt-4 header-page-search">
             <div className="text-white pe-5 d-flex iconsNavigate mobile">
@@ -62,9 +97,13 @@ export default function Client_dashboard(props) {
 
             <div className="d-flex header-top-favorite">
               <div className="border-on-image-profile-favorite ">
-                <div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./configs/profile-images/${userInformations.profileImage || 'user.png'}`).default})`}}>
-
-                </div>
+                <input autoComplete="off" type="file" id="change-photo-profile-input" className="d-none" onChange={(change) => ChangeProfilePhoto(change.target.files[0])}/>
+                <label htmlFor="change-photo-profile-input">
+                  <div className="changePhoto-client">
+                    <div>Clique para alterar foto</div>
+                  </div>
+                </label>
+                {editImage}
               </div>
 
               <div className="informations-favorite-page">
@@ -72,6 +111,7 @@ export default function Client_dashboard(props) {
                 <div className="favorite-email">{userInformations.email}</div>
               </div>
             </div>
+            {saveEditImage}
             
             <div className="content-favorite-left mt-5">
               <div className="alternative-dashboard fixed-alternative">Dashboard</div>
@@ -139,7 +179,7 @@ export default function Client_dashboard(props) {
               </div>
             </div>
 
-            <Child_component hooks={{configs, setConfigs}} />
+            <ChildComponent hooks={{configs, setConfigs}} />
 
           </div>
         </div>

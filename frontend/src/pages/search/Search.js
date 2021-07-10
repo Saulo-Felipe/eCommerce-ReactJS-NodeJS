@@ -115,12 +115,12 @@ export default function Search() {
             <div className="row">
               <div className="col">
                 <span>Minimo</span>
-                <input className="form-control" id="min-price" type="text" placeholder="R$"/>
+                <input autoComplete="off" className="form-control" id="min-price" type="text" placeholder="R$"/>
               </div>
 
               <div className="col">
                 <span>Máximo</span>
-                <input className="form-control" id="max-price" type="text" placeholder="R$"/>
+                <input autoComplete="off" className="form-control" id="max-price" type="text" placeholder="R$"/>
               </div>
             </div>
             <button className="btn btn-success mt-3" onClick={filterPrice}>Aplicar</button> <br/>

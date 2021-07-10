@@ -47,13 +47,7 @@
 	width: 100%;
 	background-color: white;
 	padding: 20px;
-	padding-left: 50px;
 	border-radius: 10px;
-}
-.body-modal-profile {
-	min-width: 700px !important;
-		margin-top: 0 !important;
-
 }
 .one-info-userProfile {
 	color: #6b6b6bde;
@@ -73,6 +67,19 @@
 .background-blue-transparent {
 	background-color: ghostwhite;
 }
+
+@media screen and (max-width: 990px) {
+	.row-user-configs {
+		display: block !important;
+	}
+	.one-info-userProfile {
+		width: 100% !important;
+	}
+	.input-mobile-width {
+		width: 100% !important;
+	}	
+}
+
 @media screen and (max-width: 770px) {
 	.profile > .container {
 		display: block;
@@ -87,3 +94,13 @@
 		opacity: 1;
 	}
 } 
+
+@media screen and (min-width: 991px) {
+	.Secondary-container-profile {
+		padding-left: 50px;
+	}
+	.body-modal-profile {
+		min-width: 700px !important;
+		margin-top: 0 !important;
+	}
+}

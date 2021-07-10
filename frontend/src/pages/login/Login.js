@@ -56,10 +56,10 @@ function Modal() {
               <form>
 
                 <label htmlFor="email_login">Email</label>
-                <input type="email" id="email_login" className="form-control mb-3" onChange={handleChangeInput}/>
+                <input autoComplete="off" type="email" id="email_login" className="form-control mb-3" onChange={handleChangeInput}/>
 
                 <label htmlFor="password_login">Senha</label>
-                <input type="password" id="password_login" className="form-control mb-3" onChange={handleChangeInput}/>
+                <input autoComplete="off" type="password" id="password_login" className="form-control mb-3" onChange={handleChangeInput}/>
 
               </form>
               <small>

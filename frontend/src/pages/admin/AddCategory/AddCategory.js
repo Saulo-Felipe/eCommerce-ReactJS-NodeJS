@@ -16,7 +16,7 @@ export default function AddCategory() {
 		   }
 	    })
 	    refreshCategories()
-	}, [])
+	}, []);
 
 	async function submitNewCategory() {
 		var category = document.querySelector('#category').value
@@ -64,7 +64,7 @@ export default function AddCategory() {
 		} else {
 			setModalBody({
 				type: 'update',
-				content: <><label htmlFor="new-category-value">Novo nome:</label><input type="text" id="new-category-value" className="form-control" defaultValue={response.data.result}/></>,
+				content: <><label htmlFor="new-category-value">Novo nome:</label><input autoComplete="off" type="text" id="new-category-value" className="form-control" defaultValue={response.data.result}/></>,
 				title: "Atualizar Categoria",
 				btnSave: "Salvar alterações",
 				id: id
@@ -105,7 +105,7 @@ export default function AddCategory() {
 					<h4 className="mb-5">Adicione uma Categoria</h4>
 					
 					<label htmlFor="category">Nome da categoria</label>
-					<input type="text" id="category" className="form-control" />
+					<input autoComplete="off" type="text" id="category" className="form-control" />
 					<button className="btn btn-success category-submit-sucess mt-4" onClick={() => submitNewCategory()}>Adicionar Categoria</button>
 					<div className="addCategorydefaultMessage text-center">{informations}</div>
 				</div>
@@ -113,9 +113,9 @@ export default function AddCategory() {
 
 			<div className="SeeAllCategory AddCategory mt-5">
 				<div className="card container">
-					<h5 className="d-flex flex-row">
+					<h5 className="d-flex flex-row input-title-search-category-add">
 					<div>Categorias</div>
-			        <div className="w-100 text-end"><input type="text" className="search-Category" placeholder="Pesquise por uma categoria..." onChange={searchCategory}/></div>
+			        <div className="w-100 text-end container-input-search-category-add"><input autoComplete="off" type="text" className="search-Category" placeholder="Pesquise por uma categoria..." onChange={searchCategory}/></div>
 					</h5>
 					<div className="category-container">
 						{
@@ -124,7 +124,7 @@ export default function AddCategory() {
 							Allcategory.map( (item) =>
 								<div key={item.id}>
 									<div className="ListCategoryLine d-flex">
-									    <div>{item.category_name}</div>
+									    <div className="category-name-add">{item.category_name}</div>
 									    <div className="updateANDdelete w-100 text-end">
 									        <span class="material-icons text-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalDeleteCategory(item.id)}>delete</span>
 		                                    <span class="material-icons-outlined text-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalUpdateCategory(item.id)}>update</span>

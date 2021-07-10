@@ -39,7 +39,7 @@ export default function LeftMenuMobile() {
         <div className="alternative-dashboard fixed-alternative">Dashboard</div>
 
 
-        <Link to={"/client_dashboard/purchases"} className="no-href-decoration">
+        <Link to={"/client_dashboard/Compras"} className="no-href-decoration">
           <div className="normal-alternative">
             <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">shopping_bag</div>
             <div className="title-norma-alternative title-buy icon-dashboard"> Compras</div>
@@ -57,16 +57,18 @@ export default function LeftMenuMobile() {
 
         <hr/>
 
-        <div className="normal-alternative">
-          <div className="material-icons-outlined icon-normal-alternative">support</div>
-          <div className="title-norma-alternative"> Suporte</div>
-        </div>
+        <Link to={"/client_dashboard/user-profile"} className="no-href-decoration">
+          <div className="normal-alternative">
+            <div className="material-icons-outlined icon-normal-alternative">manage_accounts</div>
+            <div className="title-norma-alternative"> Meus dados pessoais</div>
+          </div>        
+        </Link>
 
         <div className="alternative-dashboard fixed-alternative">Configurações</div>
 
         <div className="normal-alternative">
-          <div className="material-icons-outlined icon-normal-alternative">manage_accounts</div>
-          <div className="title-norma-alternative"> Meus dados pessoais</div>
+          <div className="material-icons-outlined icon-normal-alternative">support</div>
+          <div className="title-norma-alternative"> Suporte</div>
         </div>
 
         <hr/>

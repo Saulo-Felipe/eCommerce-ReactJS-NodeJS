@@ -40,7 +40,7 @@ export default function Register() {
     })
   }
   return (
-    <div className="container">
+    <div className="container mb-5">
       <div className="RegisterForm">
         <h4 className="mb-2">Cadastre-se</h4>
         <hr/>

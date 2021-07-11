@@ -97,7 +97,13 @@ abbr[title] {
 .color-hover:hover {
   color: #046bc9 !important;
 }
-
+.likes-icon-mobile {
+  padding: 0!important;
+  display: none;
+}
+.likes-icon-mobile > * {
+  padding: 0!important;
+}
 
 
 
@@ -159,6 +165,9 @@ abbr[title] {
 */
 
 @media screen and (max-width: 990px) {
+  .likes-icon-mobile {
+    display: block;
+  }
   .icon-user {
     line-height: unset;
     font-size: 30px;

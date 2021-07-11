@@ -89,10 +89,7 @@ function Header() {
       }
     })();
 
-
-
-
-  }, [setLike, like])
+  }, [])
 
   const [search, setSearch] = useState()
 
@@ -110,15 +107,19 @@ function Header() {
               E-Commerce
             </Link>
             <div className="d-flex flex-row item-mobile">
-              <div className="" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <div className=""  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="material-icons-outlined menu-mobile">
                   menu
                 </span>
               </div>
-              <div className="navbar-brand active-menu-mobile-left">
-                {profile_photo}
-              </div>
-              <a href="/admin" className="cart-href">
+
+              {
+                isAuthenticated 
+                ? <div className="navbar-brand active-menu-mobile-left">{profile_photo}</div>
+                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">{profile_photo}</div>
+              }
+
+              <a href="/admin" className="cart-href no-href-decoration">
                 <span className="quant-cart">24</span>
                 <span className="material-icons-outlined cart-mobile">
                   shopping_cart
@@ -127,6 +128,16 @@ function Header() {
             </div>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <div className="d-flex form-search">
+
+                <div className="nav-item item-page-favorites pe-0 likes-icon-mobile item-mobile" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <abbr title="Favoritos">
+                    <Link to={'/client_dashboard/favorites/'} className="p-2 nav-link active icon-favorite-href d-flex no-href-decoration" aria-current="page">
+                      <div className="material-icons">favorite_border</div>
+                      <div className="header-amountLikes">{like}</div>
+                    </Link>
+                  </abbr>
+                </div>
+
                 <input autoComplete="off" className="form-control input-search" type="search" placeholder="Pesquise por Categorias, produtos e etc..." aria-label="Search" onChange={changedSearch}/>
                 <Link to={`/search/${search}`} className="search-header-href">
                   <button className="btn btn-outline-success submit-search">
@@ -250,6 +261,23 @@ function Header() {
                 <li className="nav-item ps-2 item-mobile options-menu-mobile">
                   <a className="nav-link active color-hover" aria-current="page" href="/admin">Contato</a>
                 </li>
+
+                {
+                  isAuthenticated === null
+                  ? 
+                    <li className="d-flex nav-item ps-2 item-mobile text-primary w-100 mt-3">
+                      <Link to={"/register"} className="no-href-decoration w-50"><div className="text-center" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">Cadastra-se</div></Link>
+                      <div className="w-50 text-center" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Faça Login</div>
+                    </li>
+                  :
+                  <a href="/" className="no-href-decoration item-mobile" onClick={() => localStorage.removeItem('id')}>
+                    <div className="m-2 mb-0">
+                      <button className="btn btn-outline-danger">Sair</button>
+                    </div>
+                  </a>
+                }
+
+
               </ul>
 
             </div>

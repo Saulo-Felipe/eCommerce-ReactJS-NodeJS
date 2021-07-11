@@ -7,6 +7,7 @@ export default function Favorite(props) {
   const [FavoriteProducts, setFavoriteProducts] = useState([])
   const { like, setLike } = useLike()
   const [loading, setLoading] = useState()
+  const [loadingLikes, setLoadingLikes] = useState()
 
   useEffect(() => {
     props.hooks.setConfigs({
@@ -16,16 +17,18 @@ export default function Favorite(props) {
     })
 
     // ==========| Active color on actual page |==========
-    var icons = document.querySelectorAll('.icon-dashboard')
-    for (var c=0; c < icons.length; c++) {
-      icons[c].classList.remove('active-here')
-    }
-    document.querySelectorAll('.alternative-icon-favorite')[0].classList.add('active-here')
-    document.querySelectorAll('.alternative-title-favorite')[0].classList.add('active-here');
+      var icons = document.querySelectorAll('.icon-dashboard')
+      for (var c=0; c < icons.length; c++) {
+        icons[c].classList.remove('active-here')
+      }
+      document.querySelectorAll('.alternative-icon-favorite')[0].classList.add('active-here')
+      document.querySelectorAll('.alternative-title-favorite')[0].classList.add('active-here');
     // ==========| Active color on actual page |==========
     
     (async() => {
+      setLoadingLikes(<div className="text-center mt-5"><div className="spinner-border mx-auto" role="status"><span className="visually-hidden">Loading...</span></div></div>)
       const response = await api.post('/likes', { id: isAuthenticated, type: 'get all likes' })
+      setLoadingLikes()
 
       setFavoriteProducts(response.data.result)
     })();
@@ -33,7 +36,7 @@ export default function Favorite(props) {
 
   async function removeFavorite(id) {
 
-    setLoading(<span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>)
+    setLoading(<span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>)
     var btnRemove = document.querySelectorAll('.btn-remove-favorite')
     for (var c=0; c < btnRemove.length; c++)
       btnRemove[c].setAttribute('disabled', 'disabled')
@@ -84,6 +87,7 @@ export default function Favorite(props) {
           </div>
         )
       }
+      {loadingLikes}
     </div>
 	)
 }

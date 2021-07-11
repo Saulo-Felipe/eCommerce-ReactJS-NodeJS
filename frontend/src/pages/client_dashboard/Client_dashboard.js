@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import './S-Client_dashboard.css'
 import {Link} from 'react-router-dom'
+
 import Favorite from './favorites/Favorite'
 import Purchases from './purchases/Purchases'
 import UserProfile from './configs/User_Configs'
+
 import {isAuthenticated} from '../../services/isAuthenticated'
 import api from '../../services/api'
 
-export default function Client_dashboard(props) {
+export default function ClientDashboard(props) {
 
   const [configs, setConfigs] = useState({ PagePosigion: '', TitleOne: '', TitleTwo: '' })
   const [userInformations, setUserInformations] = useState({profileImage: '', email: ''})
@@ -18,6 +20,7 @@ export default function Client_dashboard(props) {
   if (props.ChildComponent === "Favorite") ChildComponent = Favorite
   else if (props.ChildComponent === "Purchases") ChildComponent = Purchases
   else if (props.ChildComponent === "UserProfile") ChildComponent = UserProfile
+  else alert('ok')
 
   useEffect(() => {
 
@@ -120,7 +123,7 @@ export default function Client_dashboard(props) {
 
               <Link to={"/client_dashboard/Compras"} className="no-href-decoration">
                 <div className="normal-alternative">
-                  <div class="material-icons-outlined icon-normal-alternative alternative-icon-buy icon-dashboard">shopping_bag</div>
+                  <div className="material-icons-outlined icon-normal-alternative alternative-icon-buy icon-dashboard">shopping_bag</div>
                   <div className="title-norma-alternative alternative-title-buy icon-dashboard"> Compras</div>
                 </div>
               </Link>
@@ -129,7 +132,7 @@ export default function Client_dashboard(props) {
 
               <Link to={"/client_dashboard/favorites"} className="no-href-decoration">
                 <div className="normal-alternative">
-                  <div class="material-icons-outlined icon-normal-alternative alternative-icon-favorite icon-dashboard">volunteer_activism</div>
+                  <div className="material-icons-outlined icon-normal-alternative alternative-icon-favorite icon-dashboard">volunteer_activism</div>
                   <div className="title-norma-alternative active-favorite alternative-title-favorite icon-dashboard"> Favoritos</div>
                 </div>
               </Link>
@@ -138,7 +141,7 @@ export default function Client_dashboard(props) {
 
               <Link to={"/client_dashboard/user-profile"} className="no-href-decoration">
                 <div className="normal-alternative">
-                  <div class="material-icons-outlined icon-normal-alternative alternative-icon-manage icon-dashboard">manage_accounts</div>
+                  <div className="material-icons-outlined icon-normal-alternative alternative-icon-manage icon-dashboard">manage_accounts</div>
                   <div className="title-norma-alternative icon-dashboard alternative-title-manage"> Meus dados pessoais</div>
                 </div>
               </Link>              
@@ -146,21 +149,21 @@ export default function Client_dashboard(props) {
               <div className="alternative-dashboard fixed-alternative">Configurações</div>
 
               <div className="normal-alternative">
-                <div class="material-icons-outlined icon-normal-alternative">support</div>
+                <div className="material-icons-outlined icon-normal-alternative">support</div>
                 <div className="title-norma-alternative"> Suporte</div>
               </div>
 
               <hr/>
 
               <div className="normal-alternative">
-                <div class="material-icons-outlined icon-normal-alternative">location_on</div>
+                <div className="material-icons-outlined icon-normal-alternative">location_on</div>
                 <div className="title-norma-alternative"> Endereços</div>
               </div>
 
               <hr/>
 
               <div className="normal-alternative">
-                <div class="material-icons-outlined icon-normal-alternative">credit_card</div>
+                <div className="material-icons-outlined icon-normal-alternative">credit_card</div>
                 <div className="title-norma-alternative"> Metodos de pagamento</div>
               </div>
 

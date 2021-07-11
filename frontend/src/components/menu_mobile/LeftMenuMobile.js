@@ -10,15 +10,18 @@ export default function LeftMenuMobile() {
 
       document.querySelector('.active-menu-mobile-left').addEventListener('click', () => {
         MobileLeftMenu.style.left = "0%"
+        document.querySelector('body').style.overflow = "hidden"
       })
 
       document.querySelector('.material-icons-outlined').addEventListener('click', () => {
         MobileLeftMenu.style.left = "-110%"
+        document.querySelector('body').style.overflow = "scroll"
       })
 
   })
 
 	return (
+    
     <div className="LeftSearch-favorite ms-5 menu-dashboard-client-header">
       <div className="material-icons-outlined close-menu-filter-search text-end w-100 pe-1 mt-2">close</div>
 

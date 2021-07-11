@@ -53,9 +53,6 @@
 }
 /*   Cards     */
 
-.card-line {
-
-} 
 
 
 .option-category-favorite {
@@ -178,5 +175,21 @@
 	}
 	.hangePhoto-client {
 		opacity: 1;
+	}
+	.card-line {
+		display: block !important;
+		border-bottom: 1px solid gray;
+	} 
+	.card-line-content {
+		padding: 0;
+	}
+	.card-line-image {
+		margin: auto;
+	}
+	.favorite-content {
+		margin: 1.5rem !important;
+	}
+	.remove-container {
+		padding: 0 20px 20px 0;
 	}
 }

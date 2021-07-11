@@ -1,5 +1,6 @@
 import React from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import {isAuthenticated} from './services/isAuthenticated'
 import Home from './pages/home/Home'
 import AddProduct from './pages/admin/AddProduct/AddProduct'
 import AddCategory from './pages/admin/AddCategory/AddCategory'
@@ -13,11 +14,12 @@ import { PrivateRoutes } from './services/PrivateRoutes'
 import { Like } from './components/context/Likes'
 import LeftMenuMobile from './components/menu_mobile/LeftMenuMobile'
 
+
 function App() {
   return (
     <>
       <BrowserRouter>
-        <LeftMenuMobile />
+        {isAuthenticated !== null ? <LeftMenuMobile /> : ""}
         <Like>
           <Header />
           <Switch>
@@ -26,19 +28,15 @@ function App() {
             <PrivateRoutes path="/admin/new-product" component={AddProduct} />
             <PrivateRoutes path="/admin/new-category" component={AddCategory} />
 
-            {/*Client Dashboard*/}
-              <PrivateRoutes path="/client_dashboard/user-profile" >
-                <ClientDashboard child_component={"UserProfile"} />
-              </PrivateRoutes>
-
-              <PrivateRoutes path="/client_dashboard/Compras">
-                <ClientDashboard child_component={"Purchases"} />
-              </PrivateRoutes>
-
-              <PrivateRoutes path="/client_dashboard/favorites">
-                <ClientDashboard child_component={"Favorite"} />
-              </PrivateRoutes>
-            {/*Client Dashboard*/}
+            <PrivateRoutes path="/client_dashboard/user-profile" >
+              <ClientDashboard ChildComponent={"UserProfile"} />
+            </PrivateRoutes>
+            <PrivateRoutes path="/client_dashboard/Compras">
+              <ClientDashboard ChildComponent={"Purchases"} />
+            </PrivateRoutes>
+            <PrivateRoutes path="/client_dashboard/favorites">
+              <ClientDashboard ChildComponent={"Favorite"} />
+            </PrivateRoutes>
 
             <Route path="/register" component={Register} />
             <Route path="/search/:value" component={Search} />

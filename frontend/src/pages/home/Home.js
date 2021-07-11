@@ -10,10 +10,12 @@ import Carousel from '../../components/carousel/Carousel'
 
 export default function Home() {
   const [products, setProduct] = useState([])
+  const [loading, setLoading] = useState(<div class="spinner-grow text-primary" role="status" style={{width: "3rem", height: "3rem"}}><span class="visually-hidden">Loading...</span></div>)
 
   useEffect(() => {
     (async () => {
       var response = await api.get('/')
+      setLoading()
       setProduct(response.data)
     })()
   }, [])
@@ -27,6 +29,7 @@ export default function Home() {
       </div>
 
       <Carousel>
+        {loading}
         {
           products.map((item) => {
             return (<Card key={item.id} title={item.product_name} cover={item.cover} price={item.price} id={item.id} />)
@@ -40,6 +43,7 @@ export default function Home() {
         <h3 className="ms-2">Produtos mais vendidos</h3>
       </div>
       <Carousel>
+        {loading}
         {
           products.map((item) => {
             return (<Card key={item.id} title={item.product_name} cover={item.cover} price={item.price} id={item.id} />)

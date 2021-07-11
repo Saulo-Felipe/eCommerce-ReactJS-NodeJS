@@ -56,7 +56,7 @@ export default function UserProfile(props) {
 	    document.querySelector('.alternative-title-manage').classList.add('active-here');
 	    // ==========| Active color on actual page |==========
 
-	}, [props])
+	}, [])
 
 	async function saveChages() {
 		var user_name = document.querySelector('#user_name').value

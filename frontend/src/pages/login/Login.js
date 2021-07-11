@@ -9,6 +9,8 @@ function Modal() {
     email: null,
     password: null
   })
+  const [loading, setLoading] = useState()
+  const [logs, setLogs] = useState()
 
   function handleChangeInput(inputValue) {
     setLogin({
@@ -19,17 +21,19 @@ function Modal() {
 
   async function handleSubmitForm() {
     if (login.email === null || login.email === null)
-      alert("preencha todos os campos")
+      setLogs(<div className="mb-2 text-center text-danger">Preencha todos os campos</div>) 
     else {
       if (login.email.length === 0 || login.password.length === 0)
-        alert("preencha todos os dados")
+        setLogs(<div className="mb-2 text-center text-danger">Preencha todos os dados</div>) 
       else {
+        setLoading(<div className="text-center mb-2"><div class="spinner-border text-dark" role="status"><span class="visually-hidden">Loading...</span></div></div>)
         var response = await api.post("/login", login)
+        setLoading()
 
         if (response.data.error) {
-          alert(response.data.error)
+          setLogs(<div className="mb-2 text-center text-danger">{response.data.error}</div>) 
         } else {
-          alert('Login realziado com sucesso!')
+          setLogs(<div className="mb-2 text-center text-success">Login realziado com sucesso, redirecionando...</div>) 
           localStorage.setItem("id", `${response.data.id}`)
           window.location.href = "/"
         }
@@ -53,6 +57,7 @@ function Modal() {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
+              {logs}
               <form>
 
                 <label htmlFor="email_login">Email</label>
@@ -62,10 +67,13 @@ function Modal() {
                 <input autoComplete="off" type="password" id="password_login" className="form-control mb-3" onChange={handleChangeInput}/>
 
               </form>
+              {loading}
               <small>
                 Não tem uma conta? <Link to="/register" onClick={closeModal}>Cadastre-se</Link>
               </small>
             </div>
+
+
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary close-modal" data-bs-dismiss="modal">Fechar</button>
               <button type="button" className="btn btn-primary" onClick={handleSubmitForm}>Fazer Login</button>

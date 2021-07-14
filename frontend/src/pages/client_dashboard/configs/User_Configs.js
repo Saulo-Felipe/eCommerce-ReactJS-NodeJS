@@ -3,6 +3,7 @@ import './S-User_Profile.css'
 import api from '../../../services/api'
 import { isAuthenticated } from '../../../services/isAuthenticated'
 
+
 export default function UserProfile(props) {
 
 	const id = isAuthenticated

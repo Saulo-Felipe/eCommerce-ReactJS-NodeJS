@@ -70,9 +70,9 @@ function Header() {
       if (isAuthenticated != null) {
         const response = await api.post('/get-user', {type: "header", id: isAuthenticated })
         setUserName(response.data.user_name)
-        setProfilePhoto(<img className="header-profile-img" src={require(`../../pages/client_dashboard/configs/profile-images/${response.data.profile_photo}`).default} alt="User" width="40" height="40" />)
+        setProfilePhoto(<img className="header-profile-img" src={`http://localhost:8081/images/${response.data.profile_photo}/null/profile`} alt="User" width="40" height="40" />)
       } else {
-        setProfilePhoto(<img className="header-profile-img" src={require('../../pages/client_dashboard/configs/profile-images/user.png').default} alt="User" width="40" height="40"/>)
+        setProfilePhoto(<img className="header-profile-img" src={`http://localhost:8081/images/user.png/null/profile`} alt="User" width="40" height="40"/>)
       }
     }
     getUser();

@@ -3,6 +3,8 @@ const router = express.Router()
 const sequelize = require('../database/connect')
 const multer = require('multer')
 const bcrypt = require('bcrypt')
+const { request } = require('express')
+const path = require('path')
 
 
 router.get('/', async(request, response) => {
@@ -14,6 +16,33 @@ router.get('/', async(request, response) => {
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
         return response.json({ error: "Erro na home principal." })
+    }
+})
+
+router.get('/images/:image_name/:id/:type', async(request, response) => {
+    try {
+        if (request.params.id === "null" && request.params.type === "profile")
+            return response.sendFile(path.join(__dirname, '../images/profile-images/user.png'))
+
+        if (request.params.type === "profile") {
+            const [VerifyImage] = await sequelize.query(`
+                SELECT profile_photo, id from clients WHERE profile_photo = '${request.params.image_name}'
+            `)
+            if (VerifyImage.length === 0) return response.json({ noFile: true })
+            return response.sendFile(path.join(__dirname,`../images/profile-images/${request.params.image_name}`))
+        }
+        else if (request.params.type === "product") {
+            const [verifyProductImage] = await sequelize.query(`
+                SELECT cover, id from products WHERE cover = '${request.params.image_name}'
+            `)
+            if (verifyProductImage.length === 0) return response.json({ noFile: true })
+            return response.sendFile(path.join(__dirname,`../images/product-images/${ request.params.image_name }`))
+        }
+        else return response.json({ noFile: true })
+
+    } catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro ao buscar imagem" })
     }
 })
 
@@ -218,7 +247,7 @@ router.post('/profile', async(request, response) => {
 var storage = multer.diskStorage({
   destination: async (request, file, callback) => {
     //await sequelize.query
-    callback(null, '../frontend/src/pages/client_dashboard/configs/profile-images')
+    callback(null, '../images/profile-images/')
   },
   filename: (request, file, callback) => {
     callback(null, file.originalname)

@@ -6,10 +6,9 @@ const sequelize = require('../database/connect')
 
 var storage = multer.diskStorage({
   destination: async (request, file, callback) => {
-    callback(null, '../frontend/src/coversProduct/')
+    callback(null, '../images/product-images/')
   },
   filename: (request, file, callback) => {
-    //console.log('filename call: ',request.files[0])
     callback(null, file.originalname)
   }
 })

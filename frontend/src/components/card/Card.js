@@ -54,7 +54,7 @@ export default function Card(props) {
             {likeIcon}
           </div>
 
-          <div className="imageProduct" style={{backgroundImage: `url(${require(`../../coversProduct/${props.cover}`).default})`}}>
+          <div className="imageProduct" style={{backgroundImage: `url(http://localhost:8081/images/${props.cover}/${props.id}/product)`}}>
           </div>
 
           <hr/>

@@ -13,7 +13,7 @@ export default function ClientDashboard(props) {
 
   const [configs, setConfigs] = useState({ PagePosigion: '', TitleOne: '', TitleTwo: '' })
   const [userInformations, setUserInformations] = useState({profileImage: '', email: ''})
-  const [editImage, setEditImage] = useState(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./configs/profile-images/${userInformations.profileImage || 'user.png'}`).default})`}}></div>)
+  const [editImage, setEditImage] = useState(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/0/profile)`}}></div>)
   const [saveEditImage, setSaveEditImage] = useState()
 
   var ChildComponent
@@ -33,9 +33,10 @@ export default function ClientDashboard(props) {
         user_name: response.data.user_name,
         profileImage: response.data.profile_photo,
         email: response.data.email,
+        id: response.data.id
       })
 
-      setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./configs/profile-images/${response.data.profile_photo || 'user.png'}`).default})`}}></div>)    
+      setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${response.data.profile_photo}/${response.data.id}/profile)`}}></div>)    
 
     })();
 
@@ -68,7 +69,7 @@ export default function ClientDashboard(props) {
   }
 
   async function discardChanges() {
-    setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`./configs/profile-images/${userInformations.profileImage || 'user.png'}`).default})`}}></div>)
+    setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${userInformations.profileImage}/${userInformations.id}/profile)`}}></div>)
     setSaveEditImage("")
     document.querySelector('#change-photo-profile-input').value = ""
   }

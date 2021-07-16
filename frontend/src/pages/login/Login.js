@@ -30,12 +30,18 @@ function Modal() {
         var response = await api.post("/login", login)
         setLoading()
 
+        var getUser = await api.post('get-user')
+
+        if (getUser.data.error) return alert('Erro ao buscar usuario') 
+
+        localStorage.setItem('id', getUser.data.user)
+
+
         if (response.data.error) {
           setLogs(<div className="mb-2 text-center text-danger">{response.data.error}</div>) 
         } else {
           setLogs(<div className="mb-2 text-center text-success">Login realziado com sucesso, redirecionando...</div>) 
-          localStorage.setItem("id", `${response.data.id}`)
-          window.location.href = "/"
+          //window.location.href = "/"
         }
       }
     }
@@ -61,10 +67,10 @@ function Modal() {
               <form>
 
                 <label htmlFor="email_login">Email</label>
-                <input autoComplete="off" type="email" id="email_login" className="form-control mb-3" onChange={handleChangeInput}/>
+                <input autoComplete="off" type="email" id="email_login" name="email" className="form-control mb-3" onChange={handleChangeInput}/>
 
                 <label htmlFor="password_login">Senha</label>
-                <input autoComplete="off" type="password" id="password_login" className="form-control mb-3" onChange={handleChangeInput}/>
+                <input autoComplete="off" type="password" id="password_login" name="password" className="form-control mb-3" onChange={handleChangeInput}/>
 
               </form>
               {loading}

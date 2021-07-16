@@ -63,7 +63,7 @@ export default function Favorite(props) {
         ? <h1>Nenhum Produto Salvo</h1>
         : FavoriteProducts.map((product) => 
           <div className="card-line d-flex mb-3" key={product.id}>
-            <div className="card-line-image" style={{backgroundImage: `url(${require(`../../../coversProduct/${product.cover}`).default})`}}>
+            <div className="card-line-image" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${product.cover}/${product.id}/product)`}}>
             </div>
             <div className="card-line-content">
               <div className="mini-title-products">{product.product_name}</div>

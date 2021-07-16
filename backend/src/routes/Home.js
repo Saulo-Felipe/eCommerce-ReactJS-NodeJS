@@ -3,8 +3,8 @@ const router = express.Router()
 const sequelize = require('../database/connect')
 const multer = require('multer')
 const bcrypt = require('bcrypt')
-const { request } = require('express')
 const path = require('path')
+const passport = require('passport')
 
 
 router.get('/', async(request, response) => {
@@ -17,6 +17,25 @@ router.get('/', async(request, response) => {
         console.log('\n\n\n=========================| Error |=====================\n', error)
         return response.json({ error: "Erro na home principal." })
     }
+})
+
+router.get('/teste-login', (request, response) => {
+    console.log(request.user)
+    response.send(`
+        <h1>Login Teste<h1>
+        <form action='/login' method='post'>
+            <input id="email" name="email" />
+            <input id="password" name="password" />
+            <button type="submit">Login</button>
+        </form>
+    `)
+})
+
+router.get('/test-redirect-login-true', (request, response) => {
+    console.log("request success: ", request.user)
+    var teste = request.user
+
+    return response.json({ teste: teste })
 })
 
 router.get('/images/:image_name/:id/:type', async(request, response) => {
@@ -125,24 +144,12 @@ router.post('/register', async(request, response) => {
     }
 })
 
-router.post('/login', async(request, response) => {
+router.post('/login', async(request, response, next) => {
     try {
-        const {email, password} = request.body
-
-        var [user] = await sequelize.query(`SELECT * FROM clients WHERE email = '${email}'`)
-
-        console.log(user)
-
-        if (user.length === 0) {
-            return response.json({ error: "Não existe nenhuma conta associada a este email." })
-        } else {
-            const match = await bcrypt.compare(password, user[0].password)
-
-            if (match)
-                return response.json({ id: user[0].id })
-            else
-                return response.json({ error: 'Senha Incorreta' })
-        }
+        passport.authenticate("local", {
+            successRedirect: "/test-redirect-login-true",
+            failureRedirect: "/test-redirect-login-false"
+        })(request, response, next)
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
@@ -152,13 +159,10 @@ router.post('/login', async(request, response) => {
 
 router.post('/get-user', async(request, response) => {
     try {
-        const { type, id } = request.body
-        if (type && type === 'header') {
-            const [user] = await sequelize.query(`SELECT * FROM clients WHERE id = ${id}`)
-            delete user[0].password
-            console.log(user)
-            return response.json(user[0])
-        }
+        if (request.user)
+            return response.json({ user: request.user })
+        else
+            return response.json({ user: null })
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
@@ -247,7 +251,7 @@ router.post('/profile', async(request, response) => {
 var storage = multer.diskStorage({
   destination: async (request, file, callback) => {
     //await sequelize.query
-    callback(null, '../images/profile-images/')
+    callback(null, path.join(__dirname, '../images/profile-images/'))
   },
   filename: (request, file, callback) => {
     callback(null, file.originalname)

@@ -3,7 +3,7 @@ import './S-PopCategory.css'
 
 export default function Left_PopCategory() {
 	return (
-		<div className="container mt-5">
+		<div className="container mt-5 mb-5">
 			<div className="d-flex flex-row PopCategory-card">
 
 	          <div className="d-flex flex-row big-card w-75 second-big-card">

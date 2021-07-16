@@ -4,17 +4,6 @@ const multer = require('multer')
 const path = require('path')
 const sequelize = require('../database/connect')
 
-var storage = multer.diskStorage({
-  destination: async (request, file, callback) => {
-    callback(null, '../images/product-images/')
-  },
-  filename: (request, file, callback) => {
-    callback(null, file.originalname)
-  }
-})
-
-let upload = multer({ storage: storage }).fields([{name: 'cover', maxCount: 1}, {name: 'images', maxCount: 8}])
-
 admin.post('/products', async (request, response) => {
   var [result] = await sequelize.query(`SELECT * FROM categories`)
 
@@ -37,6 +26,18 @@ admin.post('/relationship', async(request, response) => {
   return response.json({ OK: "ok" }) 
 })
 
+var storage = multer.diskStorage({
+  destination: async (request, file, callback) => {
+    callback(null, path.join(__dirname, '../images/product-images/'))
+  },
+  filename: (request, file, callback) => {
+    callback(null, file.originalname)
+  }
+})
+
+let upload = multer({ storage: storage }).fields([{name: 'cover', maxCount: 1}, {name: 'images', maxCount: 8}])
+
+
 admin.post('/new-product', upload, async (request, response) => {
   var cover = request.files.cover[0].originalname
   var images = ""
@@ -45,8 +46,6 @@ admin.post('/new-product', upload, async (request, response) => {
   for (var c in request.files.images) {
     images += ` ${request.files.images[c].originalname}`
   }
-
-  console.log(request.body.name)
 
   await sequelize.query(`
     INSERT INTO products 
@@ -73,8 +72,6 @@ admin.post('/new-category', async(request, response) => {
   try {
     var result = request.body.category
     result = result.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-
-    console.log(result)
 
     var [res] = await sequelize.query(`SELECT * FROM categories WHERE LOWER(category_name) = LOWER('${result}')`)
 

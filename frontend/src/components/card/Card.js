@@ -54,7 +54,7 @@ export default function Card(props) {
             {likeIcon}
           </div>
 
-          <div className="imageProduct" style={{backgroundImage: `url(http://localhost:8081/images/${props.cover}/${props.id}/product)`}}>
+          <div className="imageProduct" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${props.cover}/${props.id}/product)`}}>
           </div>
 
           <hr/>

@@ -8,11 +8,17 @@ import api from '../../services/api'
 import SubHeader from './SubHeader'
 import { useLike } from '../context/Likes'
 
-function Header() {
-  const { setLike, like } = useLike()
+export default function Header() {
+  
 
-  const [user, setUserName] = useState()
+  var teste = (async () => {return await isAuthenticated()})().then(result => teste = result)
+
+  console.log('teste: ', teste)
+
+  const { setLike, like } = useLike()
+  const [userName, setUserName] = useState()
   const [profile_photo, setProfilePhoto] = useState()
+
 
   useEffect(() => {
     var input = document.querySelector('.input-search')
@@ -65,21 +71,21 @@ function Header() {
       })
     }
 
-    async function getUser() {
+    (async () => {
+      var { user } = await isAuthenticated()
 
-      if (isAuthenticated != null) {
-        const response = await api.post('/get-user', {type: "header", id: isAuthenticated })
-        setUserName(response.data.user_name)
-        setProfilePhoto(<img className="header-profile-img" src={`http://localhost:8081/images/${response.data.profile_photo}/null/profile`} alt="User" width="40" height="40" />)
+
+    //Get user informations
+      if (user != null) {
+        
+        setUserName(user.user_name)
+        setProfilePhoto(<img className="header-profile-img" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${user.profile_photo}/${user.id}/profile`} alt="User" width="40" height="40" />)
       } else {
-        setProfilePhoto(<img className="header-profile-img" src={`http://localhost:8081/images/user.png/null/profile`} alt="User" width="40" height="40"/>)
+        setProfilePhoto(<img className="header-profile-img" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`} alt="User" width="40" height="40"/>)
       }
-    }
-    getUser();
 
     //Get Liked Products
-    (async () => {
-      if (isAuthenticated != null) {
+      if (user != null) {
         const response = await api.post('/likes', { type: "get all likes", id: isAuthenticated })
         if (!response.data.error) {
           setLike(response.data.result.length)
@@ -114,9 +120,9 @@ function Header() {
               </div>
 
               {
-                isAuthenticated 
-                ? <div className="navbar-brand active-menu-mobile-left">{profile_photo}</div>
-                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">{profile_photo}</div>
+                true
+                ? <div className="navbar-brand active-menu-mobile-left">Ollaaaaaa</div>
+                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">elseee</div>
               }
 
               <a href="/admin" className="cart-href no-href-decoration">
@@ -178,7 +184,7 @@ function Header() {
                         </div>
                         <Link to={`/profile/${isAuthenticated}`} className="toYourProfile">
                           <div className="my-account">
-                            <small className="login-small">{ user }</small>
+                            <small className="login-small">{ userName }</small>
                             <div className="">Minha Conta</div>
                           </div>
                         </Link>
@@ -295,7 +301,3 @@ function Header() {
     </>
   )
 }
-
-
-
-export default Header

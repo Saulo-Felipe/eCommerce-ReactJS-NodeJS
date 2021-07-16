@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 
 
 export default function LeftMenuMobile() {
-
+/*
   window.addEventListener('load', () => {
     var MobileLeftMenu = document.querySelector('.LeftSearch-favorite')
 
 
-      document.querySelector('.active-menu-mobile-left').addEventListener('click', () => {
+      document.querySelector('.header-profile-img').addEventListener('click', () => {
         MobileLeftMenu.style.left = "0%"
         document.querySelector('body').style.overflow = "hidden"
       })
@@ -19,7 +19,7 @@ export default function LeftMenuMobile() {
       })
 
   })
-
+*/
 	return (
     
     <div className="LeftSearch-favorite ms-5 menu-dashboard-client-header">
@@ -27,7 +27,7 @@ export default function LeftMenuMobile() {
 
       <div className="d-flex header-top-favorite">
         <div className="border-on-image-profile-favorite ">
-          <div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`../../coversProduct/teste.jpg`).default})`}}>
+          <div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`../../pages/client_dashboard/UserProfile.jpg`).default})`}}>
 
           </div>
         </div>

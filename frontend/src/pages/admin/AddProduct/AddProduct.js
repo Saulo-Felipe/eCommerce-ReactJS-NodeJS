@@ -65,18 +65,6 @@ export default function AddProduct() {
 
   }
 
-  function InputFileChange(changes) {
-    const file = changes.target
-    
-    var reader = new FileReader()
-    reader.onload = () => {
-      var dataURL = reader.result
-      var preview = document.querySelector('#FilePreview')
-      preview.src = dataURL
-    }
-    reader.readAsDataURL(file.files[0])
-  }
-
   useEffect(() => {
     (async () => {
       var response = await api.post('/admin/products')
@@ -119,8 +107,8 @@ export default function AddProduct() {
               </div>
               <div className="validade">
                 <label htmlFor="amountProduct">Capa do produto: </label>
-                <input autoComplete="off" id="cover" type="file" className="form-control " onChange={() => {InputFileChange(); handleChangeFom()}} required />
-                <div className="text-center"><img id="FilePreview" width="50%" alt="preview"/></div>
+                <input autoComplete="off" id="cover" type="file" className="form-control " onChange={handleChangeFom} required />
+                {/*<div className="text-center"><img id="FilePreview" width="50%" alt="preview"/></div>*/}
               </div>
             </div>
 

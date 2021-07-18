@@ -7,5 +7,5 @@ export var isAuthenticated = async function() {
 
     console.log("Dados do isAuthenticated: ", response.data) 
 
-    return {user: response.data.user}
+    return response.data.user
 }

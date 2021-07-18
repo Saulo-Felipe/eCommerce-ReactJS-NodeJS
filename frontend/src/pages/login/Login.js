@@ -82,7 +82,7 @@ function Modal() {
 
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary close-modal" data-bs-dismiss="modal">Fechar</button>
-              <button type="button" className="btn btn-primary" onClick={handleSubmitForm}>Fazer Login</button>
+              <a href="/"><button type="button" className="btn btn-primary" onClick={handleSubmitForm}>Fazer Login</button></a>
             </div>
           </div>
         </div>

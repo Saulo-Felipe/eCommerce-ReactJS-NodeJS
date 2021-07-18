@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './S-Card.css'
 import api from '../../services/api'
 import { useLike } from '../context/Likes'
+import { isAuthenticated } from '../../services/isAuthenticated'
 
 export default function Card(props) {
 
@@ -11,9 +12,11 @@ export default function Card(props) {
 
   useEffect(() => {
     (async () => {
-      var idUser = localStorage.getItem('id')
+      var idUser = await isAuthenticated()
+      console.log('Card js', idUser)
+
       if (idUser != null) {
-        var response = await api.post('/likes', { idUser: idUser, idProduct: props.id })
+        var response = await api.post('/likes', { idUser: idUser.id, idProduct: props.id })
 
         if (response.data.like === true) {
           setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
@@ -27,18 +30,18 @@ export default function Card(props) {
   }, [])
 
   async function LikeOrDeslike() {
-    var idUser = localStorage.getItem('id')
+    var idUser = await isAuthenticated()
     if (idUser === null) {
       alert("Você precisa estar logado para dar like em produtos.")
     } else {
-      var response = await api.post('/likes', { idUser: idUser, idProduct: props.id })
+      var response = await api.post('/likes', { idUser: idUser.id, idProduct: props.id })
 
       if (response.data.like === false) {
-        await api.post('/new-like', { idUser: idUser, idProduct: props.id, type: 'like' })
+        await api.post('/new-like', { idUser: idUser.id, idProduct: props.id, type: 'like' })
         setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
         setLike(like+1)
       } else {
-        await api.post('/new-like', { idUser: idUser, idProduct: props.id, type: 'dislike' })
+        await api.post('/new-like', { idUser: idUser.id, idProduct: props.id, type: 'dislike' })
         setLikeIcon(<span className="material-icons-outlined">favorite_border</span>)
         setLike(like-1)
       }

@@ -16,7 +16,7 @@ app.use(session({
 
 
 app.use((request, response, next) => {
-  console.log('Session: ', request.session)
+  console.log('isAuthenticated? ', request.user, request.isAuthenticated())
 
   next()
 })

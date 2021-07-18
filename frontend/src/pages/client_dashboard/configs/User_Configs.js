@@ -6,7 +6,6 @@ import { isAuthenticated } from '../../../services/isAuthenticated'
 
 export default function UserProfile(props) {
 
-	const id = isAuthenticated
 	const [informations, setInformations] = useState({})
 	const [EditAdress, setEditAdress] = useState({
 		street: '',
@@ -29,12 +28,13 @@ export default function UserProfile(props) {
 	    });
 
 		(async () => {
-			var response = await api.post('/profile', { id })
+			var isLogged = await isAuthenticated()
+			var response = await api.post('/profile', { id: isLogged.id })
 			setInformations(response.data.result)
 			if (response.data.error) return alert(response.data.error)
 
 			//Adress
-			var resp = await api.post('/get-adress', { id })
+			var resp = await api.post('/get-adress', { id: isLogged.id })
 			if (resp.data.error) return alert(resp.data.error)
 
 			var adress = resp.data.result
@@ -61,6 +61,8 @@ export default function UserProfile(props) {
 	}, [])
 
 	async function saveChages() {
+		var isLogged = await isAuthenticated()
+
 		var user_name = document.querySelector('#user_name').value === "" ? "0" : document.querySelector('#user_name').value
 		var user_email = document.querySelector('#user_email').value === "" ? "0" : document.querySelector('#user_email').value 
 		var user_number = document.querySelector('#phone_number').value === "" ? "0" : document.querySelector('#phone_number').value.replace(/[() -]/g, '')
@@ -102,7 +104,7 @@ export default function UserProfile(props) {
 		})
 
 		var response = await api.post('/edit/profile', { 
-			id, 
+			id: isLogged.id, 
 			user_name: user_name, 
 			email: user_email,
 			phone: user_number,

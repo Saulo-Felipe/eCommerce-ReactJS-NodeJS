@@ -34,6 +34,7 @@ export default function Search() {
         setSearch(resultSearch.data.result)
         setError([])
       }
+
     })()
   }, [search, Filters, count])
 
@@ -43,11 +44,11 @@ export default function Search() {
     var menuLeft = document.querySelector('.LeftSearch')
     document.querySelector('.see-filter-mobile').addEventListener('click', () => {
       menuLeft.classList.add('open-menu-filter-search')
-      document.querySelector('body').style.overflow = 'hidden'        
+      document.querySelector('body').style.overflow = 'hidden'
     })
     document.querySelector('.close-menu-filter-search').addEventListener('click', () => {
       menuLeft.classList.remove('open-menu-filter-search')
-      document.querySelector('body').style.overflow = 'auto'    
+      document.querySelector('body').style.overflow = 'auto'
     })
   }, [])
 

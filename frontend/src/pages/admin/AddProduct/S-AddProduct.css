@@ -34,5 +34,66 @@ input:focus, textarea:focus {
 }
 .container-categories-addProducts {
   max-height: 200px;
-  overflow: scroll;
+  overflow-y: scroll;
+  border-top: solid 1px #0000003d;
+  border-bottom: solid 1px #0000003d;
+  padding: 10px;
 }
+.link-to-create-new-category {
+  font-size: 0.8rem;
+  position: relative;
+  top: -10px;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.container-categories-addProducts::-webkit-scrollbar-track {
+    background-color: #F4F4F4;
+}
+.container-categories-addProducts::-webkit-scrollbar {
+    width: 6px;
+    background: #F4F4F4;
+}
+.container-categories-addProducts::-webkit-scrollbar-thumb {
+    background: #dad7d7;
+}
+
+/*============================| Checked categories |========================*/
+
+.selected-categories-container {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  padding: 10px;
+}
+.categorie-checked:hover {
+  background-color: ;
+  transition: all 0.3s;
+}
+.categorie-checked:hover > .categorie-checked-close {
+  color: red;
+  transition: all 0.3s;
+}
+.categorie-checked {
+  border: solid 1px blue;
+  background-color: skyblue;
+  border-radius: 20px;
+  width: min-content;
+  font-size: 0.8rem;
+  display: flex;
+  height: 20px;
+  padding: 0px 5px 0px 5px;
+  margin-right: 7px;
+  cursor: pointer;
+}
+.categorie-checked-name {
+  width: max-content;
+}
+
+.categorie-checked-close {
+  margin-left: 5px;
+}
+
+
+/*============================| Checked categories |========================*/

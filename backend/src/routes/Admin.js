@@ -4,7 +4,7 @@ const multer = require('multer')
 const path = require('path')
 const sequelize = require('../database/connect')
 
-admin.post('/products', async (request, response) => {
+admin.post('/get-product-Categories', async (request, response) => {
   var [result] = await sequelize.query(`SELECT * FROM categories`)
 
   return response.json({ result })
@@ -63,6 +63,7 @@ admin.post('/categories', async (request, response) => {
 
     return response.json({ result })
   }
+
   var [result] = await sequelize.query(`SELECT * FROM categories`)
 
   return response.json({ result })

@@ -9,18 +9,37 @@ import SubHeader from './SubHeader'
 import { useLike } from '../context/Likes'
 
 export default function Header() {
-  
-
-  var teste = (async () => {return await isAuthenticated()})().then(result => teste = result)
-
-  console.log('teste: ', teste)
-
   const { setLike, like } = useLike()
   const [userName, setUserName] = useState()
   const [profile_photo, setProfilePhoto] = useState()
-
+  const [isLogged, setIsLogged] = useState(null)
 
   useEffect(() => {
+
+    (async() => {
+      var response = await isAuthenticated()
+      console.log('linha 19 Header: ', response)
+
+      setIsLogged(response)
+
+      if (response !== null) {
+        setUserName(response.user_name)
+        setProfilePhoto(<img className="header-profile-img" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${response.profile_photo}/${response.id}/profile`} alt="User" width="40" height="40" />)
+      } else {
+        setProfilePhoto(<img className="header-profile-img" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`} alt="User" width="40" height="40"/>)
+      }
+
+    //Get Liked Products
+      if (response != null) {
+        const gettingLikes = await api.post('/likes', { type: "get all likes", id: response.id })
+        if (!gettingLikes.data.error) {
+          setLike(gettingLikes.data.result.length)
+        } else {
+          alert(gettingLikes.data.error)
+        }
+      }
+    })();
+
     var input = document.querySelector('.input-search')
 
     input.addEventListener('keyup', (event) => {
@@ -71,31 +90,14 @@ export default function Header() {
       })
     }
 
-    (async () => {
-      var { user } = await isAuthenticated()
-
-
-    //Get user informations
-      if (user != null) {
-        
-        setUserName(user.user_name)
-        setProfilePhoto(<img className="header-profile-img" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${user.profile_photo}/${user.id}/profile`} alt="User" width="40" height="40" />)
-      } else {
-        setProfilePhoto(<img className="header-profile-img" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`} alt="User" width="40" height="40"/>)
-      }
-
-    //Get Liked Products
-      if (user != null) {
-        const response = await api.post('/likes', { type: "get all likes", id: isAuthenticated })
-        if (!response.data.error) {
-          setLike(response.data.result.length)
-        } else {
-          alert(response.data.error)
-        }
-      }
-    })();
 
   }, [])
+
+  async function logout() {
+    var Logout = await api.post('/logout')
+
+    if (Logout.data && Logout.data.error) return alert('Erro ao sair da conta, tente novamente em instantes...')
+  }
 
   const [search, setSearch] = useState()
 
@@ -120,9 +122,9 @@ export default function Header() {
               </div>
 
               {
-                true
-                ? <div className="navbar-brand active-menu-mobile-left">Ollaaaaaa</div>
-                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">elseee</div>
+                isLogged
+                ? <div className="navbar-brand active-menu-mobile-left">{profile_photo}</div>
+                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">{profile_photo}</div>
               }
 
               <a href="/admin" className="cart-href no-href-decoration">
@@ -173,7 +175,7 @@ export default function Header() {
                 </li>
 
                 {
-                  isAuthenticated
+                  isLogged
                   ? 
                     <li className="nav-item item-desktop dropdown">
                       <div className="nav-link active d-flex flex-row " role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -182,7 +184,7 @@ export default function Header() {
                             {profile_photo}
                           </div>
                         </div>
-                        <Link to={`/profile/${isAuthenticated}`} className="toYourProfile">
+                        <Link to={`/profile/${isLogged.id}`} className="toYourProfile">
                           <div className="my-account">
                             <small className="login-small">{ userName }</small>
                             <div className="">Minha Conta</div>
@@ -194,7 +196,7 @@ export default function Header() {
                         <li><Link className="dropdown-item" to="/client_dashboard/user-profile">Minha Conta</Link></li>
                         <li><Link className="dropdown-item" to="/">Carrinho</Link></li>
                         <li><Link className="dropdown-item" to="/client_dashboard/user-profile">Configurações</Link></li>
-                        <li><a className="dropdown-item" href="/" onClick={() => localStorage.removeItem('id')}>Sair</a></li>
+                        <li><a className="dropdown-item" href="/" onClick={() => logout()}>Sair</a></li>
                       </ul>
                     </li>
                   :
@@ -269,14 +271,14 @@ export default function Header() {
                 </li>
 
                 {
-                  isAuthenticated === null
+                  isLogged === null
                   ? 
                     <li className="d-flex nav-item ps-2 item-mobile text-primary w-100 mt-3">
                       <Link to={"/register"} className="no-href-decoration w-50"><div className="text-center" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">Cadastra-se</div></Link>
                       <div className="w-50 text-center" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Faça Login</div>
                     </li>
                   :
-                  <a href="/" className="no-href-decoration item-mobile" onClick={() => localStorage.removeItem('id')}>
+                  <a href="/" className="no-href-decoration item-mobile" onClick={() => logout()}>
                     <div className="m-2 mb-0">
                       <button className="btn btn-outline-danger">Sair</button>
                     </div>
@@ -290,7 +292,7 @@ export default function Header() {
           </div>
         </nav>
 
-        <SubHeader isAuthenticated={isAuthenticated}/>
+        <SubHeader/>
 
         {/* Modal aqui a baixo */}
         <Modal/>

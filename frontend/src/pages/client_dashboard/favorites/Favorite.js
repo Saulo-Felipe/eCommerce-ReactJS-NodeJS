@@ -26,8 +26,9 @@ export default function Favorite(props) {
     // ==========| Active color on actual page |==========
     
     (async() => {
+      var isLogged = await isAuthenticated()
       setLoadingLikes(<div className="text-center mt-5"><div className="spinner-border mx-auto" role="status"><span className="visually-hidden">Loading...</span></div></div>)
-      const response = await api.post('/likes', { id: isAuthenticated, type: 'get all likes' })
+      const response = await api.post('/likes', { id: isLogged.id, type: 'get all likes' })
       setLoadingLikes()
 
       setFavoriteProducts(response.data.result)
@@ -35,16 +36,17 @@ export default function Favorite(props) {
   }, [])
 
   async function removeFavorite(id) {
+    var isLogged = await isAuthenticated()
 
     setLoading(<span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>)
     var btnRemove = document.querySelectorAll('.btn-remove-favorite')
     for (var c=0; c < btnRemove.length; c++)
       btnRemove[c].setAttribute('disabled', 'disabled')
 
-    const response = await api.post('/new-like', { type: 'dislike', idUser: isAuthenticated, idProduct: id })
+    const response = await api.post('/new-like', { type: 'dislike', idUser: isLogged.id, idProduct: id })
     if (response.data.error) return alert('Error ao deslike. Tente novamente mais tarde ou entre em contato com o suporte')
 
-    var res = await api.post('/likes', { id: isAuthenticated, type: 'get all likes' })
+    var res = await api.post('/likes', { id: isLogged.id, type: 'get all likes' })
     if (res.data.error) return alert('Erro interno ao listar likes, tente novamente mais tarde.')
     
     setLoading()

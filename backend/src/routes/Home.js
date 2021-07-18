@@ -91,6 +91,8 @@ router.post('/search', async(request, response)=> {
             OFFSET ${pagePositon * 9} 
             LIMIT 9 
         `)
+
+        console.log('retornando resultado de pesqusia: ', result, 'AND', countPage)
         
         return response.status(200).json({result: result, countPage: countPage.length})
     }
@@ -154,6 +156,18 @@ router.post('/login', async(request, response, next) => {
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
         return response.json({ error: "erro ao realizar Login." })
+    }
+})
+
+router.post('/logout', (request, response) => {
+    try {
+        request.session.destroy(err => {
+            return
+        })
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: 'Error ao fazer logout, tente novamente em instantes...' })
     }
 })
 

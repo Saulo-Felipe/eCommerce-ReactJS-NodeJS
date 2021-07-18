@@ -25,18 +25,18 @@ export default function ClientDashboard(props) {
   useEffect(() => {
 
     (async () => {
-      const response = await api.post('get-user', {type: 'header', id: isAuthenticated})
+      var isLogged = await isAuthenticated()
 
-      if (response.data.error) return alert('Erro ao listar dados de usuario!')
+      if (isLogged.data && isLogged.data.error) return alert('Erro ao listar dados de usuario!')
 
       setUserInformations({
-        user_name: response.data.user_name,
-        profileImage: response.data.profile_photo,
-        email: response.data.email,
-        id: response.data.id
+        user_name: isLogged.user_name,
+        profileImage: isLogged.profile_photo,
+        email: isLogged.email,
+        id: isLogged.id
       })
 
-      setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${response.data.profile_photo}/${response.data.id}/profile)`}}></div>)    
+      setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${isLogged.profile_photo}/${isLogged.id}/profile)`}}></div>)    
 
     })();
 
@@ -52,10 +52,11 @@ export default function ClientDashboard(props) {
   }
 
   async function saveChanges(file) {
+    var isLogged = await isAuthenticated()
 
     var formData = new FormData()
 
-    formData.append('id', isAuthenticated)
+    formData.append('id', isLogged.id)
     formData.append('image-profile', file)
 
     var response = await api.post('/change-profile-photo', formData, {
@@ -66,6 +67,7 @@ export default function ClientDashboard(props) {
 
     if (response.data.error) return alert('Error encontrado')
 
+    setSaveEditImage("")
   }
 
   async function discardChanges() {

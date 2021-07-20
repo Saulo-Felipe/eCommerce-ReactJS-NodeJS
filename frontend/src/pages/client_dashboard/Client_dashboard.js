@@ -9,12 +9,14 @@ import UserProfile from './configs/User_Configs'
 import {isAuthenticated} from '../../services/isAuthenticated'
 import api from '../../services/api'
 
+import {useProfilePhoto} from '../../components/context/ProfilePhoto'
+
 export default function ClientDashboard(props) {
 
   const [configs, setConfigs] = useState({ PagePosigion: '', TitleOne: '', TitleTwo: '' })
   const [userInformations, setUserInformations] = useState({profileImage: '', email: ''})
-  const [editImage, setEditImage] = useState(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/0/profile)`}}></div>)
   const [saveEditImage, setSaveEditImage] = useState()
+  const { profilePhoto, setProfilePhoto } = useProfilePhoto()
 
   var ChildComponent
   if (props.ChildComponent === "Favorite") ChildComponent = Favorite
@@ -36,7 +38,6 @@ export default function ClientDashboard(props) {
         id: isLogged.id
       })
 
-      setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${isLogged.profile_photo}/${isLogged.id}/profile)`}}></div>)    
 
     })();
 
@@ -47,7 +48,7 @@ export default function ClientDashboard(props) {
     console.log('entrei')
     var preview = URL.createObjectURL(file)
     console.log('preview: ', preview)
-    setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${preview})`}}></div>)
+    setProfilePhoto(`${preview}`)
     setSaveEditImage(<div className="container-btn-save-or-remove-image d-flex" onClick={() => saveChanges(file)}><button className="btn btn-secondary me-2" onClick={() => discardChanges()}>Descartar alterações</button><button className="btn btn-success">Salvar</button></div>)
   }
 
@@ -71,7 +72,7 @@ export default function ClientDashboard(props) {
   }
 
   async function discardChanges() {
-    setEditImage(<div className="favorite-perfil-photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${userInformations.profileImage}/${userInformations.id}/profile)`}}></div>)
+    setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${userInformations.profileImage || "user.png"}/${userInformations.id}/profile`)
     setSaveEditImage("")
     document.querySelector('#change-photo-profile-input').value = ""
   }
@@ -109,7 +110,7 @@ export default function ClientDashboard(props) {
                     <div>Clique para alterar foto</div>
                   </div>
                 </label>
-                {editImage}
+                <div className="favorite-perfil-photo" style={{backgroundImage: `url(${profilePhoto}`}}></div>
               </div>
 
               <div className="informations-favorite-page">

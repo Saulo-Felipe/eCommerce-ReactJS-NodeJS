@@ -32,6 +32,22 @@ export default function Favorite(props) {
       setLoadingLikes()
 
       setFavoriteProducts(response.data.result)
+
+      console.log('Produtos likeados: ', response.data.result)
+
+      //========| Get categories of product |==========
+        /*const relationIDs = response.data.result.map(item => item.id)
+        console.log('relations: ', relationIDs)
+        var resp = await api.post('/get-categories-of-product', {
+          IDs: relationIDs
+        })
+
+        if (resp.data.error) return alert('Erro ao buscar categorias de produtos....')
+
+        setCategories(resp.data.categories)  */
+
+      //========| Get categories of product |==========
+
     })();
   }, [])
 
@@ -69,13 +85,23 @@ export default function Favorite(props) {
             </div>
             <div className="card-line-content">
               <div className="mini-title-products">{product.product_name}</div>
-              <div>
-                <span className="option-category-favorite">Categorias:</span>
-                <span className="result-category-favorite"> notebooks, informatica, celulares</span>
+              <div className="d-flex">
+                <div className="option-category-favorite">Categorias: </div>
+                <div className="result-category-favorite d-flex"> 
+                  {
+                    product.categories.length === 0 ?
+                    <div className="categorie-of-favorite-product ms-1"> Nenhuma categoria cadastrada</div> :
+                    product.categories.map((item) => <div className="categorie-of-favorite-product ms-1"><a href="/" className="me-2 text-decoration-none"> {item} </a></div> )
+                  }
+                </div>
               </div>
-              <div>
+              {/* <div>
                 <span className="option-category-favorite">Cores:</span>
                 <span className="result-category-favorite"> Azul, Vermelho, Verde</span>
+              </div> */}
+              <div className="">
+                <span className="option-category-favorite">Descrição: </span>
+                <small className="">{product.description}</small>
               </div>
               <div className="mini-price-products">R$ {product.price}</div>
             </div>

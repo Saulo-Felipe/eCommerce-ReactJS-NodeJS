@@ -120,7 +120,12 @@
 	font-size: 0.8em;
 	color: #4e54c8;
 }
-
+.width-max-content {
+	width: max-content;
+}
+.categorie-of-favorite-product > a {
+	font-size: 0.8rem;
+}
 /*  Alternatives  */
 
 .fixed-alternative {

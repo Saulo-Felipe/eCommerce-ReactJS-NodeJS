@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import api from '../../services/api'
 
-
+  
 function Modal() {
 
   const [login, setLogin] = useState({
     email: null,
     password: null
   })
+  const History = useHistory()
   const [loading, setLoading] = useState()
   const [logs, setLogs] = useState()
 
@@ -41,7 +42,8 @@ function Modal() {
           setLogs(<div className="mb-2 text-center text-danger">{response.data.error}</div>) 
         } else {
           setLogs(<div className="mb-2 text-center text-success">Login realziado com sucesso, redirecionando...</div>) 
-          //window.location.href = "/"
+
+          History.push("/")
         }
       }
     }

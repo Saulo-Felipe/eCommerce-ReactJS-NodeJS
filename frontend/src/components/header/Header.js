@@ -7,15 +7,15 @@ import { isAuthenticated } from '../../services/isAuthenticated'
 import api from '../../services/api'
 import SubHeader from './SubHeader'
 import { useLike } from '../context/Likes'
+import { useProfilePhoto } from '../context/ProfilePhoto'
 
 export default function Header() {
   const { setLike, like } = useLike()
   const [userName, setUserName] = useState()
-  const [profile_photo, setProfilePhoto] = useState()
+  const { profilePhoto, setProfilePhoto } = useProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
   const [isLogged, setIsLogged] = useState(null)
 
   useEffect(() => {
-
     (async() => {
       var response = await isAuthenticated()
       console.log('linha 19 Header: ', response)
@@ -24,9 +24,9 @@ export default function Header() {
 
       if (response !== null) {
         setUserName(response.user_name)
-        setProfilePhoto(<img className="header-profile-img" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${response.profile_photo}/${response.id}/profile`} alt="User" width="40" height="40" />)
+        setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${response.profile_photo || "user.png"}/${response.id}/profile`)
       } else {
-        setProfilePhoto(<img className="header-profile-img" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`} alt="User" width="40" height="40"/>)
+        setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
       }
 
     //Get Liked Products
@@ -123,8 +123,8 @@ export default function Header() {
 
               {
                 isLogged
-                ? <div className="navbar-brand active-menu-mobile-left">{profile_photo}</div>
-                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">{profile_photo}</div>
+                ? <div className="navbar-brand active-menu-mobile-left"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
+                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
               }
 
               <a href="/admin" className="cart-href no-href-decoration">
@@ -181,7 +181,7 @@ export default function Header() {
                       <div className="nav-link active d-flex flex-row " role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <div>
                           <div className="navbar-brand">
-                            {profile_photo}
+                            <img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" />
                           </div>
                         </div>
                         <Link to={`/profile/${isLogged.id}`} className="toYourProfile">
@@ -204,7 +204,7 @@ export default function Header() {
                       <a className="nav-link active d-flex flex-row " aria-current="page" href="/" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                         <div>
                           <div className="navbar-brand">
-                            {profile_photo}
+                            <img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" />
                           </div>
                         </div>
                         <div className="my-account">

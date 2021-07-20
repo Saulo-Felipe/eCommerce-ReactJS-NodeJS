@@ -1,63 +1,8 @@
 const express = require('express')
-const admin = express.Router()
-const multer = require('multer')
-const path = require('path')
-const sequelize = require('../database/connect')
+const adminCategory = express.Router()
+const sequelize = require('../../database/connect')
 
-admin.post('/get-product-Categories', async (request, response) => {
-  var [result] = await sequelize.query(`SELECT * FROM categories`)
-
-  return response.json({ result })
-})
-
-admin.post('/relationship', async(request, response) => {
-  const { CategoriesToProducts } = request.body
-
-  console.log(CategoriesToProducts)
-
-  const [lastProduct] = await sequelize.query(`SELECT MAX(id) from products`)
-
-  console.log('max:', lastProduct[0].max)
-
-  for (var c of CategoriesToProducts) {
-    var [result] = await sequelize.query(`INSERT INTO category_product (product_id, category_id) values (${lastProduct[0].max}, ${c})`)
-  }
-
-  return response.json({ OK: "ok" }) 
-})
-
-var storage = multer.diskStorage({
-  destination: async (request, file, callback) => {
-    callback(null, path.join(__dirname, '../images/product-images/'))
-  },
-  filename: (request, file, callback) => {
-    callback(null, file.originalname)
-  }
-})
-
-let upload = multer({ storage: storage }).fields([{name: 'cover', maxCount: 1}, {name: 'images', maxCount: 8}])
-
-
-admin.post('/new-product', upload, async (request, response) => {
-  var cover = request.files.cover[0].originalname
-  var images = ""
-  var body = request.body
-
-  for (var c in request.files.images) {
-    images += ` ${request.files.images[c].originalname}`
-  }
-
-  await sequelize.query(`
-    INSERT INTO products 
-    ("product_name", price, amount, cover, images, description)
-    VALUES 
-    ('${body.name}', ${body.price}, ${body.amount}, '${cover}', '${images}', '${body.description}')
-  `)
-
-  return response.json({ ola: "teste" })
-})
-
-admin.post('/categories', async (request, response) => {
+adminCategory.post('/categories', async (request, response) => {
   if (request.body.type === "especific category") {
     var [result] = await sequelize.query(`SELECT * FROM categories WHERE category_name ILIKE '%${request.body.category}%'`)
 
@@ -69,7 +14,7 @@ admin.post('/categories', async (request, response) => {
   return response.json({ result })
 })
 
-admin.post('/new-category', async(request, response) => {
+adminCategory.post('/new-category', async(request, response) => {
   try {
     var result = request.body.category
     result = result.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
@@ -90,7 +35,7 @@ admin.post('/new-category', async(request, response) => {
   }
 })
 
-admin.post('/delete-category', async (request, response) => {
+adminCategory.post('/delete-category', async (request, response) => {
   try {
     const {id} = request.body
 
@@ -103,7 +48,7 @@ admin.post('/delete-category', async (request, response) => {
   }
 })
 
-admin.post('/update-category', async (request, response) => {
+adminCategory.post('/update-category', async (request, response) => {
   try {
     const {type} = request.body
 
@@ -131,4 +76,5 @@ admin.post('/update-category', async (request, response) => {
   }
 })
 
-module.exports = admin
+
+module.exports = adminCategory

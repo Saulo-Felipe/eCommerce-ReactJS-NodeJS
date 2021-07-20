@@ -14,35 +14,77 @@ export default function AddProduct() {
   const [loading, setLoading] = useState()
   const [categories, setCategories] = useState([])
   const [selectedCategories, setSelectedCategories] = useState([])
-  var CategoriesToProducts = []
+  const [CategoriesToProducts, setCategoriesToProducts] = useState([])
+  const [loadingAdd, setLoadingAdd] = useState()
 
 
 
   function handleChangeFom(values) {
-    console.log('Values: ', productInfo)
     var id = values.target.id
+    var value = values.target.value
+
+    console.log('Valor digitado: ', values.target.value)
 
     if (id === "name") {
-      productInfo.name = values.target.value
+      setProductInfo({
+        name: value,
+        amount: productInfo.amount,
+        cover: productInfo.cover,
+        description: productInfo.description,
+        images: productInfo.images,
+        price: productInfo.price 
+      })
+    } else if (id === "amountProduct") {
+      setProductInfo({
+        name: productInfo.name,
+        amount: value,
+        cover: productInfo.cover,
+        description: productInfo.description,
+        images: productInfo.images,
+        price: productInfo.price 
+      })
+    } else if (id === "cover") {
+      setProductInfo({
+        name: productInfo.name,
+        amount: productInfo.amount,
+        cover: values.target.files[0],
+        description: productInfo.description,
+        images: productInfo.images,
+        price: productInfo.price 
+      })
+    } else if (id === "descriptionProduct") {
+      setProductInfo({
+        name: productInfo.name,
+        amount: productInfo.amount,
+        cover: productInfo.cover,
+        description: value,
+        images: productInfo.images,
+        price: productInfo.price 
+      })
+    } else if (id === "multipleImages") {
+      setProductInfo({
+        name: productInfo.name,
+        amount: productInfo.amount,
+        cover: productInfo.cover,
+        description: productInfo.description,
+        images: values.target.files,
+        price: productInfo.price 
+      })
+    } else if (id === "price") {
+      setProductInfo({
+        name: productInfo.name,
+        amount: productInfo.amount,
+        cover: productInfo.cover,
+        description: productInfo.description,
+        images: productInfo.images,
+        price: value
+      })
     }
-    else if (id === "amountProduct")
-      productInfo.amount = parseInt(values.target.value)
-    else if (id === "cover")
-      productInfo.cover = values.target.files[0]
-    else if (id === "descriptionProduct")
-      productInfo.description = values.target.value
-    else if (id === "multipleImages") 
-      productInfo.images = values.target.files
-    else if (id === "price")
-      productInfo.price = values.target.value
-
-    console.log(productInfo)
+    console.log('valor total: ', productInfo)
   }
 
   async function submitProduct() {
     if (productInfo.name === null || productInfo.amount === null || productInfo.cover === null || productInfo.description === null || productInfo.images === null || productInfo.price === null) {
-      console.log("Nulos: ", productInfo)
-      console.log('teste de persistencia: ', CategoriesToProducts)
       alert('Preencha todos os campos para poder finalizar o cadastro!')
     } else {
       var formData = new FormData()
@@ -59,15 +101,19 @@ export default function AddProduct() {
         }
       }
 
-      await api.post('/admin/new-product', formData, {
+      setLoadingAdd(<div className="text-center"><img src={require('../../../images/loading.gif').default} alt="Loading gif" width="100px"/></div>)
+      var res = await api.post('/admin/new-product', formData, {
         headers: {
           'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
         }
       })
+      if (res.data.error) return alert('Erro ao adicionar produto, tente novamente ou entre em contato com o proprietario.')
 
       var response = await api.post('/admin/relationship', { CategoriesToProducts: CategoriesToProducts })
       
       if (response.data.error) alert('Erro interno, por favor tente mais tarde.')
+      setLoadingAdd()
+      window.location.href = "/"
     }
   }
 
@@ -95,6 +141,7 @@ export default function AddProduct() {
   }
 
   function addCategory(changes, id, categoryName) {
+    console.log('Categoria: ', CategoriesToProducts)
     if (changes.target.checked === true) {
 
       var confirm = true
@@ -104,7 +151,7 @@ export default function AddProduct() {
 
       if (confirm === true) {
         setSelectedCategories([...selectedCategories, {id: id, category_name: categoryName }])
-        CategoriesToProducts.push(id)
+        setCategoriesToProducts([...CategoriesToProducts, id])
       }
 
     } else {
@@ -127,7 +174,7 @@ export default function AddProduct() {
       }
     }
 
-    CategoriesToProducts = CategoriesToProducts.filter((item) => item !== id)
+    setCategoriesToProducts(CategoriesToProducts.filter((item) => item !== id))
   }
 
   return (
@@ -198,6 +245,8 @@ export default function AddProduct() {
               })
             }
           </div>
+
+          {loadingAdd}
 
           <button className="btn btn-success mt-2" onClick={submitProduct}>Finalizar Cadastro</button>
         </div>

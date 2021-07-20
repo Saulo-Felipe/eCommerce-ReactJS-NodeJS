@@ -1,9 +1,16 @@
 const express = require('express')
-const router = require('./routes/Home.js')
-const admin = require('./routes/Admin.js')
 const cors = require('cors')
 const session = require('express-session')
 const passport = require('passport')
+
+//Routes
+  const router = require('./routes/Home.js')
+  const client = require('./routes/Client.js')
+  const admin = require('./routes/Admin/Admin.js')
+  const adminProducts = require('./routes/Admin/Products.js')
+  const adminCategory = require('./routes/Admin/Categories.js')
+
+
 require('./passportConfigs/auth')(passport)
 
 const app = express()
@@ -13,13 +20,6 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
-
-
-app.use((request, response, next) => {
-  console.log('isAuthenticated? ', request.user, request.isAuthenticated())
-
-  next()
-})
 
 
 app.use(passport.initialize())
@@ -36,7 +36,11 @@ app.use(cors({
 
 //Routes
   app.use('/', router)
+  app.use('/', client)
+
   app.use('/admin', admin)
+  app.use('/admin', adminProducts)
+  app.use('/admin', adminCategory)
 
 
 

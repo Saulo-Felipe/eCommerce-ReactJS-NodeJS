@@ -235,12 +235,12 @@ export default function UserProfile(props) {
 
 						<div className="d-flex p-3 background-blue-transparent row-user-configs">
 							<h6 className="w-50 profile-title-information">Telefone: </h6>
-							<input autoComplete="off" type="text" className="w-50 form-control input-mobile-width" id="phone_number" maxlength="14" placeholder="(86) 99112-5544" onChange={(changes) => {phone(changes.target.value)}} defaultValue={informations.phone === "0" ? "" : informations.phone}/>
+							<input autoComplete="off" type="text" className="w-50 form-control input-mobile-width" id="phone_number" maxLength="14" placeholder="(86) 99112-5544" onChange={(changes) => {phone(changes.target.value)}} defaultValue={informations.phone === "0" ? "" : informations.phone}/>
 						</div>
 
 						<div className="d-flex p-3 row-user-configs">
 							<h6 className="w-50 profile-title-information">CPF: </h6>
-							<input autoComplete="off" type="text" className="w-50 form-control input-mobile-width" id="user_cpf" maxlength="14" placeholder="123.456.789-25" onChange={(changes) => {cpf(changes.target.value)}} defaultValue={informations.cpf === "0" ? "" : informations.cpf} />
+							<input autoComplete="off" type="text" className="w-50 form-control input-mobile-width" id="user_cpf" maxLength="14" placeholder="123.456.789-25" onChange={(changes) => {cpf(changes.target.value)}} defaultValue={informations.cpf === "0" ? "" : informations.cpf} />
 						</div>
 
 						<hr className="m-3"/>

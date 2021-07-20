@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './S-Card.css'
 import api from '../../services/api'
 import { useLike } from '../context/Likes'
@@ -7,13 +8,12 @@ import { isAuthenticated } from '../../services/isAuthenticated'
 export default function Card(props) {
 
   const [likeIcon, setLikeIcon] = useState()
-
   const { like, setLike } = useLike()
 
   useEffect(() => {
     (async () => {
       var idUser = await isAuthenticated()
-      console.log('Card js', idUser)
+
 
       if (idUser != null) {
         var response = await api.post('/likes', { idUser: idUser.id, idProduct: props.id })
@@ -49,37 +49,39 @@ export default function Card(props) {
   }
 
   return (
-    <div className="PrimaryCard ms-2">
-      <div className="SecondaryCard">
-        <div className="ThirdCard">
+      <div className="PrimaryCard ms-2">
+        <Link to={`product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
+        <div className="SecondaryCard">
+          <div className="ThirdCard">
 
-          <div className="heartLike" onClick={LikeOrDeslike}>
-            {likeIcon}
-          </div>
-
-          <div className="imageProduct" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${props.cover}/${props.id}/product)`}}>
-          </div>
-
-          <hr/>
-          <div className="contentProduct">
-            <span className="oldPrice">R$ 1999</span>
-            <div className="titleCard">{props.title}</div>
-            <div className="priceCard">R$ {props.price}.<span className="DecimalPrice">00</span></div>
-            <span className="subPrice">ou 10x de 24,90</span>
-            <div className="d-flex flex-row rating">
-              <div className="stars">
-                <span className="material-icons-outlined star">star</span>
-                <span className="material-icons-outlined star">star</span>
-                <span className="material-icons-outlined star">star</span>
-                <span className="material-icons-outlined star">star</span>
-                <span className="material-icons-outlined star">star_half</span>
-              </div>
-              <div className="amountRating">4.5mil</div>
+            <div className="heartLike" onClick={LikeOrDeslike}>
+              {likeIcon}
             </div>
-          </div>
 
+            <div className="imageProduct" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${props.cover}/${props.id}/product)`}}>
+            </div>
+
+            <hr/>
+            <div className="contentProduct">
+              <span className="oldPrice">R$ 1999</span>
+              <div className="titleCard">{props.title}</div>
+              <div className="priceCard">R$ {props.price}.<span className="DecimalPrice">00</span></div>
+              <span className="subPrice">ou 10x de 24,90</span>
+              <div className="d-flex flex-row rating">
+                <div className="stars">
+                  <span className="material-icons-outlined star">star</span>
+                  <span className="material-icons-outlined star">star</span>
+                  <span className="material-icons-outlined star">star</span>
+                  <span className="material-icons-outlined star">star</span>
+                  <span className="material-icons-outlined star">star_half</span>
+                </div>
+                <div className="amountRating">4.5mil</div>
+              </div>
+            </div>
+
+          </div>
         </div>
+    </Link>
       </div>
-    </div>
   )
 }

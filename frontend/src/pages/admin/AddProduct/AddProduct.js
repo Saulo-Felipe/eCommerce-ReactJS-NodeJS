@@ -113,7 +113,7 @@ export default function AddProduct() {
       
       if (response.data.error) alert('Erro interno, por favor tente mais tarde.')
       setLoadingAdd()
-      window.location.href = "/"
+      //window.location.href = "/"
     }
   }
 

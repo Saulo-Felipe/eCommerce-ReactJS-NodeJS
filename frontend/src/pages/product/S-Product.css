@@ -29,6 +29,7 @@
 	width: 80px;
 	height: 80px;
 	overflow: hidden;
+	transition: all 0.5s;
 }
 .product-one-image-select > img {
 	position: relative;
@@ -48,20 +49,23 @@
 	padding: 20px;
 }
 .the-image-selected-container > img {
-	max-width: 100%;
 	position: relative;
     top: 50%;
     transform: translateY(-50%);
+    max-height: 100%;
+    max-width: 100%;
 }
 .no-selected {
-	opacity: 0.6;
+	opacity: 0.45;
+	transition: all 0.4s;
 }
 .selected {
 	opacity: 1;
-	border: solid 1px #2196f3bf;
+	border: solid 1px #2196f3;
+	transition: all 0.4s;
 }
 .information-about-product-container {
-	padding: 20px;
+	padding: 20px 20px 20px 0px;
 	position: relative;
 	width: 30%;
 }
@@ -97,4 +101,10 @@
 	font-size: 0.8rem;
 	margin-top: -10px;
 	margin-left: 5px;
+}
+.btn-add-to-cart {
+	transition: all 0.5s;
+}
+.btn-add-to-cart:hover {
+	box-shadow: 0px 0px 0px !important;
 }

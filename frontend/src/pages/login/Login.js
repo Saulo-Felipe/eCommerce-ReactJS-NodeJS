@@ -1,17 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../../services/api'
 
   
 function Modal() {
 
-  const [login, setLogin] = useState({
-    email: null,
-    password: null
-  })
+  const [login, setLogin] = useState({ email: null, password: null })
   const History = useHistory()
   const [loading, setLoading] = useState()
   const [logs, setLogs] = useState()
+
+  useEffect(() => {
+    var enter = document.querySelectorAll('.login-focus')
+
+    for (var c=0; c < enter.length; c++) {
+      enter[c].addEventListener('keyup', (event) => {
+        if (event.keyCode === 13) {
+          handleSubmitForm()
+        }
+      })
+    }
+    
+
+  }, [])
 
   function handleChangeInput(inputValue) {
     setLogin({
@@ -27,23 +38,17 @@ function Modal() {
       if (login.email.length === 0 || login.password.length === 0)
         setLogs(<div className="mb-2 text-center text-danger">Preencha todos os dados</div>) 
       else {
-        setLoading(<div className="text-center mb-2"><div class="spinner-border text-dark" role="status"><span class="visually-hidden">Loading...</span></div></div>)
+        setLoading(<div className="text-center mb-2"><img width="80px" src={require("../../images/Infinity-loading.gif").default} alt="loading gif" /></div>)
         var response = await api.post("/login", login)
         setLoading()
 
-        var getUser = await api.post('get-user')
+        
 
-        if (getUser.data.error) return alert('Erro ao buscar usuario') 
-
-        localStorage.setItem('id', getUser.data.user)
-
-
-        if (response.data.error) {
-          setLogs(<div className="mb-2 text-center text-danger">{response.data.error}</div>) 
+        if (response.data.error || response.data.message) {
+          setLogs(<div className="mb-2 text-center text-danger">{response.data.error || response.data.message}</div>) 
         } else {
           setLogs(<div className="mb-2 text-center text-success">Login realziado com sucesso, redirecionando...</div>) 
-
-          History.push("/")
+          window.location.href = "/"
         }
       }
     }
@@ -69,10 +74,10 @@ function Modal() {
               <form>
 
                 <label htmlFor="email_login">Email</label>
-                <input autoComplete="off" type="email" id="email_login" name="email" className="form-control mb-3" onChange={handleChangeInput}/>
+                <input autoComplete="off" type="email" id="email_login" name="email" className="form-control mb-3 login-focus" onChange={handleChangeInput}/>
 
                 <label htmlFor="password_login">Senha</label>
-                <input autoComplete="off" type="password" id="password_login" name="password" className="form-control mb-3" onChange={handleChangeInput}/>
+                <input autoComplete="off" type="password" id="password_login" name="password" className="form-control mb-3 login-focus" onChange={handleChangeInput}/>
 
               </form>
               {loading}
@@ -84,7 +89,7 @@ function Modal() {
 
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary close-modal" data-bs-dismiss="modal">Fechar</button>
-              <a href="/"><button type="button" className="btn btn-primary" onClick={handleSubmitForm}>Fazer Login</button></a>
+              <button type="button" className="btn btn-primary" onClick={handleSubmitForm}>Fazer Login</button>
             </div>
           </div>
         </div>

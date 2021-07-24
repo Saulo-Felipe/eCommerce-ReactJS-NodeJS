@@ -9,8 +9,6 @@ import { Toast } from '../../components/context/Toast'
 
 export default function Product() {
 
-	console.log('toas: ', Toast)
-
 	const {id} = useParams()
 	const [product, setProduct] = useState({
 		product_name: ""
@@ -19,7 +17,7 @@ export default function Product() {
 	const [selectedImage, setSelectedImage] = useState()
 	const [likeIcon, setLikeIcon] = useState()
 	const {like, setLike} = useLike()
-	const [msgAlert, setMsgAlert] = useState() 
+	const [msgAlert, setMsgAlert] = useState()
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -60,12 +58,26 @@ export default function Product() {
 		})();
 	}, [])
 
-	function changeSelect(url) {
+	function changeSelect(url, index) {
 		setSelectedImage(url)	
+
+		var imgs = document.querySelectorAll('.product-one-image-select')
+
+		for (var count=0; count < imgs.length; count++) {
+			if (Number(count) === Number(index)) {
+				imgs[count].classList.remove('no-selected')
+				imgs[count].classList.add('selected')
+			} else {
+				imgs[count].classList.add('no-selected')
+				imgs[count].classList.remove('selected')
+			}
+		}
+
 	}
 
 	async function changeLike() {
-		setMsgAlert(<Toast title={"Você deu um likes"} time={"Agora"} content={"Você gosta bastante de dar likes, não é mesmo?"} />)
+		setMsgAlert(<Toast title={"Você deu um likes"} time={Date.now()} content={"Você gosta bastante de dar likes, não é mesmo?"} />)		
+		
     var idUser = await isAuthenticated()
     if (idUser === null) {
       alert("Você precisa estar logado para dar like em produtos.")
@@ -93,7 +105,7 @@ export default function Product() {
 		    	{
 		    		imageFiles.map((item, index) =>
 		    			<div className={`product-one-image-select ${index === 0 ? "selected" : "no-selected"}`} 
-		    				onClick={() => changeSelect(item)}
+		    				onClick={() => changeSelect(item, index)}
 		    			>
 		    				<img  src={`${item}`}  alt={`image ${Date.now()}`} />
 		    			</div>
@@ -119,12 +131,35 @@ export default function Product() {
 			    	</div>
 			    	<div className=" like_contain_product" onClick={() => changeLike()}>{likeIcon}</div>
 					</div>
-		    	<h4 className="mb-3">{product.product_name}</h4>
+		    	<h4 className="mb-3 mt-4">{product.product_name}</h4>
 
-					<small className="text-decoration-line-through">199.99</small>
+					<small className="text-decoration-line-through mt-2">199.99</small>
 		    	<div className="display-6 text-primary">R$	{product.price} <small className="text-success fs-5"> 7% OFF</small></div>
 		    	<div >ou 12x de R${(Number(product.price) / 12).toFixed(2) }</div>
+
+		    	<div className="d-flex mt-5">
+		    		<select className="form-control w-25 me-2">
+		    			<option value="">1</option>
+		    			<option value="">2</option>
+		    			<option value="">3</option>
+		    			<option value="">4</option>
+		    			<option value="">5</option>
+		    			<option value="">6</option>
+		    			<option value="">7</option>
+		    			<option value="">8</option>
+		    			<option value="">9</option>
+		    		</select>
+		    		<div className="w-75">
+		    			<button className="btn btn-primary form-control shadow btn-add-to-cart">Adicionar ao carrinho</button>
+		    		</div>
+		    	</div>
 		    </div>
+			</div>
+
+			<div className="comments-product">
+				<div>
+						
+				</div>				
 			</div>
 
 			{msgAlert}

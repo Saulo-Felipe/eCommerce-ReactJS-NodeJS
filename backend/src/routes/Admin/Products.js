@@ -3,6 +3,7 @@ const adminProducts = express.Router()
 const multer = require('multer')
 const path = require('path')
 const sequelize = require('../../database/connect')
+const uniqid = require('uniqid')
 
 
 
@@ -17,20 +18,32 @@ var storage = multer.diskStorage({
     callback(null, path.join(__dirname, '../../images/product-images/'))
   },
   filename: (request, file, callback) => {
-    callback(null, file.originalname)
+    var FileOriginal = (file.originalname.replace(/\./g, "") + uniqid() + "." + file.mimetype.replace(/image\//g, "")).replace(/ /g, "")
+
+    if (file.fieldname === "cover")
+      request.coverName = FileOriginal
+    else if (file.fieldname === "images") {
+      if (typeof request.images !== "object") {
+        request.images = []
+        request.images.push(FileOriginal)
+      }
+      else
+        request.images.push(FileOriginal)
+      }
+
+    callback(null, FileOriginal)
   }
 })
 
 let upload = multer({ storage: storage }).fields([{name: 'cover', maxCount: 1}, {name: 'images', maxCount: 8}])
 
-
 adminProducts.post('/new-product', upload, async (request, response) => {
-  var cover = request.files.cover[0].originalname.replaceAll(/ /g, "-")
+  var cover = request.coverName
   var images = ""
   var body = request.body
 
-  for (var c in request.files.images) {
-    images += ` ${request.files.images[c].originalname.replaceAll(/ /g, "-")}`
+  for (var c in request.images) {
+    images += ` ${request.images[c]}`
   }
 
   await sequelize.query(`

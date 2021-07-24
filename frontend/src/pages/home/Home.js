@@ -40,7 +40,7 @@ export default function Home() {
       <PopCategory/>
 
       <div className="container mt-5 mb-2">
-        <h3 className="ms-2">Produtos mais vendidos</h3>
+        <h3 className="ms-2">Produtos populares</h3>
       </div>
       <Carousel>
         {loading}

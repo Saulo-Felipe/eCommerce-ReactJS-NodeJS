@@ -7,15 +7,15 @@ const passport = require('passport')
 
 
 router.get('/', async(request, response) => {
-    try {
-        var [AllProducts, others] = await sequelize.query('SELECT * FROM products LIMIT 9')
+  try {
+    var [AllProducts, others] = await sequelize.query('SELECT * FROM products LIMIT 9')
 
-        return response.json(AllProducts)
-    }
-    catch(error) {
-        console.log('\n\n\n=========================| Error |=====================\n', error)
-        return response.json({ error: "Erro na home principal." })
-    }
+    return response.send(AllProducts)
+  }
+  catch(error) {
+    console.log('\n\n\n=========================| Error |=====================\n', error)
+    return response.json({ error: "Erro na home principal." })
+  }
 })
 
 router.get('/images/:image_name/:id/:type', async(request, response) => {
@@ -135,18 +135,32 @@ router.post('/register', async(request, response) => {
     }
 })
 
-router.post('/login', async(request, response, next) => {
-    try {
-        passport.authenticate("local", {
-            successRedirect: "/test-redirect-login-true",
-            failureRedirect: "/test-redirect-login-false"
-        })(request, response, next)
-    }
-    catch(error) {
-        console.log('\n\n\n=========================| Error |=====================\n', error)
-        return response.json({ error: "erro ao realizar Login." })
-    }
+
+router.post('/login', (request, response, next) => {
+  try {
+    passport.authenticate("local", (error, user, info) => {
+
+      if (error)
+        return response.json({ message: error })
+      else if (info)
+        return response.json({ message: info.message })
+      else if (user){
+        request.logIn(user, (err) => {
+          if (err) return next(err)
+        })
+        return response.json({ loggedIn: true })
+      }
+      else 
+        return response.json({ message: "Erro interno ao realizar Login, tente novamente mais tarde." })
+
+    })(request, response, next)
+  }
+  catch(error) {
+    console.log('\n\n\n=========================| Error |=====================\n', error)
+    return response.json({ error: "erro ao realizar Login." })
+  }
 })
+
 
 router.post('/logout', (request, response) => {
     try {

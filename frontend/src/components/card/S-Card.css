@@ -2,7 +2,7 @@
   width: 200px;
   height: 350px;
   cursor: pointer;
-
+  position: relative;
 }
 
 .SecondaryCard {

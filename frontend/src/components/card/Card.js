@@ -16,7 +16,6 @@ export default function Card(props) {
     (async () => {
       var idUser = await isAuthenticated()
 
-
       if (idUser != null) {
         var response = await api.post('/likes', { idUser: idUser.id, idProduct: props.id })
 
@@ -53,7 +52,7 @@ export default function Card(props) {
 
   return (
       <div className="PrimaryCard ms-2">
-        <div className="heartLike" onClick={LikeOrDeslike}>
+        <div className="heartLike" onClick={() => LikeOrDeslike()}>
           {likeIcon}
         </div>
         <Link to={`/product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">

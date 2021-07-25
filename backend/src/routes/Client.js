@@ -19,20 +19,6 @@ client.post('/get-user', async(request, response) => {
     }
 })
 
-client.post('/product', async(request, response) => {
-    try {
-        const {id} = request.body
-
-        var [product] = await sequelize.query(`SELECT * FROM products WHERE id = ${id}`)
-
-        return response.json({result: product[0]})
-    }
-    catch(error) {
-        console.log('\n\n\n=========================| Error |=====================\n', error)
-        return response.json({ error: 'Error ao listar cliente.' })
-    }
-})
-
 
 client.post('/profile', async(request, response) => {
     try {
@@ -189,13 +175,13 @@ client.post('/new-like', async(request, response) => {
             var [result] = await sequelize.query(`
                 INSERT INTO userliked_product (id_user, id_product_like) VALUES (${idUser}, ${idProduct})
             `)
-            return response.json({ ok: "ok" })
+            return response.json({ success: true })
 
         } else if (type === 'dislike') {
             var [result] = await sequelize.query(`
                 DELETE FROM userliked_product where id_user = ${idUser} and id_product_like = ${idProduct}
             `)
-            return response.json({ ok: "ok" })
+            return response.json({ success: true })
             
         } else {
             return response.json({ error: "Erro interno, por favor tente novamente mais tarde. Error: "+type })
@@ -204,30 +190,6 @@ client.post('/new-like', async(request, response) => {
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
         return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })
-    }
-})
-
-client.post('/get-categories-of-product', async(request, response) => {
-    try {
-        const { IDs } = request.body
-
-        if (IDs.length !== 0) {
-
-            for (var itemID of IDs) {
-                const [result] = await sequelize.query(`
-                    SELECT categories.category_name FROM products
-                    INNER JOIN category_product ON category_product.product_id = products.id
-                    INNER JOIN categories ON categories.id = category_id
-                    WHERE products.id = ${itemID}
-                `)
-
-                return response.json({ categories: result })
-            }
-        }
-    }
-    catch(error) {
-        console.log('\n\n\n=========================| Error |=====================\n', error)
-        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })        
     }
 })
 

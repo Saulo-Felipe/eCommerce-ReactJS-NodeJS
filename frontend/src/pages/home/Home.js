@@ -11,13 +11,20 @@ import Carousel from '../../components/carousel/Carousel'
 export default function Home() {
   const [products, setProduct] = useState([])
   const [loading, setLoading] = useState(<div class="spinner-grow text-primary" role="status" style={{width: "3rem", height: "3rem"}}><span class="visually-hidden">Loading...</span></div>)
+  const [mostPopular, setMostPopular] = useState([])
 
   useEffect(() => {
     (async () => {
       var response = await api.get('/')
       setLoading()
       setProduct(response.data)
+
+      var resPopularProduct = await api.post('/most-popular-products')
+
+      setMostPopular(resPopularProduct.data.mostPopular)
+
     })()
+
   }, [])
 
   return (
@@ -45,7 +52,7 @@ export default function Home() {
       <Carousel>
         {loading}
         {
-          products.map((item) => {
+          mostPopular.map((item) => {
             return (<Card key={item.id} title={item.product_name} cover={item.cover} price={item.price} id={item.id} />)
           })
         }

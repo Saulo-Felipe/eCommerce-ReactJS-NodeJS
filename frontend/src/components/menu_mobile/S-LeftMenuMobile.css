@@ -1,0 +1,19 @@
+.title-favorite {
+	padding-left: 8px;
+}
+.like-amount-notify {
+	text-align: right;
+	width: 80%;
+}
+.like-amount-notify > div {
+	border-radius: 50%;
+    background-color: tomato;
+    color: white;
+    height: 25px;
+    width: 25px;
+    text-align: center;
+    line-height: 25px;
+    position: relative;
+    left: 90%;
+    transform: translateX(-100%);
+}

@@ -10,6 +10,7 @@ const flash = require('connect-flash')
   const admin = require('./routes/Admin/Admin.js')
   const adminProducts = require('./routes/Admin/Products.js')
   const adminCategory = require('./routes/Admin/Categories.js')
+  const userProduct = require('./routes/User/userProduct.js')
 
 
 require('./passportConfigs/auth')(passport)
@@ -37,6 +38,7 @@ const app = express()
 //Routes
   app.use('/', router)
   app.use('/', client)
+  app.use('/', userProduct)
 
   app.use('/admin', admin)
   app.use('/admin', adminProducts)

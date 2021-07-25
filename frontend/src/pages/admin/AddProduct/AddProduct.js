@@ -17,8 +17,6 @@ export default function AddProduct() {
   const [CategoriesToProducts, setCategoriesToProducts] = useState([])
   const [loadingAdd, setLoadingAdd] = useState()
 
-
-
   function handleChangeFom(values) {
     var id = values.target.id
     var value = values.target.value
@@ -113,7 +111,7 @@ export default function AddProduct() {
       
       if (response.data.error) alert('Erro interno, por favor tente mais tarde.')
       setLoadingAdd()
-      //window.location.href = "/"
+      window.location.href = "/"
     }
   }
 

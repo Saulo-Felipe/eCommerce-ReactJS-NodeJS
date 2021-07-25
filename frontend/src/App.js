@@ -21,8 +21,8 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        {isAuthenticated !== null ? <LeftMenuMobile /> : ""}
         <Like>
+          <LeftMenuMobile />
           <ProfilePhoto>
             <Header />
             <Switch>

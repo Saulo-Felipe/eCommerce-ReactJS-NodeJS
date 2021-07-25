@@ -6,6 +6,9 @@
 }
 .search-content-container {
 	background-color: white;
+	max-height: 100vh;
+    overflow: scroll;
+    margin-right: 3px;
 }
 .LeftSearch-favorite {
 	box-shadow: 0px 0px 10px black;
@@ -168,12 +171,12 @@
 	.LeftSearch-favorite {
 		margin: 0 !important;
 		left: -110%;
-	  width: 90% !important;
-	  border-radius: 0;
-		height: 100vh;
-	  position: absolute;
-	  top: 0;
-	  z-index: 1999;
+	  	width: 90% !important;
+	  	border-radius: 0;
+	  	height: 100vh;
+	  	position: absolute;
+	  	top: 0;
+	  	z-index: 1999;
 	}
 	.menu-dashboard-client {
 		display: none;

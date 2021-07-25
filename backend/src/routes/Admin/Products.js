@@ -50,7 +50,7 @@ adminProducts.post('/new-product', upload, async (request, response) => {
     INSERT INTO products 
     ("product_name", price, amount, cover, images, description)
     VALUES 
-    ('${body.name}', ${body.price}, ${body.amount}, '${cover}', '${images}', '${body.description}')
+    ('${body.name}', ${body.price}, ${body.amount}, '${cover}', '${images}', '${body.description.replace(/'/, "")}')
   `)
 
   return response.json({ ola: "teste" })

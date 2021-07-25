@@ -18,7 +18,6 @@ export default function Header() {
   useEffect(() => {
     (async() => {
       var response = await isAuthenticated()
-      console.log('linha 19 Header: ', response)
 
       setIsLogged(response)
 
@@ -114,19 +113,20 @@ export default function Header() {
               <img src={LogoTipo} alt="Logotipo" width="30" height="24" className="d-inline-block align-text-top" />
               E-Commerce
             </Link>
+
+
+            {/*=========|   options top menu-mobile   |==========*/}
             <div className="d-flex flex-row item-mobile">
               <div className=""  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="material-icons-outlined menu-mobile">
                   menu
                 </span>
               </div>
-
               {
                 isLogged
                 ? <div className="navbar-brand active-menu-mobile-left"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
                 : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
               }
-
               <a href="/admin" className="cart-href no-href-decoration">
                 <span className="quant-cart">24</span>
                 <span className="material-icons-outlined cart-mobile">
@@ -134,7 +134,12 @@ export default function Header() {
                 </span>
               </a>
             </div>
+            {/*=========|   options top menu-mobile   |==========*/}
+
+
+
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
+
               <div className="d-flex form-search">
 
                 <div className="nav-item item-page-favorites pe-0 likes-icon-mobile item-mobile" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,6 +158,7 @@ export default function Header() {
                   </button>
                 </Link>
               </div>
+
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li className="nav-item menuBar-desktop">
@@ -269,22 +275,6 @@ export default function Header() {
                 <li className="nav-item ps-2 item-mobile options-menu-mobile">
                   <a className="nav-link active color-hover" aria-current="page" href="/admin">Contato</a>
                 </li>
-
-                {
-                  isLogged === null
-                  ? 
-                    <li className="d-flex nav-item ps-2 item-mobile text-primary w-100 mt-3">
-                      <Link to={"/register"} className="no-href-decoration w-50"><div className="text-center" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">Cadastra-se</div></Link>
-                      <div className="w-50 text-center" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Faça Login</div>
-                    </li>
-                  :
-                  <a href="/" className="no-href-decoration item-mobile" onClick={() => logout()}>
-                    <div className="m-2 mb-0">
-                      <button className="btn btn-outline-danger">Sair</button>
-                    </div>
-                  </a>
-                }
-
 
               </ul>
 

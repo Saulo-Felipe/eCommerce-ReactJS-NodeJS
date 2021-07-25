@@ -13,7 +13,7 @@ import {useProfilePhoto} from '../../components/context/ProfilePhoto'
 
 export default function ClientDashboard(props) {
 
-  const [configs, setConfigs] = useState({ PagePosigion: '', TitleOne: '', TitleTwo: '' })
+  const [configs, setConfigs] = useState({ PagePosition: '', TitleOne: '', TitleTwo: '' })
   const [userInformations, setUserInformations] = useState({profileImage: '', email: ''})
   const [saveEditImage, setSaveEditImage] = useState()
   const { profilePhoto, setProfilePhoto } = useProfilePhoto()
@@ -37,11 +37,7 @@ export default function ClientDashboard(props) {
         email: isLogged.email,
         id: isLogged.id
       })
-
-
     })();
-
-
   }, [])
 
   async function ChangeProfilePhoto(file) {
@@ -92,7 +88,7 @@ export default function ClientDashboard(props) {
             <div className="text-white pe-5 d-flex iconsNavigate desktop">
               <span className="material-icons-outlined iconNavigateSearch">home</span> Home
               <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> Dashboard
-              <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> {configs.PagePosigion}
+              <span className="material-icons-two-tone iconNavigateSearch">navigate_next</span> {configs.PagePosition}
             </div>
           </div>
         </div>
@@ -178,7 +174,7 @@ export default function ClientDashboard(props) {
 
           <div className="container search-content-container">
             <div className="FilterTop d-flex">
-              <h5 className="text-white w-100">{configs.TitleTwo} </h5>
+              <h5 className="text-white w-100 position-absolute">{configs.TitleTwo} </h5>
               <div className="text-end w-100">
                 <a href="/" onClick={() => localStorage.removeItem('id')}>
                   <button className="btn btn-outline-danger me-4">Sair</button>

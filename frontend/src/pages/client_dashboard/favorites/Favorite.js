@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import api from '../../../services/api'
 import { isAuthenticated } from '../../../services/isAuthenticated'
-import { useLike } from '../../../components/context/Likes'
+import { like, useLike } from '../../../components/context/Likes'
 
 export default function Favorite(props) {
   const [FavoriteProducts, setFavoriteProducts] = useState([])
   const { like, setLike } = useLike()
-  const [loading, setLoading] = useState()
-  const [loadingLikes, setLoadingLikes] = useState()
+  const [loading, setLoading] = useState([])
+  const [loadingLikes, setLoadingLikes] = useState([])
 
   useEffect(() => {
     props.hooks.setConfigs({
-      PagePosigion: 'Favoritos',
+      PagePosition: 'Favoritos',
       TitleOne: 'Favoritos',
       TitleTwo: 'Lista de Produtos salvos: '
     })
@@ -32,21 +32,6 @@ export default function Favorite(props) {
       setLoadingLikes()
 
       setFavoriteProducts(response.data.result)
-
-      console.log('Produtos likeados: ', response.data.result)
-
-      //========| Get categories of product |==========
-        /*const relationIDs = response.data.result.map(item => item.id)
-        console.log('relations: ', relationIDs)
-        var resp = await api.post('/get-categories-of-product', {
-          IDs: relationIDs
-        })
-
-        if (resp.data.error) return alert('Erro ao buscar categorias de produtos....')
-
-        setCategories(resp.data.categories)  */
-
-      //========| Get categories of product |==========
 
     })();
   }, [])
@@ -77,7 +62,7 @@ export default function Favorite(props) {
 	return (
 		<div className="favorite-content ms-4">
       {
-        FavoriteProducts.length === 0 
+        FavoriteProducts && FavoriteProducts.length === 0 
         ? <h1>Nenhum Produto Salvo</h1>
         : FavoriteProducts.map((product) => 
           <div className="card-line d-flex mb-3" key={product.id}>
@@ -89,16 +74,14 @@ export default function Favorite(props) {
                 <div className="option-category-favorite">Categorias: </div>
                 <div className="result-category-favorite d-flex"> 
                   {
-                    product.categories.length === 0 ?
-                    <div className="categorie-of-favorite-product ms-1"> Nenhuma categoria cadastrada</div> :
-                    product.categories.map((item) => <div className="categorie-of-favorite-product ms-1"><a href="/" className="me-2 text-decoration-none"> {item} </a></div> )
+                    product.categories 
+                    ? product.categories.length === 0 ?
+                      <div className="categorie-of-favorite-product ms-1"> Nenhuma categoria cadastrada</div> :
+                      product.categories.map((item) => <div className="categorie-of-favorite-product ms-1"><a href="/" className="me-2 text-decoration-none"> {item} </a></div> )
+                    : ""
                   }
                 </div>
               </div>
-              {/* <div>
-                <span className="option-category-favorite">Cores:</span>
-                <span className="result-category-favorite"> Azul, Vermelho, Verde</span>
-              </div> */}
               <div className="">
                 <span className="option-category-favorite">Descrição: </span>
                 <small className="">{product.description}</small>

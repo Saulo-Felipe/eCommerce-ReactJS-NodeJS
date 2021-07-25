@@ -7,7 +7,7 @@ const photoProvider = createContext()
 
 const ProfilePhoto = (props) => {
 
-	const [profilePhoto, setProfilePhoto] = useState();
+	const [profilePhoto, setProfilePhoto] = useState(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`);
 
 	return (
 

@@ -4,6 +4,7 @@ import { useLike } from '../context/Likes'
 import './S-LeftMenuMobile.css'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import api from '../../services/api'
+import { useProfilePhoto } from '../context/ProfilePhoto'
 
 
 export default function LeftMenuMobile() {
@@ -12,6 +13,7 @@ export default function LeftMenuMobile() {
   const [mobile, setMobile] = useState(false)
   const [search, setSearch] = useState()
   const [isLogged, setIsLogged] = useState(null)
+  const { profilePhoto, setProfilePhoto } = useProfilePhoto()
 
 
   function changedSearch(InputValueSearch) {
@@ -75,7 +77,7 @@ export default function LeftMenuMobile() {
               ? 
               <>
                 <div className="border-on-image-profile-favorite m-auto">
-                  <div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`../../pages/client_dashboard/UserProfile.jpg`).default})`}}>
+                  <div className="favorite-perfil-photo" style={{backgroundImage: `url(${profilePhoto})`}}>
 
                   </div>
                 </div>
@@ -89,7 +91,7 @@ export default function LeftMenuMobile() {
                 <>
                   <div className="d-flex header-top-favorite">
                     <div className="border-on-image-profile-favorite ">
-                      <div className="favorite-perfil-photo" style={{backgroundImage: `url(${require(`../../pages/client_dashboard/UserProfile.jpg`).default})`}}>
+                      <div className="favorite-perfil-photo" style={{backgroundImage: `url(${profilePhoto})`}}>
 
                       </div>
                     </div>
@@ -99,12 +101,6 @@ export default function LeftMenuMobile() {
                       <div className="favorite-email">jubileuAmarelo@gmail.com</div>
                     </div>
                   </div>
-
-                  <a href="/" className="no-href-decoration item-mobile" onClick={() => logout()}>
-                    <div className="m-2 mb-0">
-                      <button className="btn btn-outline-danger">Sair</button>
-                    </div>
-                  </a>
                 </>
             }
             
@@ -118,70 +114,124 @@ export default function LeftMenuMobile() {
             </div>
 
             <div className="content-favorite-left mt-4">
-              <div className="alternative-dashboard fixed-alternative">Home</div>
-              
-              <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
-                <div className="normal-alternative">
-                  <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">shopping_bag</div>
-                  <div className="title-norma-alternative title-buy icon-dashboard"> Compras</div>
-                </div>
-              </Link>
 
-              <div className="alternative-dashboard fixed-alternative">Dashboard</div>
+              <div class="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#other-alternatives-menu-mobile" aria-expanded="false" aria-controls="other-alternatives-menu-mobile">
+                Home <i class="fas fa-caret-down"></i>
+              </div>
+              <div class="collapse" id="other-alternatives-menu-mobile">
 
-              <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
-                <div className="normal-alternative">
-                  <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">shopping_bag</div>
-                  <div className="title-norma-alternative title-buy icon-dashboard"> Compras</div>
-                </div>
-              </Link>
-
-              <hr/>
-
-              <Link to={"/client_dashboard/favorites"} className="no-href-decoration ALL_close-menu-mobile">
-                <div className="normal-alternative">
-                  <div className="material-icons-outlined icon-normal-alternative icon-favorite icon-dashboard">volunteer_activism</div>
-                  <div className="d-flex title-norma-alternative active-favorite title-favorite icon-dashboard">
-                    <div>Favoritos</div>
-                    <div className="like-amount-notify"><div>{like}</div></div>
+                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
+                  <div className="normal-alternative">
+                    <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">home</div>
+                    <div className="title-norma-alternative title-buy icon-dashboard"> Home</div>
                   </div>
-                </div>
-              </Link>
+                </Link>
 
-              <hr/>
+                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
+                  <div className="normal-alternative">
+                    <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">dashboard</div>
+                    <div className="title-norma-alternative title-buy icon-dashboard"> Categorias</div>
+                  </div>
+                </Link>
 
-              <Link to={"/client_dashboard/user-profile"} className="no-href-decoration ALL_close-menu-mobile">
+
+                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
+                  <div className="normal-alternative">
+                    <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">local_offer</div>
+                    <div className="title-norma-alternative title-buy icon-dashboard"> Ofertas do Dia</div>
+                  </div>
+                </Link>
+
+                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
+                  <div className="normal-alternative">
+                    <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">credit_score</div>
+                    <div className="title-norma-alternative title-buy icon-dashboard"> Mais vendidos</div>
+                  </div>
+                </Link>
+
+                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
+                  <div className="normal-alternative">
+                    <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">alternate_email</div>
+                    <div className="title-norma-alternative title-buy icon-dashboard"> Contato</div>
+                  </div>
+                </Link>
+              </div>
+
+              <div class="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false" aria-controls="dashboard-collapse">
+                Dashboard <i class="fas fa-caret-down"></i>
+              </div>
+              <div className="collapse show" id="dashboard-collapse">
+                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
+                  <div className="normal-alternative">
+                    <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">shopping_bag</div>
+                    <div className="title-norma-alternative title-buy icon-dashboard"> Compras</div>
+                  </div>
+                </Link>
+
+                <hr/>
+
+                <Link to={"/client_dashboard/favorites"} className="no-href-decoration ALL_close-menu-mobile">
+                  <div className="normal-alternative">
+                    <div className="material-icons-outlined icon-normal-alternative icon-favorite icon-dashboard">volunteer_activism</div>
+                    <div className="d-flex title-norma-alternative active-favorite title-favorite icon-dashboard">
+                      <div>Favoritos</div>
+                      <div className="like-amount-notify"><div>{like}</div></div>
+                    </div>
+                  </div>
+                </Link>
+
+                <hr/>
+
+                <Link to={"/client_dashboard/user-profile"} className="no-href-decoration ALL_close-menu-mobile">
+                  <div className="normal-alternative">
+                    <div className="material-icons-outlined icon-normal-alternative">manage_accounts</div>
+                    <div className="title-norma-alternative"> Meus dados pessoais</div>
+                  </div>        
+                </Link>
+              </div>
+
+
+              <div class="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#configs-collapse" aria-expanded="false" aria-controls="configs-collapse">
+                Configurações <i class="fas fa-caret-down"></i>
+              </div>
+
+              <div className="collapse show" id="configs-collapse">
                 <div className="normal-alternative">
-                  <div className="material-icons-outlined icon-normal-alternative">manage_accounts</div>
-                  <div className="title-norma-alternative"> Meus dados pessoais</div>
-                </div>        
-              </Link>
+                  <div className="material-icons-outlined icon-normal-alternative">support</div>
+                  <div className="title-norma-alternative"> Suporte</div>
+                </div>
 
-              <div className="alternative-dashboard fixed-alternative">Configurações</div>
+                <hr/>
 
-              <div className="normal-alternative">
-                <div className="material-icons-outlined icon-normal-alternative">support</div>
-                <div className="title-norma-alternative"> Suporte</div>
+                <div className="normal-alternative">
+                  <div className="material-icons-outlined icon-normal-alternative">location_on</div>
+                  <div className="title-norma-alternative"> Endereços</div>
+                </div>
+
+                <hr/>
+
+                <div className="normal-alternative">
+                  <div className="material-icons-outlined icon-normal-alternative">credit_card</div>
+                  <div className="title-norma-alternative"> Metodos de pagamento</div>
+                </div>
+                
               </div>
 
-              <hr/>
+              {
+                isLogged !== null
+                 ?
+                  <div className="m-4" onClick={() => logout()}>
+                    <div className="text-danger me-4">Sair</div>
+                  </div>
+                :
+                ""
+              }
 
-              <div className="normal-alternative">
-                <div className="material-icons-outlined icon-normal-alternative">location_on</div>
-                <div className="title-norma-alternative"> Endereços</div>
-              </div>
-
-              <hr/>
-
-              <div className="normal-alternative">
-                <div className="material-icons-outlined icon-normal-alternative">credit_card</div>
-                <div className="title-norma-alternative"> Metodos de pagamento</div>
-              </div>
-
+              <div className="text-center text-secondary">By Saulo Felipe </div>
 
             </div>
           </div>
-        : <div>ola</div>
+        : ""
       }
     </>
 

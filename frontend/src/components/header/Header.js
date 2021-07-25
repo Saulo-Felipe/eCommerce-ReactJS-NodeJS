@@ -46,12 +46,12 @@ export default function Header() {
     })
 
     // Verificar focus do input de pesquisa
-    input.addEventListener('focus', () => {
-      document.querySelector('.submit-search').style.borderColor = "gray"
-    })
-    input.addEventListener('blur', () => {
-      document.querySelector('.submit-search').style.borderColor = "#ced4da"
-    })
+      input.addEventListener('focus', () => {
+        document.querySelector('.submit-search').style.borderColor = "gray"
+      })
+      input.addEventListener('blur', () => {
+        document.querySelector('.submit-search').style.borderColor = "#ced4da"
+      })
 
     if (window.matchMedia('(min-width: 991px)').matches) {
 
@@ -117,7 +117,7 @@ export default function Header() {
 
             {/*=========|   options top menu-mobile   |==========*/}
             <div className="d-flex flex-row item-mobile">
-              <div className=""  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <div>
                 <span className="material-icons-outlined menu-mobile">
                   menu
                 </span>
@@ -241,39 +241,6 @@ export default function Header() {
                     <li><hr className="dropdown-divider"/></li>
                     <li><a className="dropdown-item" href="/admin">Something else here</a></li>
                   </ul>
-                </li>
-
-                {/*
-                  * Menu Mobile A baixo
-                  *
-                */}
-
-                <li className="nav-item dropdown item-mobile ps-2 options-menu-mobile">
-                  <a className="nav-link active dropdown-toggle" href="/admin" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span className="material-icons-outlined">widgets</span> <span>Categorias</span>
-                  </a>
-                  <ul className="dropdown-menu dropdown-menu-lg-end dropdown-mobile-details" aria-labelledby="navbarDropdown">
-                    <li><a className="dropdown-item" href="/admin">Action</a></li>
-                    <li><a className="dropdown-item" href="/admin">Another action</a></li>
-                    <li><hr className="dropdown-divider"/></li>
-                    <li><a className="dropdown-item" href="/admin">Something else here</a></li>
-                  </ul>
-                </li>
-
-                <li className="nav-item ps-2 item-mobile options-menu-mobile">
-                  <a className="nav-link active color-hover" aria-current="page" href="/admin">Home</a>
-                </li>
-
-                <li className="nav-item ps-2 item-mobile options-menu-mobile">
-                  <a className="nav-link active color-hover" aria-current="page" href="/admin">Ofertas do dia</a>
-                </li>
-
-                <li className="nav-item ps-2 item-mobile options-menu-mobile">
-                  <a className="nav-link active color-hover" aria-current="page" href="/admin">Mais vendidos</a>
-                </li>
-
-                <li className="nav-item ps-2 item-mobile options-menu-mobile">
-                  <a className="nav-link active color-hover" aria-current="page" href="/admin">Contato</a>
                 </li>
 
               </ul>

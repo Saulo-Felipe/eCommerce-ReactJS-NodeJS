@@ -22,8 +22,8 @@ function App() {
     <>
       <BrowserRouter>
         <Like>
-          <LeftMenuMobile />
           <ProfilePhoto>
+            <LeftMenuMobile />
             <Header />
             <Switch>
               <Route path="/" component={Home} exact />

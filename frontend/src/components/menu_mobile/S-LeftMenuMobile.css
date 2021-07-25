@@ -17,3 +17,19 @@
     left: 90%;
     transform: translateX(-100%);
 }
+.LeftSearch-favorite  {
+    overflow: scroll;
+}
+
+.LeftSearch-favorite::-webkit-scrollbar-track {
+    opacity: 0;
+    width: 0px;
+}
+.LeftSearch-favorite::-webkit-scrollbar {
+    opacity: 0;
+    width: 0px;
+}
+.LeftSearch-favorite::-webkit-scrollbar-thumb {
+    width: 0px ;
+    opacity: 0 ;
+}

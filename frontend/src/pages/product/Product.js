@@ -5,6 +5,9 @@ import './S-Product.css'
 import { useLike } from '../../components/context/Likes'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import { Toast } from '../../components/context/Toast'
+import Rating from './Rating/Rating'
+import Carousel from '../../components/carousel/Carousel'
+import Card from '../../components/card/Card'
 
 
 export default function Product() {
@@ -18,6 +21,8 @@ export default function Product() {
 	const [likeIcon, setLikeIcon] = useState()
 	const {like, setLike} = useLike()
 	const [msgAlert, setMsgAlert] = useState()
+	const [productSuggestion, setProductSuggestion] = useState([])
+
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -42,18 +47,47 @@ export default function Product() {
 
 
 			//Get likes
-			var isLogged = await isAuthenticated()
+				var isLogged = await isAuthenticated()
 
-			if (isLogged !== null) {
-	      var response = await api.post('/likes', { idUser: isLogged.id, idProduct: id })				
+				if (isLogged !== null) {
+		      var response = await api.post('/likes', { idUser: isLogged.id, idProduct: id })				
 
-	      if (response.data.like === true)
-	      	setLikeIcon(<i class="fas fa-heart fa-lg like-this text-danger"></i>)
-	      else
-	      	setLikeIcon(<i class="far fa-heart fa-lg like-this"></i>)
-			} else
-	      setLikeIcon(<i class="far fa-heart fa-lg like-this"></i>)
+		      if (response.data.like === true)
+		      	setLikeIcon(<i class="fas fa-heart fa-lg like-this text-danger"></i>)
+		      else
+		      	setLikeIcon(<i class="far fa-heart fa-lg like-this"></i>)
+				} else
+		      setLikeIcon(<i class="far fa-heart fa-lg like-this"></i>)
 
+		  //Get Suggestion
+		  	var suggestion = await api.post('/product-suggestion', { productID: id })
+
+		  	if (suggestion.data.error) return alert("Erro ao buscar produtos similares")
+
+	  		var allSuggestion = suggestion.data.result
+		  	if (allSuggestion) {
+
+					for (var c=0; c < allSuggestion.length; c++) {
+
+				    var position = JSON.stringify(allSuggestion).indexOf(JSON.stringify(allSuggestion[c]))
+
+				    if (position !== -1) {
+			        var quant = 0
+			        
+			        for (var e=0; e < allSuggestion.length; e++) {
+		            if (JSON.stringify(allSuggestion[c]) === JSON.stringify(allSuggestion[e]))
+		              quant++
+			        }
+			        
+			        if (quant > 1) {
+			          delete allSuggestion[c]
+			        }
+				    }
+
+					}
+				}
+
+				setProductSuggestion(allSuggestion)
 
 		})();
 	}, [])
@@ -137,7 +171,7 @@ export default function Product() {
 		    	<div className="display-6 text-primary">R$	{product.price} <small className="text-success fs-5"> 7% OFF</small></div>
 		    	<div >ou 12x de R${(Number(product.price) / 12).toFixed(2) }</div>
 
-		    	<div className="d-flex mt-5">
+		    	<div className="d-flex mt-5 add-to-card-container">
 		    		<select className="form-control w-25 me-2">
 		    			<option value="">1</option>
 		    			<option value="">2</option>
@@ -156,11 +190,24 @@ export default function Product() {
 		    </div>
 			</div>
 
-			<div className="comments-product">
-				<div>
-						
-				</div>				
+				{
+					productSuggestion.map(product => {
+						return <Card 
+							key={product.id} 
+							title={product.product_name} 
+							cover={product.cover} 
+							price={product.price} 
+							id={product.id}
+						/>
+					})
+				}
+
+			<div className="product-description container">
+				<h4 className="mb-3">Descrição: </h4>
+				<p className="lead">{product.description}</p>
 			</div>
+
+			<Rating />
 
 			{msgAlert}
 		</div>

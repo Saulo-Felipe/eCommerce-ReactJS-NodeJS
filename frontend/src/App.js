@@ -1,23 +1,51 @@
 import React from 'react'
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 import {isAuthenticated} from './services/isAuthenticated'
 import Home from './pages/home/Home'
-import AddProduct from './pages/admin/AddProduct/AddProduct'
-import AddCategory from './pages/admin/AddCategory/AddCategory'
 import Header from './components/header/Header'
 import Register from './pages/register/Register'
-import Dashboard from './pages/admin/dashboard/Dashboard'
 import Search from './pages/search/Search'
 import Footer from './components/footer/Footer'
 import ClientDashboard from './pages/client_dashboard/Client_dashboard'
-import { PrivateRoutes } from './services/PrivateRoutes'
+import {PrivateRoutes} from './services/PrivateRoutes'
 import { Like } from './components/context/Likes'
 import { ProfilePhoto } from './components/context/ProfilePhoto'
 import LeftMenuMobile from './components/menu_mobile/LeftMenuMobile'
 import Product from './pages/product/Product'
+import NoMatch from './pages/noMatch/NoMatch'
 
 
 function App() {
+
+  const [isLogged, setIsLogged] = React.useState(false)
+  const [isAdmin, setIsAdmin] = React.useState(false)
+
+  const isLoggedRoutes = [
+    <Route path="/client_dashboard/user-profile" >
+      <ClientDashboard ChildComponent={"UserProfile"} />
+    </Route>,
+    <Route path="/client_dashboard/Compras">
+      <ClientDashboard ChildComponent={"Purchases"} />
+    </Route>,
+    <Route path="/client_dashboard/favorites">
+      <ClientDashboard ChildComponent={"Favorite"} />
+    </Route>
+  ]
+
+  React.useEffect(() => {
+    (async() => {
+      var response = await isAuthenticated()
+
+      if (response !== null) {
+        setIsLogged(true)
+
+        if (Number(response.isAdmin) === 1)
+          setIsAdmin(true)
+      }
+    })();
+  }, [])
+
+
   return (
     <>
       <BrowserRouter>
@@ -27,24 +55,28 @@ function App() {
             <Header />
             <Switch>
               <Route path="/" component={Home} exact />
-              <PrivateRoutes path="/admin/dashboard" component={Dashboard} />
-              <PrivateRoutes path="/admin/new-product" component={AddProduct} />
-              <PrivateRoutes path="/admin/new-category" component={AddCategory} />
-
-              <PrivateRoutes path="/client_dashboard/user-profile" >
-                <ClientDashboard ChildComponent={"UserProfile"} />
-              </PrivateRoutes>
-              <PrivateRoutes path="/client_dashboard/Compras">
-                <ClientDashboard ChildComponent={"Purchases"} />
-              </PrivateRoutes>
-              <PrivateRoutes path="/client_dashboard/favorites">
-                <ClientDashboard ChildComponent={"Favorite"} />
-              </PrivateRoutes>
-
               <Route path="/register" component={Register} />
               <Route path="/search/:value" component={Search} />
-
               <Route path="/product/:id/:description" component={Product}/>
+
+              {/*========| Login Routes |========*/}
+              {
+                isLogged === true 
+                ? isLoggedRoutes.map(item => item)
+                : <NoMatch />
+              }
+
+              {/*========| Administrative Routes |========*/}
+              {
+                isAdmin === true
+                ? PrivateRoutes.map(item => item)
+                : <NoMatch/>
+              }
+
+              <Route path="*" >
+                <NoMatch />
+              </Route>
+
             </Switch>
           </ProfilePhoto>
         </Like>

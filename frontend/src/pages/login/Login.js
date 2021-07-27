@@ -48,7 +48,7 @@ function Modal() {
           setLogs(<div className="mb-2 text-center text-danger">{response.data.error || response.data.message}</div>) 
         } else {
           setLogs(<div className="mb-2 text-center text-success">Login realziado com sucesso, redirecionando...</div>) 
-          window.location.href = "/"
+          setTimeout(() => window.location.href = "/", 1000)
         }
       }
     }

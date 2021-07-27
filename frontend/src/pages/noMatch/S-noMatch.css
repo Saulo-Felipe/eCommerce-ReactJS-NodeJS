@@ -1,0 +1,23 @@
+.nomatch {
+	margin-top: 100px;
+	margin-bottom: 200px;
+}
+.nomatch-404 {
+	font-size: 10em;
+	text-align: center;
+}
+
+.nomatch-sub {
+	font-size: 2em;
+	text-align: center;
+}
+
+.nomatch-tri {
+	text-align: center;
+}
+
+@media screen and (max-width: 991px) {
+	.nomatch {
+		margin-bottom: 400px;
+	}
+}

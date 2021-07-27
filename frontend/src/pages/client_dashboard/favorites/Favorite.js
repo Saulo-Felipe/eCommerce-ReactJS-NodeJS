@@ -10,6 +10,8 @@ export default function Favorite(props) {
   const [loadingLikes, setLoadingLikes] = useState([])
 
   useEffect(() => {
+
+
     props.hooks.setConfigs({
       PagePosition: 'Favoritos',
       TitleOne: 'Favoritos',

@@ -16,16 +16,20 @@ export default function Header() {
   const [isLogged, setIsLogged] = useState(null)
 
   useEffect(() => {
+
     (async() => {
       var response = await isAuthenticated()
 
       setIsLogged(response)
 
       if (response !== null) {
+        localStorage.setItem("isLoggedIn", true)
+        
         setUserName(response.user_name)
         setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${response.profile_photo || "user.png"}/${response.id}/profile`)
       } else {
         setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
+        localStorage.setItem("isLoggedIn", false)
       }
 
     //Get Liked Products

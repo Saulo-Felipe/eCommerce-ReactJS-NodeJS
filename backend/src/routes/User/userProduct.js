@@ -62,6 +62,51 @@ userProduct.post('/get-categories-of-product', async(request, response) => {
 })
 
 
+userProduct.post('/product-suggestion', async (request, response) => {
+    try {
+        const { productID } = request.body
+
+        const [categories] = await sequelize.query(`
+            SELECT categories.id FROM products
+            INNER JOIN category_product ON products.id = category_product.product_id
+            INNER JOIN categories ON categories.id = category_product.category_id
+            WHERE products.id = ${ productID }
+        `)
+
+        if (categories.length === 0) {
+
+        } else {
+
+            var filterCategories = String(categories.map((category, index) => `categories.id = ${ category.id } ${ index === categories.length - 1 ? '' : 'OR' }` ))
+            console.log('Filtros: ', filterCategories)
+
+            var [suggestion] = await sequelize.query(`
+                SELECT products.product_name, products.price, products.cover, products.id FROM products
+                INNER JOIN category_product ON category_product.product_id = products.id
+                INNER JOIN categories ON categories.id = category_product.category_id
+                WHERE 
+                ${
+                    filterCategories.replace(/,/g, " ")
+                } 
+            `)
+
+            if (suggestion.length === 0) {
+
+            } else {
+
+                return response.json({ result: suggestion})
+            }
+
+
+        }
+
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." }) 
+    }
+
+})
 
 
 module.exports = userProduct

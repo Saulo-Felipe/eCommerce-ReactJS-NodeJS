@@ -12,7 +12,7 @@ import api from '../../services/api'
 import {useProfilePhoto} from '../../components/context/ProfilePhoto'
 
 export default function ClientDashboard(props) {
-
+  
   const [configs, setConfigs] = useState({ PagePosition: '', TitleOne: '', TitleTwo: '' })
   const [userInformations, setUserInformations] = useState({profileImage: '', email: ''})
   const [saveEditImage, setSaveEditImage] = useState()

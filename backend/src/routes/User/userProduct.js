@@ -87,7 +87,7 @@ userProduct.post('/product-suggestion', async (request, response) => {
                 WHERE 
                 ${
                     filterCategories.replace(/,/g, " ")
-                } 
+                }
             `)
 
             if (suggestion.length === 0) {
@@ -105,6 +105,24 @@ userProduct.post('/product-suggestion', async (request, response) => {
         console.log('\n\n\n=========================| Error |=====================\n', error)
         return response.json({ error: "Erro interno, por favor tente novamente mais tarde." }) 
     }
+
+})
+
+userProduct.post('/rating', (request, response) => {
+    response.send('Ok')
+})
+
+userProduct.post('/new-rating', async(request, response) => {
+    try {
+
+        
+        
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })         
+    }
+
 
 })
 

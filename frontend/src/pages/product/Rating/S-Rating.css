@@ -1,0 +1,33 @@
+._comment-informations {
+	align-items: center;
+}
+.img-user-comment {
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.img-user-comment > img {
+	width: 100%;
+}
+.user-name-comment {
+	align-items: center;
+}
+
+.content-comment {
+	background-color: #80808012;
+	border-radius: 5px;
+	padding: 10px;
+	margin-top: 10px;
+	overflow-wrap: anywhere;
+}
+
+.space-between-comment {
+	border-left: dashed 2px #8080804a;
+	border-bottom: dashed 2px #8080804a;
+	padding-right: 25px;
+	height: 50%;
+	height: 50px;
+    margin-left: 20px;
+}

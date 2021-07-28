@@ -89,6 +89,17 @@ export default function Product() {
 
 				setProductSuggestion(allSuggestion)
 
+
+		  var next = document.querySelectorAll(".next-carousel")
+		  var prev = document.querySelectorAll(".prev-carousel")
+		  var scrollCarousel = document.querySelectorAll(".carousel-scroll")
+		  next[0].addEventListener("click", () => {
+		    scrollCarousel[0].scrollBy(400, 0)
+		  })
+		  prev[0].addEventListener("click", () => {
+		    scrollCarousel[0].scrollBy(-400, 0)
+		  })
+
 		})();
 	}, [])
 
@@ -171,7 +182,11 @@ export default function Product() {
 		    	<div className="display-6 text-primary">R$	{product.price} <small className="text-success fs-5"> 7% OFF</small></div>
 		    	<div >ou 12x de R${(Number(product.price) / 12).toFixed(2) }</div>
 
-		    	<div className="d-flex mt-5 add-to-card-container">
+		    	<div className="mt-5 mb-2 shadow">
+		    		<button className="btn btn-success form-control">Comprar Agora</button>
+		    	</div>
+
+		    	<div className="d-flex add-to-card-container">
 		    		<select className="form-control w-25 me-2">
 		    			<option value="">1</option>
 		    			<option value="">2</option>
@@ -190,6 +205,10 @@ export default function Product() {
 		    </div>
 			</div>
 
+			<h3 className="container">
+				Produtos Similares
+			</h3>
+			<Carousel>
 				{
 					productSuggestion.map(product => {
 						return <Card 
@@ -201,8 +220,10 @@ export default function Product() {
 						/>
 					})
 				}
+			</Carousel>
 
-			<div className="product-description container">
+
+			<div className="product-description container mt-5">
 				<h4 className="mb-3">Descrição: </h4>
 				<p className="lead">{product.description}</p>
 			</div>

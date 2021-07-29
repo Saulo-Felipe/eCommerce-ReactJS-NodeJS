@@ -7,9 +7,10 @@ import Register from './pages/register/Register'
 import Search from './pages/search/Search'
 import Footer from './components/footer/Footer'
 import ClientDashboard from './pages/client_dashboard/Client_dashboard'
-import {PrivateRoutes} from './services/PrivateRoutes'
+import { PrivateRoutes } from './services/PrivateRoutes'
 import { Like } from './components/context/Likes'
 import { ProfilePhoto } from './components/context/ProfilePhoto'
+import { Rating } from './components/context/Rating'
 import LeftMenuMobile from './components/menu_mobile/LeftMenuMobile'
 import Product from './pages/product/Product'
 import NoMatch from './pages/noMatch/NoMatch'
@@ -41,6 +42,7 @@ function App() {
 
         if (Number(response.isAdmin) === 1)
           setIsAdmin(true)
+
       }
     })();
   }, [])
@@ -50,35 +52,37 @@ function App() {
     <>
       <BrowserRouter>
         <Like>
-          <ProfilePhoto>
-            <LeftMenuMobile />
-            <Header />
-            <Switch>
-              <Route path="/" component={Home} exact />
-              <Route path="/register" component={Register} />
-              <Route path="/search/:value" component={Search} />
-              <Route path="/product/:id/:description" component={Product}/>
+        <ProfilePhoto>
+        <Rating>
+          <LeftMenuMobile />
+          <Header />
+          <Switch>
+            <Route path="/" component={Home} exact />
+            <Route path="/register" component={Register} />
+            <Route path="/search/:value" component={Search} />
+            <Route path="/product/:id/:description" component={Product}/>
 
-              {/*========| Login Routes |========*/}
-              {
-                isLogged === true 
-                ? isLoggedRoutes.map(item => item)
-                : <NoMatch />
-              }
+            {/*========| Login Routes |========*/}
+            {
+              isLogged === true 
+              ? isLoggedRoutes.map(item => item)
+              : <NoMatch />
+            }
 
-              {/*========| Administrative Routes |========*/}
-              {
-                isAdmin === true
-                ? PrivateRoutes.map(item => item)
-                : <NoMatch/>
-              }
+            {/*========| Administrative Routes |========*/}
+            {
+              isAdmin === true
+              ? PrivateRoutes.map(item => item)
+              : <NoMatch/>
+            }
 
-              <Route path="*" >
-                <NoMatch />
-              </Route>
+            <Route path="*" >
+              <NoMatch />
+            </Route>
 
-            </Switch>
-          </ProfilePhoto>
+          </Switch>
+        </Rating>
+        </ProfilePhoto>
         </Like>
       </BrowserRouter>
       <Footer/>

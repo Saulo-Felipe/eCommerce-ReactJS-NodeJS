@@ -23,11 +23,24 @@
 	overflow-wrap: anywhere;
 }
 
-.space-between-comment {
-	border-left: dashed 2px #8080804a;
-	border-bottom: dashed 2px #8080804a;
-	padding-right: 25px;
-	height: 50%;
-	height: 50px;
-    margin-left: 20px;
+.star-selected-rating {
+	cursor: pointer;
+	transition: all 0.1s;
+}
+
+.star-selected-rating:hover {
+	transform: scale(1.2);
+	color: gold;
+}
+
+.line-comment {
+	opacity: 0.1 !important;
+}
+
+.container-all-rating {
+	width: max-content;
+}
+.container-all-rating > .fs-1 {
+	font-size: 3.5em !important;
+	margin-bottom: -15px;
 }

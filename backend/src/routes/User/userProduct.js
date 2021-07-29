@@ -108,15 +108,43 @@ userProduct.post('/product-suggestion', async (request, response) => {
 
 })
 
-userProduct.post('/rating', (request, response) => {
-    response.send('Ok')
+userProduct.post('/rating', async(request, response) => {
+    try {
+        const { productID } = request.body
+
+
+        var [result] = await sequelize.query(`
+            SELECT clients.profile_photo, clients.user_name, clients.id, rating.comment, rating.rating, rating.comment_data
+            FROM rating 
+            INNER JOIN clients ON rating.id_user = clients.id 
+            INNER JOIN products ON rating.id_product = products.id 
+            WHERE products.id = ${ productID }
+        `)
+
+        if (result.length === 0) {
+            return response.json({ result: [] })
+        } else {
+            return response.json({ result: result })
+        }
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })         
+    }
 })
 
 userProduct.post('/new-rating', async(request, response) => {
     try {
+        const { comment, userID, productID } = request.body
 
-        
-        
+        var data = new Date()
+
+        var [result] = await sequelize.query(`
+            INSERT INTO rating (id_product, id_user, comment, rating, comment_data)
+            VALUES (${productID}, ${userID}, '${comment.comment}', ${comment.rating}, '${data.toLocaleDateString()}')
+        `)
+
+        return response.json({ ok: true })
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)

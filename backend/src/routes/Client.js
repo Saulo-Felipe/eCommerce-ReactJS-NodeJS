@@ -4,6 +4,7 @@ const sequelize = require('../database/connect')
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
+const uniqid = require('uniqid')
 
 
 client.post('/get-user', async(request, response) => {
@@ -96,7 +97,10 @@ var storage = multer.diskStorage({
     callback(null, path.join(__dirname, '../images/profile-images/'))
   },
   filename: (request, file, callback) => {
-    callback(null, file.originalname)
+    var FileOriginal = (file.originalname.replace(/\./g, "") + uniqid() + "." + file.mimetype.replace(/image\//g, "")).replace(/ /g, "")
+
+    request.profile_image = FileOriginal
+    callback(null, FileOriginal)
   }
 })
 var upload = multer({ storage: storage }).single('image-profile')
@@ -109,7 +113,7 @@ client.post('/change-profile-photo', upload, async(request, response) => {
                 if (error) console.log('Erro ao deleter imagem...', error)
             })
         }
-        await sequelize.query(`UPDATE clients SET profile_photo = '${request.file.originalname}' where id = ${request.body.id}`)
+        await sequelize.query(`UPDATE clients SET profile_photo = '${request.profile_image}' where id = ${request.body.id}`)
 
         return response.json({ ok: 'ok' })
     }

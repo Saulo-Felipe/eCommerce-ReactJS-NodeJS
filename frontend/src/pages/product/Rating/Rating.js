@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import './S-Rating.css'
+import api from '../../../services/api'
+import { useParams } from 'react-router-dom'
+import { isAuthenticated } from '../../../services/isAuthenticated'
 
 
-
-export default function Rating() {
+export default function Rating(props) {
+	const {id} = useParams()
 
 	const [limitAmount, setLimitAmount] = useState(0)
 	const [colorComment, setColorComment] = useState('text-secondary')
-	const [rating, setRating] = useState() 
-//	const [limitComments, setLimitComments] = useState([])
+	const [rating, setRating] = useState({ comment: "", rating: 0 }) 
+	const [errors, setError] = useState()
+	const [loading, setLoading] = useState()
+	const [allComments, setAllComments] = useState([])
+	const [allStars, setAllStars] = useState()
 
+
+	useEffect(() => {
+
+		updateComments()
+
+	}, [])
 
 	function commentChanges(change) {
 		var value = change.target.value
@@ -24,39 +36,85 @@ export default function Rating() {
 			setColorComment('text-success')
 		}
 		setLimitAmount(value.length)
+
+		setRating({
+			comment: value,
+			rating: rating.rating
+		})
 	}
 
 	async function submitNewComment() {
-		var response = await api.post('')
+		var user = await isAuthenticated()
+
+		if (user !== null) {
+
+			if (rating.comment.length < 15) {
+				setError("Por favor insira um comentário de no mínimo 15 caracteres.")
+				setTimeout(() => setError(), 3000)
+			} else if (rating.rating === 0) {
+				setError("Clique nas estrelas para votar")
+				setTimeout(() => setError(), 3000)
+			} else {
+				setLoading(<div><img src={require("../../../images/Infinity-loading.gif").default} alt="loading" width="80px"/></div>)
+				var response = await api.post('/new-rating', { comment: rating, userID: user.id, productID: id })
+				setLoading()
+
+				updateComments()
+
+				if (response.data.error) return alert('Erro ao adicionar comentário!')
+			}
+		} else {
+			alert('Você precisa está logado para comentar')
+		}
 	}
 
+	async function updateComments() {
+		var response = await api.post('/rating', { productID: id })
 
-	useEffect(() => {
+		if (response.data.error) return alert('Erro ao buscar comentários')
 
-/*		var allComments = document.querySelectorAll('.content-comment')
+		var countRating = 0
+		for (var c=0; c < response.data.result.length; c++) {
+			countRating += response.data.result[c].rating
+		}
+		props.rating.setAllRating({
+			note: countRating / response.data.result.length,
+			totalRating: response.data.result.length
+		})
 
-		for (var c=0; c < allComments.length; c++) {
-
-			if (allComments[c].innerText.length > 300) {
-				var split = allComments[c].innerText.split("")
-				var smallComment = ""
-
-				split = split.map((item, index) => {
-					if (index <= 300) {
-						allComments[c].innerText += String(item)  
-						if (index === 300) {
-							allComments[c].innerHTML += "<span class='text-primary ms-2'>Ver Mais</span>"
-						}
+		for (var c=0; c < response.data.result.length; c++) {
+			// update comments
+				var amountCount = response.data.result[c].rating
+				for (var count=0; count < amountCount; count ++) {
+					if (typeof response.data.result[c].rating !==  "object") {
+						response.data.result[c].rating = []
 					}
-				})
-			}
 
+					response.data.result[c].rating.push(<i class="fas fa-star ms-1"></i>)
+				}
 		}
 
-*/
+		setAllComments(response.data.result)		
+	}
 
+	function submitStarRating(position) {
+		setRating({
+			comment: rating.comment,
+			rating: position
+		})
 
-	}, [])
+		for (var c=0; c < 5; c++) {
+			var allStars = document.querySelectorAll('.star-selected-rating')
+
+			if (c < position) {
+				allStars[c].classList.remove('far')
+				allStars[c].classList.add('fas')				
+			} else {
+				allStars[c].classList.add('far')
+				allStars[c].classList.remove('fas')				
+			}
+		} 
+	}
 
 
 	return (
@@ -67,15 +125,17 @@ export default function Rating() {
 			<div className="mt-2">
 				<h3>Avaliações sobre o Produto: </h3>
 
-				<div className="text-warning mt-4 ">
-					<span class="material-icons-outlined">star</span>
-					<span class="material-icons-outlined">star</span>
-					<span class="material-icons-outlined">star</span>
-					<span class="material-icons-outlined">star</span>
-					<span class="material-icons-outlined">star</span>
-					<span class="material-icons-outlined">star</span>
+				<div className="text-end container-all-rating ms-4">
+					<div className="mt-4 fs-1 fw-light">{props.rating.allRating.note.toFixed(1)}</div>
+					<div className="text-warning">
+						<span class="material-icons-outlined">star</span>
+						<span class="material-icons-outlined">star</span>
+						<span class="material-icons-outlined">star</span>
+						<span class="material-icons-outlined">star</span>
+						<span class="material-icons-outlined">star</span>
+					</div>
+					<div>{props.rating.allRating.totalRating} opiniões</div>
 				</div>
-				<h1>5.0</h1>
 
 				<div className="new-comment mt-3 shadow p-5">
 					<h3>Deixe sua opinião :)</h3>
@@ -85,80 +145,55 @@ export default function Rating() {
 
 					<br />
 					<button className="btn btn-outline-primary" onClick={submitNewComment}>Adicionar comentário</button>
+
+					<div className="mt-3">
+						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(1)}/>
+						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(2)}/>
+						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(3)}/>
+						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(4)}/>
+						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(5)}/>
+					</div>
+					<div className="text-danger text-center">{errors}</div>
+					{loading}
 				</div>
 
+
 				<div className="all-comments pb-5 mt-5">
-					
-					<div className="comment">
-					    <div className="d-flex _comment-informations">
-							<div className="img-user-comment">
-								<img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`} alt="" />							
-							</div>
-							<div className="user-name-comment ms-2 d-flex">
-								<div>Saulo Felipe</div>
-								<div className="text-warning ms-3 ">
-									<i class="fas fa-star ms-1"></i>
-									<i class="fas fa-star ms-1"></i>
-									<i class="fas fa-star ms-1"></i>
-									<i class="fas fa-star ms-1"></i>
-									<i class="fas fa-star ms-1"></i>
-								</div>
-							</div>
-						</div>
+					{
+						allComments.length === 0
+							? <h1>Esse produto ainda não possui nenhuma Avaliação.</h1>
+							: allComments.map((item, index) => {
+								return (
+									<>
+										<hr className="m-4 line-comment"/>
 
-						<div className="d-flex">
-							<div className="space-between-comment"></div>
+										<div className="comment">
+									    <div className="d-flex _comment-informations">
+											<div className="img-user-comment">
+												<img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.profile_photo}/${item.id}/profile`} alt="" />							
+											</div>
+											<div className="user-name-comment ms-2 d-flex">
+												<div>{item.user_name}</div>
+												<div className="text-warning ms-3 ">
+													{
+														item.rating.map(starElement => starElement)
+													}
+												</div>
+											</div>
+										</div>
 
-							<div className="content-comment">
-								dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 								dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 								dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-							</div>
-						</div>
-					</div>
+										<div className="d-flex mb-2">
+											<div className="content-comment">
+												{item.comment}
+											</div>
+										</div>
+										
+										<small className="text-secondary">{item.comment_data}</small>
 
-					<hr className="m-5"/>
-
-					<div className="comment">
-					    <div className="d-flex _comment-informations">
-							<div className="img-user-comment">
-								<img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`} alt="" />							
-							</div>
-							<div className="user-name-comment ms-2 d-flex">
-								<div>Maria Souza</div>
-								<div className="text-warning ms-3 ">
-									<i class="fas fa-star ms-1"></i>
-									<i class="fas fa-star ms-1"></i>
-									<i class="fas fa-star ms-1"></i>
-									<i class="fas fa-star ms-1"></i>
-									<i class="fas fa-star ms-1"></i>
-								</div>
-							</div>
-						</div>
-
-						<div className="d-flex">
-							<div className="space-between-comment"></div>
-
-							<div className="content-comment">
-								dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-								dwjklfjlds dskjfl jsdljflds dwjklfjlds dskjfl jsdljflds 
-							</div>
-						</div>
-					</div>
-
+									</div>
+								</>)
+							})
+					}
 				</div>
 			</div>
 			

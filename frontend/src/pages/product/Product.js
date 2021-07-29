@@ -13,15 +13,14 @@ import Card from '../../components/card/Card'
 export default function Product() {
 
 	const {id} = useParams()
-	const [product, setProduct] = useState({
-		product_name: ""
-	})
+	const [product, setProduct] = useState({ product_name: "" })
 	const [imageFiles, setImageFiles] = useState([])
 	const [selectedImage, setSelectedImage] = useState()
 	const [likeIcon, setLikeIcon] = useState()
 	const {like, setLike} = useLike()
 	const [msgAlert, setMsgAlert] = useState()
 	const [productSuggestion, setProductSuggestion] = useState([])
+	const [allRating, setAllRating] = useState({ note: 0, totalRating: 0 })
 
 
 	useEffect(() => {
@@ -89,7 +88,7 @@ export default function Product() {
 
 				setProductSuggestion(allSuggestion)
 
-
+		// Carousel
 		  var next = document.querySelectorAll(".next-carousel")
 		  var prev = document.querySelectorAll(".prev-carousel")
 		  var scrollCarousel = document.querySelectorAll(".carousel-scroll")
@@ -159,7 +158,7 @@ export default function Product() {
 		    </div>
 
 		    <div className="the-image-selected-container">
-		    	<img src={`${selectedImage}`} alt="" />
+		    	<img src={`${selectedImage}`} alt="product selected" />
 		    </div>
 
 		    <div className="information-about-product-container">
@@ -172,7 +171,7 @@ export default function Product() {
 				    		<span class="material-icons-outlined">star</span>
 				    		<span class="material-icons-outlined">grade</span>
 			    		</div>
-			    		<div className="avaliations-stars">78 avaliações</div>
+			    		<div className="avaliations-stars">{ allRating.totalRating } avaliações</div>
 			    	</div>
 			    	<div className=" like_contain_product" onClick={() => changeLike()}>{likeIcon}</div>
 					</div>
@@ -228,7 +227,7 @@ export default function Product() {
 				<p className="lead">{product.description}</p>
 			</div>
 
-			<Rating />
+			<Rating rating={{ allRating, setAllRating }}/>
 
 			{msgAlert}
 		</div>

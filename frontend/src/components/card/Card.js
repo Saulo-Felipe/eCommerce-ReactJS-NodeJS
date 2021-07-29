@@ -11,6 +11,7 @@ export default function Card(props) {
   const [likeIcon, setLikeIcon] = useState()
   const { like, setLike } = useLike()
   const [logs, setLogs] = useState()
+  const [rating, setRating] = useState(0)
 
   useEffect(() => {
     (async () => {
@@ -27,6 +28,15 @@ export default function Card(props) {
       } else {
         setLikeIcon(<span className="material-icons-outlined ">favorite_border</span>)
       }
+
+    // Get rating
+      var ratingCard = await api.post('/rating', { productID: props.id })
+
+      if (ratingCard.data.error) return alert('Erro ao buscar avaliações')
+      console.log('Card avaliação: ', ratingCard.data.result)
+
+      setRating(ratingCard.data.result.length)
+
     })()
   }, [])
 
@@ -69,7 +79,7 @@ export default function Card(props) {
                 <div className="titleCard">{props.title}</div>
                 <div className="priceCard">R$ {props.price}.<span className="DecimalPrice">00</span></div>
                 <span className="subPrice">ou 10x de 24,90</span>
-                <div className="d-flex flex-row rating">
+                <div className=" flex-row rating">
                   <div className="stars">
                     <span className="material-icons-outlined star">star</span>
                     <span className="material-icons-outlined star">star</span>
@@ -77,7 +87,7 @@ export default function Card(props) {
                     <span className="material-icons-outlined star">star</span>
                     <span className="material-icons-outlined star">star_half</span>
                   </div>
-                  <div className="amountRating">4.5mil</div>
+                  <div className="amountRating">{rating} {rating < 2 ? "Avaliação" : "Avaliações"}</div>
                 </div>
               </div>
 

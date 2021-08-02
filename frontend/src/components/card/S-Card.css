@@ -1,171 +1,110 @@
-.PrimaryCard {
+.primaryCard {
+  position: relative;
+  height: 360px;
   width: 200px;
-  height: 350px;
+  margin: 5px;
   cursor: pointer;
-  position: relative;
+  overflow: hidden;
 }
-
-.SecondaryCard {
+.primaryCard:hover {
+  box-shadow: 0px 0px 10px #00000059;
+}
+.primaryCard:hover .product-alerts {
+  margin-left: 0px;
+  opacity: 1;
+}
+.primaryCard:hover .product-add-card {
+  top: 100%;
+}
+.secondayCard {
+  height: 100%;
   width: 100%;
-  height: 340px;
   background-color: white;
-  transition: all 0.5s ease;
-
 }
-.ThirdCard {
-  height: 310px;
+.product-image {
+  height: 50%;
   width: 100%;
   position: relative;
-
+}
+.product-cover {
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: 90%;
+  background-repeat: no-repeat;
 }
 .heartLike {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  width: 30px;
+  z-index: 3;
   height: 30px;
+  width: 30px;
   text-align: center;
-  line-height: 44px;
-  color: rgba(0, 0, 0, 0.6);
+  line-height: 45px;
+  background-color: #00000029;
   left: 98%;
   top: 1%;
   transform: translateX(-100%);
-  z-index: 100;
-}
-.heartLike:hover {
-  color: rgba(255, 0, 0, 0.8);
-}
-.imageProduct {
-  height: 60%;
-  width: 100%;
-  position: relative;
-  background-size: 170px;
-  background-position: center;  
-  background-repeat: no-repeat;
-}
-.contentProduct {
-  height: 40%;
-  width: 100%;
-  padding-left: 12px;
-}
-.oldPrice {
-  font-size: 0.8rem;
-  text-decoration: line-through;
-  color: rgba(0, 0, 0, 0.5);
-}
-.titleCard {
-  transition: all 0.5s ease;
-  font-size: 1em;
-  margin: 0;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 1;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.PrimaryCard:hover .titleCard {
-  -webkit-line-clamp: 2;
-}
-.priceCard {
-  font-size: 1.2rem;
-  color: #4a00ff;
-  margin: 0;
-}
-.subPrice {
-  font-size: 0.7em;
-  color: rgba(0, 0, 0, 0.7);
-  margin: 0;
-}
-.DecimalPrice {
-  font-size: 0.8rem;
-  color: #4a00ff;
-}
-
-.rating {
-  margin-top: .3rem;
-}
-.star {
-  color: #ffb000;
-  font-size: 1.2em;
-}
-.amountRating {
-  margin-left: 10px;
-  font-size: 0.9em;
-}
-
-
-@media screen and (min-width: 991px) {
-  .PrimaryCard:hover .SecondaryCard {
-    height: 350px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
-  }
-}
-/*
-*
-*   Mobile Config
-*
-*/
-
-@media screen and (max-width: 991px) {
-  .rating {
-    margin-top: 0.5em;
-  }
-  .titleCard {
-    -webkit-line-clamp: 2;
-  }
-  .PrimaryCard {
-    height: 360px;
-  }
-  .SecondaryCard {
-    height: 380px;
-  }
-  .ThirdCard {
-    height: 340px;
-  }
-
-}
-
-
-
-/*
-*
-* ===============  All classes =============
-*
-*/
-
-.text-red {
+  border-radius: 50%;
   color: red;
 }
-.BiggerWidth {
+.product-alerts {
+  margin-left: -50px;
+  position: relative;
+  transition: 0.3s;
+  opacity: 0;
+  z-index: 2;
+}
+.product-new {
+  position: absolute;
+  background-color: green;
+  z-index: 1;
+  color: white;
+  font-size: 0.7rem;
+  border-radius: 7px;
+  padding: 3px 4px 3px 4px;
+  margin: 8px;
+}
+
+.product-promotion {
+  position: absolute;
+  background-color: gold;
+  z-index: 1;
+  color: white;
+  font-size: 0.7rem;
+  border-radius: 7px;
+  padding: 3px 4px 3px 4px;
+  margin: 8px;
+  left: 40px;
+}
+.product-content {
+  padding: 7px;
+}
+.product-title {
+  height: 47.6px;
+}
+.product-price {
+  font-size: 1.8rem;
+}
+
+.product-stars > span > * {
+  font-size: 0.9rem;
+  color: gold;
+}
+.product-amount-rating {
+  font-size: 0.8rem;
+  margin-left: 6px;
+  top: -2px;
+  position: relative;
+}
+.product-add-card {
+  background-color: blue;
+  color: white;
+  position: absolute;
+  top: 110%;
+  transform: translateY(-100%);
   width: 100%;
-  height: auto;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.BiggerHeight {
-  height: 100%;
-  width: auto;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-hr {
-  margin: 0;
-}
-
-
-/*
-*  Responsive cards
-*/
-@media screen and (max-width: 500px) {
-  .PrimaryCard {
-    width: 50%;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .PrimaryCard {
-    width: 60%;
-  }
+  transition: all 0.2s;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 5px;
 }

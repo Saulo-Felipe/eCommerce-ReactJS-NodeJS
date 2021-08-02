@@ -12,6 +12,7 @@ export default function Card(props) {
   const { like, setLike } = useLike()
   const [logs, setLogs] = useState()
   const [rating, setRating] = useState(0)
+  const [stars, setStars] = useState([])
 
   useEffect(() => {
     (async () => {
@@ -37,6 +38,25 @@ export default function Card(props) {
 
       setRating(ratingCard.data.result.length)
 
+      var countRating = 0
+      for (var count=0; count < ratingCard.data.result.length; count++) {
+        countRating += ratingCard.data.result[count].rating
+      }
+      countRating = countRating / ratingCard.data.result.length
+
+      var mapRating = []
+      for (var c=0; c < 5; c++) {
+        if (c < countRating) {
+          console.log(`Entrei no preenchido pq: ${c} < ${countRating}`)
+          mapRating = [...mapRating, <span className="material-icons-outlined star">star</span>]
+        } else {
+          console.log(`Entrei no vazio pq: ${c} > ${countRating}`)
+          mapRating = [...mapRating, <span className="material-icons-outlined star">star_border</span>]
+        }
+      }
+
+      setStars(mapRating)
+
     })()
   }, [])
 
@@ -61,40 +81,40 @@ export default function Card(props) {
   }
 
   return (
-      <div className="PrimaryCard ms-2">
-        <div className="heartLike" onClick={() => LikeOrDeslike()}>
-          {likeIcon}
-        </div>
-        <Link to={`/product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
-          <div className="SecondaryCard">
-            <div className="ThirdCard">
+    <div className="primaryCard">
 
+      <div className="product-alerts">
+        <div className="product-new">Novo</div>
+        <div className="product-promotion">Promoção</div>
+      </div>
 
-              <div className="imageProduct" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${props.cover}/${props.id}/product)`}}>
-              </div>
+      <div className="heartLike" onClick={() => LikeOrDeslike()}>{likeIcon}</div>
 
-              <hr/>
-              <div className="contentProduct">
-                <span className="oldPrice">R$ 1999</span>
-                <div className="titleCard">{props.title}</div>
-                <div className="priceCard">R$ {props.price}.<span className="DecimalPrice">00</span></div>
-                <span className="subPrice">ou 10x de 24,90</span>
-                <div className=" flex-row rating">
-                  <div className="stars">
-                    <span className="material-icons-outlined star">star</span>
-                    <span className="material-icons-outlined star">star</span>
-                    <span className="material-icons-outlined star">star</span>
-                    <span className="material-icons-outlined star">star</span>
-                    <span className="material-icons-outlined star">star_half</span>
-                  </div>
-                  <div className="amountRating">{rating} {rating < 2 ? "Avaliação" : "Avaliações"}</div>
-                </div>
-              </div>
+      <Link to={`/product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
 
+        <div className="secondayCard">
+          
+          <div className="product-image">
+            <div className="product-cover" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${props.cover}/${props.id}/product)`}}>
+              
             </div>
           </div>
-        </Link>
-        {logs}
-      </div>
+
+          <div className="product-content">
+            <small className="product-old-price text-decoration-line-through text-secondary">R$199.99</small>
+            <div className="product-title">{props.title}</div>
+            <div className="product-price fw-light">R${props.price}</div>
+
+            <div className="product-stars mt-2">
+              <span>{stars.map(item => item)}</span>
+              <span className="product-amount-rating">{rating} {rating < 2 ? "Avaliação" : "Avaliações"}</span>
+            </div>
+          </div>
+
+
+        </div>
+        <div className="product-add-card"><i class="fas fa-cart-plus"></i>Adicione ao Carrinho</div>
+      </Link>
+    </div>
   )
 }

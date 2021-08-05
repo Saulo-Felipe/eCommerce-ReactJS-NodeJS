@@ -57,7 +57,6 @@ export default function AddCategory() {
 
 		var response = await api.post('/admin/update-category', {id: id, type: "search id"})
 
-		console.log(response)
 
 		if (response.data.error) {
 			alert(response.data.error)

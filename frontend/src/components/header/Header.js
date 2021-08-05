@@ -17,6 +17,14 @@ export default function Header() {
 
   useEffect(() => {
 
+    document.querySelector('.cart-active').addEventListener('mouseover', () => {
+      document.querySelector('.cart-active-menu').classList.add('show')
+    })
+
+    document.querySelector('.cart-active').addEventListener('mouseleave', () => {
+      document.querySelector('.cart-active-menu').classList.remove('show')
+    });
+
     (async() => {
       var response = await isAuthenticated()
 
@@ -225,9 +233,9 @@ export default function Header() {
                     </li>
                 }
 
-                <li className="nav-item dropdown item-desktop">
+                <li className="nav-item dropdown item-desktop cart-active">
 
-                  <a className="nav-link active d-flex flex-row" href="/admin" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <a className="nav-link active d-flex flex-row cart-active" href="/admin" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <div>
                       <span className="material-icons-outlined icon-cart">
                         shopping_cart
@@ -239,11 +247,11 @@ export default function Header() {
                     </div>
                   </a>
 
-                  <ul className="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
+                  <ul className="dropdown-menu dropdown-menu-lg-end cart-active-menu" aria-labelledby="navbarDropdown" data-bs-popper="none">
                     <li><a className="dropdown-item" href="/admin">Action</a></li>
                     <li><a className="dropdown-item" href="/admin">Another action</a></li>
                     <li><hr className="dropdown-divider"/></li>
-                    <li><a className="dropdown-item" href="/admin">Something else here</a></li>
+                    <li><Link className="dropdown-item" to={"/my-shopping-cart"}>Ir para carrinho</Link></li>
                   </ul>
                 </li>
 

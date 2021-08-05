@@ -10,10 +10,10 @@ import ClientDashboard from './pages/client_dashboard/Client_dashboard'
 import { PrivateRoutes } from './services/PrivateRoutes'
 import { Like } from './components/context/Likes'
 import { ProfilePhoto } from './components/context/ProfilePhoto'
-import { Rating } from './components/context/Rating'
 import LeftMenuMobile from './components/menu_mobile/LeftMenuMobile'
 import Product from './pages/product/Product'
 import NoMatch from './pages/noMatch/NoMatch'
+import ShopCart from './pages/shoppingCart/ShopCart'
 
 
 function App() {
@@ -42,7 +42,6 @@ function App() {
 
         if (Number(response.isAdmin) === 1)
           setIsAdmin(true)
-
       }
     })();
   }, [])
@@ -53,7 +52,6 @@ function App() {
       <BrowserRouter>
         <Like>
         <ProfilePhoto>
-        <Rating>
           <LeftMenuMobile />
           <Header />
           <Switch>
@@ -72,7 +70,13 @@ function App() {
             {/*========| Administrative Routes |========*/}
             {
               isAdmin === true
-              ? PrivateRoutes.map(item => item)
+              ? (
+                <>
+                {
+                  PrivateRoutes.map(item => item)
+                }
+                  <Route path="/my-shopping-cart" component={ShopCart}/>
+                </>)
               : <NoMatch/>
             }
 
@@ -81,7 +85,6 @@ function App() {
             </Route>
 
           </Switch>
-        </Rating>
         </ProfilePhoto>
         </Like>
       </BrowserRouter>

@@ -1,0 +1,30 @@
+.page-cart-top {
+	height: 200px;
+	background-color: #191C33;
+	color: white;
+	padding: 20px;
+}
+
+.page-cart-content {
+
+}
+
+.page-cart-products {
+	width: 65%;
+	border: solid 1px red;
+	padding: 15px;
+	margin-bottom: 100px;
+	min-height: 400px;
+	border-radius: 7px;
+}
+
+.page-cart-checkout {
+	width: 30%;
+	border: solid 1px red;
+	margin: -100px 2.5% 0 2.5%;
+	background-color: white;
+	padding: 15px;
+	margin-bottom: 100px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	border-radius: 7px;
+}

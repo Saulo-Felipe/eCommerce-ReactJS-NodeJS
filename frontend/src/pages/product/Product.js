@@ -21,6 +21,7 @@ export default function Product() {
 	const [msgAlert, setMsgAlert] = useState()
 	const [productSuggestion, setProductSuggestion] = useState([])
 	const [allRating, setAllRating] = useState({ note: 0, totalRating: 0 })
+	const [productStars, setProductStars] = useState([])
 
 
 	useEffect(() => {
@@ -100,7 +101,19 @@ export default function Product() {
 		  })
 
 		})();
-	}, [])
+
+		// star rating icons
+			var starsArray = []
+			for (var c=0; c < 5; c++) {
+				if (c + 0.5 < allRating.note) {
+					starsArray.push(<span class="material-icons-outlined">star</span>)
+				} else 
+					starsArray.push(<span class="material-icons-outlined">grade</span>)
+				
+			}
+			setProductStars(starsArray)
+
+	}, [allRating.note])
 
 	function changeSelect(url, index) {
 		setSelectedImage(url)	
@@ -165,11 +178,9 @@ export default function Product() {
 			    <div className="d-flex">
 			    	<div className="products-star-avaliation d-flex">
 			    		<div className="text-warning">
-				    		<span class="material-icons-outlined">star</span>
-				    		<span class="material-icons-outlined">star</span>
-				    		<span class="material-icons-outlined">star</span>
-				    		<span class="material-icons-outlined">star</span>
-				    		<span class="material-icons-outlined">grade</span>
+			    			{
+			    				productStars.map(item => item)
+			    			}
 			    		</div>
 			    		<div className="avaliations-stars">{ allRating.totalRating } avaliações</div>
 			    	</div>

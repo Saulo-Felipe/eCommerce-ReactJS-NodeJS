@@ -41,9 +41,7 @@ export default function ClientDashboard(props) {
   }, [])
 
   async function ChangeProfilePhoto(file) {
-    console.log('entrei')
     var preview = URL.createObjectURL(file)
-    console.log('preview: ', preview)
     setProfilePhoto(`${preview}`)
     setSaveEditImage(<div className="container-btn-save-or-remove-image d-flex" onClick={() => saveChanges(file)}><button className="btn btn-secondary me-2" onClick={() => discardChanges()}>Descartar alterações</button><button className="btn btn-success">Salvar</button></div>)
   }
@@ -128,7 +126,7 @@ export default function ClientDashboard(props) {
                 </div>
               </Link>
 
-              <hr/>
+              <hr className="m-0"/>
 
               <Link to={"/client_dashboard/favorites"} className="no-href-decoration">
                 <div className="normal-alternative">
@@ -137,7 +135,7 @@ export default function ClientDashboard(props) {
                 </div>
               </Link>
 
-              <hr/>
+              <hr className="m-0"/>
 
               <Link to={"/client_dashboard/user-profile"} className="no-href-decoration">
                 <div className="normal-alternative">
@@ -153,14 +151,14 @@ export default function ClientDashboard(props) {
                 <div className="title-norma-alternative"> Suporte</div>
               </div>
 
-              <hr/>
+              <hr className="m-0"/>
 
               <div className="normal-alternative">
                 <div className="material-icons-outlined icon-normal-alternative">location_on</div>
                 <div className="title-norma-alternative"> Endereços</div>
               </div>
 
-              <hr/>
+              <hr className="m-0"/>
 
               <div className="normal-alternative">
                 <div className="material-icons-outlined icon-normal-alternative">credit_card</div>

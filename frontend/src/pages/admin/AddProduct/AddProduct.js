@@ -21,7 +21,6 @@ export default function AddProduct() {
     var id = values.target.id
     var value = values.target.value
 
-    console.log('Valor digitado: ', values.target.value)
 
     if (id === "name") {
       setProductInfo({
@@ -78,7 +77,6 @@ export default function AddProduct() {
         price: value
       })
     }
-    console.log('valor total: ', productInfo)
   }
 
   async function submitProduct() {
@@ -133,13 +131,11 @@ export default function AddProduct() {
     var response = await api.post('/admin/categories', { type: "especific category", category })
     setLoading()
 
-    console.log('Todos: ', response.data.result)
 
     setCategories(response.data.result)
   }
 
   function addCategory(changes, id, categoryName) {
-    console.log('Categoria: ', CategoriesToProducts)
     if (changes.target.checked === true) {
 
       var confirm = true

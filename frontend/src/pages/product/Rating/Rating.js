@@ -14,7 +14,8 @@ export default function Rating(props) {
 	const [errors, setError] = useState()
 	const [loading, setLoading] = useState()
 	const [allComments, setAllComments] = useState([])
-	const [allStars, setAllStars] = useState()
+	const {allRating, setAllRating} = props.rating
+	const [productStars, setProductStars] = useState([])
 
 
 	useEffect(() => {
@@ -23,17 +24,31 @@ export default function Rating(props) {
 
 	}, [])
 
+	useEffect(() => {
+	// star rating icons
+		var starsArray = []
+		for (var c=0; c < 5; c++) {
+			if (c + 0.5 < allRating.note) {
+				starsArray.push(<span class="material-icons-outlined">star</span>)
+			} else {
+				starsArray.push(<span class="material-icons-outlined">grade</span>)
+			}
+		}
+		setProductStars(starsArray)
+
+	}, [allRating.note])
+
 	function commentChanges(change) {
 		var value = change.target.value
 
 		if (value.length > 100) {
 			setColorComment('text-warning')
-		} else if (value.length > 190) {
+		} 
+		if (value.length === 200) {
 			setColorComment('text-danger')
-		} else if (value.length === 0) {
+		}
+		if (value.length === 0) {
 			setColorComment('text-secondary')
-		} else {
-			setColorComment('text-success')
 		}
 		setLimitAmount(value.length)
 
@@ -77,7 +92,8 @@ export default function Rating(props) {
 		for (var c=0; c < response.data.result.length; c++) {
 			countRating += response.data.result[c].rating
 		}
-		props.rating.setAllRating({
+
+		setAllRating({
 			note: countRating / response.data.result.length,
 			totalRating: response.data.result.length
 		})
@@ -85,12 +101,15 @@ export default function Rating(props) {
 		for (var c=0; c < response.data.result.length; c++) {
 			// update comments
 				var amountCount = response.data.result[c].rating
-				for (var count=0; count < amountCount; count ++) {
+				for (var count=0; count < 5; count++) {
 					if (typeof response.data.result[c].rating !==  "object") {
 						response.data.result[c].rating = []
 					}
-
-					response.data.result[c].rating.push(<i class="fas fa-star ms-1"></i>)
+					if (count < amountCount) {
+						response.data.result[c].rating.push(<i class="fas fa-star ms-1"></i>)						
+					} else {
+						response.data.result[c].rating.push(<i class="far fa-star ms-1"></i>)						
+					}
 				}
 		}
 
@@ -114,6 +133,12 @@ export default function Rating(props) {
 				allStars[c].classList.remove('fas')				
 			}
 		} 
+
+		setRating({
+			comment: "",
+			rating: 0
+		})
+
 	}
 
 
@@ -126,21 +151,19 @@ export default function Rating(props) {
 				<h3>Avaliações sobre o Produto: </h3>
 
 				<div className="text-end container-all-rating ms-4">
-					<div className="mt-4 fs-1 fw-light">{props.rating.allRating.note.toFixed(1)}</div>
+					<div className="mt-4 fs-1 fw-light">{allRating.note.toFixed(1)}</div>
 					<div className="text-warning">
-						<span class="material-icons-outlined">star</span>
-						<span class="material-icons-outlined">star</span>
-						<span class="material-icons-outlined">star</span>
-						<span class="material-icons-outlined">star</span>
-						<span class="material-icons-outlined">star</span>
+						{
+							productStars.map(item => item)
+						}
 					</div>
-					<div>{props.rating.allRating.totalRating} opiniões</div>
+					<div>{allRating.totalRating} opiniões</div>
 				</div>
 
 				<div className="new-comment mt-3 shadow p-5">
 					<h3>Deixe sua opinião :)</h3>
 					<label htmlFor="comment-input">Comentário</label>
-					<textarea className="form-control" id="comment-input" onChange={commentChanges}></textarea>
+					<textarea className="form-control" id="comment-input" onChange={commentChanges} maxlength="200"></textarea>
 					<div className={`float-end ${colorComment}`}> {limitAmount} / 200</div>
 
 					<br />

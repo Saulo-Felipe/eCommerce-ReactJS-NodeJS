@@ -34,23 +34,22 @@ export default function Card(props) {
       var ratingCard = await api.post('/rating', { productID: props.id })
 
       if (ratingCard.data.error) return alert('Erro ao buscar avaliações')
-      console.log('Card avaliação: ', ratingCard.data.result)
 
       setRating(ratingCard.data.result.length)
 
       var countRating = 0
+
       for (var count=0; count < ratingCard.data.result.length; count++) {
         countRating += ratingCard.data.result[count].rating
       }
+      
       countRating = countRating / ratingCard.data.result.length
 
       var mapRating = []
       for (var c=0; c < 5; c++) {
-        if (c < countRating) {
-          console.log(`Entrei no preenchido pq: ${c} < ${countRating}`)
+        if (c + 0.5 < countRating) {
           mapRating = [...mapRating, <span className="material-icons-outlined star">star</span>]
         } else {
-          console.log(`Entrei no vazio pq: ${c} > ${countRating}`)
           mapRating = [...mapRating, <span className="material-icons-outlined star">star_border</span>]
         }
       }
@@ -87,11 +86,11 @@ export default function Card(props) {
         <div className="product-new">Novo</div>
         <div className="product-promotion">Promoção</div>
       </div>
-
+      
       <div className="heartLike" onClick={() => LikeOrDeslike()}>{likeIcon}</div>
-
+      
       <Link to={`/product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
-
+      
         <div className="secondayCard">
           
           <div className="product-image">
@@ -99,6 +98,8 @@ export default function Card(props) {
               
             </div>
           </div>
+          
+          <hr className="m-0" />
 
           <div className="product-content">
             <small className="product-old-price text-decoration-line-through text-secondary">R$199.99</small>
@@ -110,8 +111,8 @@ export default function Card(props) {
               <span className="product-amount-rating">{rating} {rating < 2 ? "Avaliação" : "Avaliações"}</span>
             </div>
           </div>
-
-
+          
+          
         </div>
         <div className="product-add-card"><i class="fas fa-cart-plus"></i>Adicione ao Carrinho</div>
       </Link>

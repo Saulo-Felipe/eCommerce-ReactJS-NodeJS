@@ -19,7 +19,6 @@ export default function Register() {
       } else {
         if (inputValue.password === inputValue.passwordTwo) {
           var response = await api.post('/register', inputValue)
-          console.log('response: ', response)
           if (response.data.error) {
             alert(response.data.error)
           } else {

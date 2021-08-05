@@ -7,7 +7,6 @@ export default function Dashboard() {
   const [iconClose, setIconClose] = useState('menu')
 
   useEffect(() => {
-    console.log('entrou')
     document.querySelector('.admin-icon-close').addEventListener('click', () => {
        var resizeSection = document.querySelector('.admin-content-dashboard')
       var MobileNavBar = document.querySelector('.admin-menu-left')

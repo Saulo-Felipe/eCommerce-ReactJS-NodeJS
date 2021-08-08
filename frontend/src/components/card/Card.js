@@ -79,6 +79,19 @@ export default function Card(props) {
     }
   }
 
+
+  async function addToCart(productID) {
+    var idUser = await isAuthenticated()
+    if (idUser === null) return alert("Você precisa está logado para adicionar itens ao carrinho.")
+
+    var response = await api.post('/new-cart-product', { productID: productID, userID: idUser.id })
+
+    if (response.data.error) return alert('Erro ao inserir produto no carrinho.')
+
+
+
+  }
+
   return (
     <div className="primaryCard">
 
@@ -114,8 +127,8 @@ export default function Card(props) {
           
           
         </div>
-        <div className="product-add-card"><i class="fas fa-cart-plus"></i>Adicione ao Carrinho</div>
       </Link>
+      <div onClick={() => addToCart(props.id)} className="product-add-card"><i class="fas fa-cart-plus"></i>Adicione ao Carrinho</div>
     </div>
   )
 }

@@ -14,6 +14,7 @@ export default function Header() {
   const [userName, setUserName] = useState()
   const { profilePhoto, setProfilePhoto } = useProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
   const [isLogged, setIsLogged] = useState(null)
+  const [cartAmount, setCartAmount] = useState(0)
 
   useEffect(() => {
 
@@ -27,6 +28,13 @@ export default function Header() {
 
     (async() => {
       var response = await isAuthenticated()
+
+    // Get amount cart product
+      var amountCart = await api.post('/cart-products', { userID: response.id }) 
+
+      if (amountCart.data.error) return alert('Erro ao listar produtos do carrinho.')
+
+      setCartAmount(amountCart.data.result.length)
 
       setIsLogged(response)
 
@@ -139,12 +147,12 @@ export default function Header() {
                 ? <div className="navbar-brand active-menu-mobile-left"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
                 : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
               }
-              <a href="/admin" className="cart-href no-href-decoration">
-                <span className="quant-cart">24</span>
+              <Link to="/my-shopping-cart" className="cart-href no-href-decoration">
+                <span className="quant-cart">{cartAmount}</span>
                 <span className="material-icons-outlined cart-mobile">
                   shopping_cart
                 </span>
-              </a>
+              </Link>
             </div>
             {/*=========|   options top menu-mobile   |==========*/}
 
@@ -171,7 +179,7 @@ export default function Header() {
                 </Link>
               </div>
 
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav principal-navbar me-auto mb-2 mb-lg-0">
 
                 <li className="nav-item menuBar-desktop">
                   <abbr title="Menu" className="abbrMenuConfig">
@@ -185,7 +193,7 @@ export default function Header() {
 
                 <li className="nav-item item-page-favorites pe-0">
                   <abbr title="Favoritos">
-                    <Link to={'/client_dashboard/favorites/'} className="nav-link active icon-favorite-href d-flex no-href-decoration" aria-current="page">
+                    <Link to={'/client_dashboard/favorites/'} className="position-relative nav-link active icon-favorite-href d-flex no-href-decoration" aria-current="page">
                       <div className="material-icons">favorite_border</div>
                       <div className="header-amountLikes">{like}</div>
                     </Link>
@@ -235,17 +243,16 @@ export default function Header() {
 
                 <li className="nav-item dropdown item-desktop cart-active">
 
-                  <a className="nav-link active d-flex flex-row cart-active" href="/admin" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div>
-                      <span className="material-icons-outlined icon-cart">
-                        shopping_cart
-                      </span>
+                  <Link to="/my-shopping-cart" className="nav-link active d-flex flex-row cart-active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div className="position-relative">
+                      <div className="material-icons-outlined icon-cart">shopping_cart</div>
+                      <div className="amount-products-cart">{cartAmount}</div>
                     </div>
                     <div className="my-account">
                       <small className="login-small">Meu Carrinho</small>
                       <div className="dropdown-toggle">$299,99</div>
                     </div>
-                  </a>
+                  </Link>
 
                   <ul className="dropdown-menu dropdown-menu-lg-end cart-active-menu" aria-labelledby="navbarDropdown" data-bs-popper="none">
                     <li><a className="dropdown-item" href="/admin">Action</a></li>

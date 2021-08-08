@@ -154,5 +154,43 @@ userProduct.post('/new-rating', async(request, response) => {
 
 })
 
+userProduct.post('/cart-products', async (request, response) => {
+    try {
+        const { userID } = request.body
+
+        var [result] = await sequelize.query(`
+            SELECT products.id, product_name,  price, cover FROM products
+            INNER JOIN cart_user ON cart_user.product_id = products.id
+            INNER JOIN clients ON clients.id = cart_user.user_id
+            WHERE clients.id = ${ userID }
+        `)
+
+        return response.json({ result })
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })         
+    }
+
+})
+
+userProduct.post('/new-cart-product', async (request, response) => {
+    try {
+
+        var { userID, productID } = request.body
+
+        console.log('Valor de ids: ', userID, productID)
+
+        await sequelize.query(`
+            INSERT INTO cart_user (user_id, product_id) VALUES (${userID}, ${productID})
+        `)
+
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })         
+    }
+})
+
 
 module.exports = userProduct

@@ -5,26 +5,141 @@
 	padding: 20px;
 }
 
+.page-cart-top-itens {
+	display: flex;
+	flex-direction: column;
+    justify-content: space-between;
+}
+
 .page-cart-content {
 
 }
 
 .page-cart-products {
 	width: 65%;
-	border: solid 1px red;
-	padding: 15px;
+	padding: 20px 0px 20px 20px;
 	margin-bottom: 100px;
 	min-height: 400px;
 	border-radius: 7px;
+	overflow-x: hidden;
 }
 
 .page-cart-checkout {
 	width: 30%;
-	border: solid 1px red;
 	margin: -100px 2.5% 0 2.5%;
 	background-color: white;
 	padding: 15px;
 	margin-bottom: 100px;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 	border-radius: 7px;
+}
+
+.card-cart-product {
+	height: 130px;
+	width: 100%;
+	padding: 15px;
+	justify-content: space-between;
+	align-items: center;
+	transition: all 0.5s;
+	cursor: pointer;
+	z-index: 1;
+}
+
+.card-cart-product:hover {
+	transform: translateX(-65px);
+}
+
+.card-cart-image {
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.card-cart-amount-container {
+	width: min-content;
+}
+
+.card-cart-product-amount {
+	position: relative;
+	left: 100%;
+	transform: translateX(-100%);
+}
+
+.cart-remove-product {
+	width: 50px;
+	height: 100%;
+	margin-right: -66px;
+	position: relative;
+    top: 0;
+    height: 130px;
+}
+
+.checkout-finish {
+	display: inline-flex;
+    place-content: center;
+}
+
+.small-information {
+	box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
+	text-align: center;
+}
+.small-information  i {
+	color: #ff5722;
+}
+
+.modal-content {
+	border-radius: 0;
+}
+
+.getCep-body {
+	padding: 30px;
+}
+
+.transform-X {
+	position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min-content;
+}
+
+@media screen and (min-width: 992px) {
+
+}
+
+@media screen and (max-width: 991px) {
+	.card-cart-product {
+		display: block !important;
+		height: auto;
+	}
+	.card-cart-product img {
+		width: 50vw;
+	}
+	.card-cart-product div {
+		display: block !important;
+		text-align: center;
+	}
+	.page-cart-content {
+		display: block !important;
+	}
+
+	.page-cart-top {
+		flex-direction: column-reverse;
+	    justify-content: flex-end;
+	}
+	.page-cart-top-itens {
+		height: -webkit-fill-available;;
+	}
+	.page-cart-products {
+		width: 100%;
+		padding: 10px;
+		margin: 0 !important;
+	}
+	.page-cart-checkout {
+		margin: 3% 3% 0% 3%;
+		width: 94%;
+	}
+	.card-cart-price {
+		font-size: 1.5rem !important;
+	}
 }

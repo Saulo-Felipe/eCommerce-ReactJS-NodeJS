@@ -108,3 +108,16 @@
   font-size: 0.8rem;
   padding: 5px;
 }
+
+@media screen and (max-width: 1000px) {
+  .product-alerts {
+    margin-left: 0px;
+    opacity: 1;
+  }
+  .product-add-card  {
+    top: 100%;
+  }
+  .primaryCard {
+    height: 380px;
+  }
+}

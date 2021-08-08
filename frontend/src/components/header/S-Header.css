@@ -13,6 +13,9 @@ header > nav {
 .navbar-brand {
   padding-top: 0;
 }
+.principal-navbar {
+  align-items: center;
+}
 .form-search {
   margin: auto;
   width: 100%;
@@ -67,11 +70,7 @@ header > nav {
   transform: translateY(-50%);
   padding-right: 10px;
 }
-.icon-favorite-href {
-  position: relative;
-  top: 60%;
-  transform: translateY(-50%);
-}
+
 .menuBar-desktop {
   display: none;
   cursor: pointer;
@@ -153,9 +152,25 @@ abbr[title] {
   width: 20px;
   font-size: 0.8em;
   font-weight: 600;
-  margin-left: -10px;
   text-align: center;
-  margin-top: -7px;
+  position: absolute;
+  line-height: 22px;
+  top: 0;
+  left: -5px;
+}
+
+.amount-products-cart {
+  font-weight: 600;
+  position: absolute;
+  top: 1px;
+  left: -15px;
+  background-color: red;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  color: white;
+  font-size: 0.8rem;
   line-height: 22px;
 }
 

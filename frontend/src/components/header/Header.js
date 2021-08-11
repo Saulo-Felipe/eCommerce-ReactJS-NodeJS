@@ -8,13 +8,14 @@ import api from '../../services/api'
 import SubHeader from './SubHeader'
 import { useLike } from '../context/Likes'
 import { useProfilePhoto } from '../context/ProfilePhoto'
+import { useCart } from '../context/Cart'
 
 export default function Header() {
   const { setLike, like } = useLike()
   const [userName, setUserName] = useState()
   const { profilePhoto, setProfilePhoto } = useProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
   const [isLogged, setIsLogged] = useState(null)
-  const [cartAmount, setCartAmount] = useState(0)
+  const { cart, setCart } = useCart()
 
   useEffect(() => {
 
@@ -29,16 +30,19 @@ export default function Header() {
     (async() => {
       var response = await isAuthenticated()
 
-    // Get amount cart product
-      var amountCart = await api.post('/cart-products', { userID: response.id }) 
-
-      if (amountCart.data.error) return alert('Erro ao listar produtos do carrinho.')
-
-      setCartAmount(amountCart.data.result.length)
-
-      setIsLogged(response)
 
       if (response !== null) {
+      // Get amount cart product
+        var amountCart = await api.post('/cart-products', { userID: response.id }) 
+
+        if (amountCart.data.error) return alert('Erro ao listar produtos do carrinho.')
+
+        setCart(amountCart.data.result.length)
+
+
+      // Get amount cart product ^^
+        setIsLogged(response)
+        
         localStorage.setItem("isLoggedIn", true)
         
         setUserName(response.user_name)
@@ -148,7 +152,7 @@ export default function Header() {
                 : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
               }
               <Link to="/my-shopping-cart" className="cart-href no-href-decoration">
-                <span className="quant-cart">{cartAmount}</span>
+                <span className="quant-cart">{cart}</span>
                 <span className="material-icons-outlined cart-mobile">
                   shopping_cart
                 </span>
@@ -220,7 +224,7 @@ export default function Header() {
 
                       <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li><Link className="dropdown-item" to="/client_dashboard/user-profile">Minha Conta</Link></li>
-                        <li><Link className="dropdown-item" to="/">Carrinho</Link></li>
+                        <li><Link className="dropdown-item" to="/my-shopping-cart">Carrinho</Link></li>
                         <li><Link className="dropdown-item" to="/client_dashboard/user-profile">Configurações</Link></li>
                         <li><a className="dropdown-item" href="/" onClick={() => logout()}>Sair</a></li>
                       </ul>
@@ -246,7 +250,7 @@ export default function Header() {
                   <Link to="/my-shopping-cart" className="nav-link active d-flex flex-row cart-active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <div className="position-relative">
                       <div className="material-icons-outlined icon-cart">shopping_cart</div>
-                      <div className="amount-products-cart">{cartAmount}</div>
+                      <div className="amount-products-cart">{cart}</div>
                     </div>
                     <div className="my-account">
                       <small className="login-small">Meu Carrinho</small>
@@ -255,9 +259,6 @@ export default function Header() {
                   </Link>
 
                   <ul className="dropdown-menu dropdown-menu-lg-end cart-active-menu" aria-labelledby="navbarDropdown" data-bs-popper="none">
-                    <li><a className="dropdown-item" href="/admin">Action</a></li>
-                    <li><a className="dropdown-item" href="/admin">Another action</a></li>
-                    <li><hr className="dropdown-divider"/></li>
                     <li><Link className="dropdown-item" to={"/my-shopping-cart"}>Ir para carrinho</Link></li>
                   </ul>
                 </li>

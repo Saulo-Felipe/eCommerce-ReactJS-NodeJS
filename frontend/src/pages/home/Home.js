@@ -10,7 +10,7 @@ import Carousel from '../../components/carousel/Carousel'
 
 export default function Home() {
   const [products, setProduct] = useState([])
-  const [loading, setLoading] = useState(<div class="spinner-grow text-primary" role="status" style={{width: "3rem", height: "3rem"}}><span class="visually-hidden">Loading...</span></div>)
+  const [loading, setLoading] = useState(<div className="spinner-grow text-primary" role="status" style={{width: "3rem", height: "3rem"}}><span className="visually-hidden">Loading...</span></div>)
   const [mostPopular, setMostPopular] = useState([])
 
   useEffect(() => {

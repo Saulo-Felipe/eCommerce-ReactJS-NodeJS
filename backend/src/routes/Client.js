@@ -9,6 +9,7 @@ const uniqid = require('uniqid')
 
 client.post('/get-user', async(request, response) => {
     try {
+        console.log('Está logado?', request.isAuthenticated())
         if (request.user)
             return response.json({ user: request.user })
         else

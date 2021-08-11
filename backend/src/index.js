@@ -3,6 +3,7 @@ const cors = require('cors')
 const session = require('express-session')
 const passport = require('passport')
 const flash = require('connect-flash')
+require('dotenv').config()
 
 //Routes
   const router = require('./routes/Home.js')
@@ -11,7 +12,6 @@ const flash = require('connect-flash')
   const adminProducts = require('./routes/Admin/Products.js')
   const adminCategory = require('./routes/Admin/Categories.js')
   const userProduct = require('./routes/User/userProduct.js')
-
 
 require('./passportConfigs/auth')(passport)
 
@@ -30,9 +30,9 @@ const app = express()
   app.use(express.json())
 
   app.use(cors({ 
-    origin:'http://localhost:3000', 
-    credentials: true,            //access-control-allow-credentials:true
-    optionSuccessStatus: 200  
+    origin: process.env.FRONTEND_URL, 
+    credentials: true,
+    optionSuccessStatus: 200
   }))
 
 //Routes
@@ -46,4 +46,4 @@ const app = express()
 
 
 
-app.listen(8081, () => {console.log('server is running')})
+app.listen(process.env.PORT || 8081, () => {console.log('Server is Running 💻🚀')})

@@ -115,10 +115,10 @@ export default function LeftMenuMobile() {
 
             <div className="content-favorite-left mt-4">
 
-              <div class="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#other-alternatives-menu-mobile" aria-expanded="false" aria-controls="other-alternatives-menu-mobile">
-                Home <i class="fas fa-caret-down"></i>
+              <div className="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#other-alternatives-menu-mobile" aria-expanded="false" aria-controls="other-alternatives-menu-mobile">
+                Home <i className="fas fa-caret-down"></i>
               </div>
-              <div class="collapse" id="other-alternatives-menu-mobile">
+              <div className="collapse" id="other-alternatives-menu-mobile">
 
                 <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
                   <div className="normal-alternative">
@@ -157,8 +157,8 @@ export default function LeftMenuMobile() {
                 </Link>
               </div>
 
-              <div class="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false" aria-controls="dashboard-collapse">
-                Dashboard <i class="fas fa-caret-down"></i>
+              <div className="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false" aria-controls="dashboard-collapse">
+                Dashboard <i className="fas fa-caret-down"></i>
               </div>
               <div className="collapse show" id="dashboard-collapse">
                 <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
@@ -191,8 +191,8 @@ export default function LeftMenuMobile() {
               </div>
 
 
-              <div class="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#configs-collapse" aria-expanded="false" aria-controls="configs-collapse">
-                Configurações <i class="fas fa-caret-down"></i>
+              <div className="alternative-dashboard w-100 fixed-alternative border-bottom"  data-bs-toggle="collapse" data-bs-target="#configs-collapse" aria-expanded="false" aria-controls="configs-collapse">
+                Configurações <i className="fas fa-caret-down"></i>
               </div>
 
               <div className="collapse show" id="configs-collapse">

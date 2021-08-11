@@ -7,31 +7,22 @@ import Register from './pages/register/Register'
 import Search from './pages/search/Search'
 import Footer from './components/footer/Footer'
 import ClientDashboard from './pages/client_dashboard/Client_dashboard'
-import { PrivateRoutes } from './services/PrivateRoutes'
 import { Like } from './components/context/Likes'
+import { Cart } from './components/context/Cart'
 import { ProfilePhoto } from './components/context/ProfilePhoto'
 import LeftMenuMobile from './components/menu_mobile/LeftMenuMobile'
 import Product from './pages/product/Product'
 import NoMatch from './pages/noMatch/NoMatch'
 import ShopCart from './pages/shoppingCart/ShopCart'
+import Dashboard from './pages/admin/dashboard/Dashboard'
+import AddProduct from './pages/admin/AddProduct/AddProduct'
+import AddCategory from './pages/admin/AddCategory/AddCategory'
 
 
 function App() {
 
   const [isLogged, setIsLogged] = React.useState(false)
-  const [isAdmin, setIsAdmin] = React.useState(false)
-
-  const isLoggedRoutes = [
-    <Route path="/client_dashboard/user-profile" >
-      <ClientDashboard ChildComponent={"UserProfile"} />
-    </Route>,
-    <Route path="/client_dashboard/Compras">
-      <ClientDashboard ChildComponent={"Purchases"} />
-    </Route>,
-    <Route path="/client_dashboard/favorites">
-      <ClientDashboard ChildComponent={"Favorite"} />
-    </Route>
-  ]
+  const [isAdmin, setIsAdmin] = React.useState(true)
 
   React.useEffect(() => {
     (async() => {
@@ -39,7 +30,6 @@ function App() {
 
       if (response !== null) {
         setIsLogged(true)
-
         if (Number(response.isAdmin) === 1)
           setIsAdmin(true)
       }
@@ -52,6 +42,7 @@ function App() {
       <BrowserRouter>
         <Like>
         <ProfilePhoto>
+        <Cart>
           <LeftMenuMobile />
           <Header />
           <Switch>
@@ -60,24 +51,39 @@ function App() {
             <Route path="/search/:value" component={Search} />
             <Route path="/product/:id/:description" component={Product}/>
 
-            {/*========| Login Routes |========*/}
             {
               isLogged === true 
-              ? isLoggedRoutes.map(item => item)
-              : <NoMatch />
-            }
-
-            {/*========| Administrative Routes |========*/}
-            {
-              isAdmin === true
-              ? (
+              ?
                 <>
-                {
-                  PrivateRoutes.map(item => item)
-                }
-                  <Route path="/my-shopping-cart" component={ShopCart}/>
-                </>)
-              : <NoMatch/>
+                  {
+                    <>
+                      <Route path="/client_dashboard/user-profile" >
+                        <ClientDashboard ChildComponent={"UserProfile"} />
+                      </Route>
+                      <Route path="/client_dashboard/Compras">
+                        <ClientDashboard ChildComponent={"Purchases"} />
+                      </Route>
+                      <Route path="/client_dashboard/favorites">
+                        <ClientDashboard ChildComponent={"Favorite"} />
+                      </Route>
+
+                      <Route path="/my-shopping-cart" component={ShopCart}/>
+                    </>
+                  }
+
+                  {
+                    isAdmin === true 
+                    ?
+                      <>
+                        <Route path="/admin/new-category"> <AddCategory/> </Route>
+                        <Route path="/admin/dashboard"> <Dashboard /> </Route>
+                        <Route path="/admin/new-product"> <AddProduct /> </Route>                      
+                      </>
+                    : <Route path="*" ><NoMatch /></Route>
+                  }
+                </>
+
+              : <Route path="*" ><NoMatch /></Route>
             }
 
             <Route path="*" >
@@ -85,6 +91,7 @@ function App() {
             </Route>
 
           </Switch>
+        </Cart>
         </ProfilePhoto>
         </Like>
       </BrowserRouter>

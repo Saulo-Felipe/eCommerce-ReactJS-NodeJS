@@ -271,3 +271,29 @@ abbr[title] {
 .header-profile-img {
   border-radius: 50%;
 }
+
+.SubHeader-categories {
+  display: flex;
+  max-width: 98vw;
+  flex-direction: unset;
+  flex-wrap: wrap;
+}
+
+.w-98 {
+  width: 98vw;
+}
+.w-40 {
+  width: 40%;
+}
+
+.subheader-category {
+  border-radius: 5px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.subheader-category:hover {
+  border-color: blue !important;
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.05);
+}

@@ -1,21 +1,48 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-
+import { DevelopmentPage } from '../../pages/noMatch/NoMatch'
+import api from '../../services/api'
 
 export default function SubHeader(props) {
+
+	const [categories, setCategories] = useState([])
+
+	useEffect(() => {
+
+		(async() => {
+
+			var response = await api.post('/all-categories')
+
+			if (response.data.error) return alert('Erro ao listar categorias')
+
+			setCategories(response.data.result)
+
+		})();
+
+	}, [])
 	
 	return (
+		<>
 		<nav className="navbar navbar-expand-lg navbar-light bg-light navbar-secondary">
 		  <div className="container-fluid">
 
 		    <div className="dropdown category">
-		      <div className="dropdown-toggle color-hover" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+		      <div className="dropdown-toggle color-hover cursor-pointer" type="button " id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
 		        <span className="material-icons-outlined">widgets</span> <span>Categorias</span>
 		      </div>
 		      <ul className="dropdown-menu active-hover" aria-labelledby="dropdownMenu2">
-		        <li><button className="dropdown-item" type="button">Action</button></li>
-		        <li><button className="dropdown-item" type="button">Another action</button></li>
-		        <li><button className="dropdown-item" type="button">Something else here</button></li>
+		      	<div className="d-flex w-98 p-3">
+		      		<div className="SubHeader-categories">
+				        {
+				        	categories.map(item => <div key={item.id} className="border p-1 m-1 subheader-category">{item.category_name}</div>)
+				        }
+		      		</div>
+
+		      		<div className="w-40 align-self-center">
+		      			<img src={require('../../images/construct.png').default} alt="construct page" />
+		      		</div>
+
+		        </div>
 		      </ul>
 		    </div>
 
@@ -30,15 +57,15 @@ export default function SubHeader(props) {
 		        </li>
 
 		        <li className="nav-item ms-2">
-		          <a className="nav-link active color-hover" aria-current="page" href="/admin">Ofertas do dia</a>
+		          <div className="nav-link active color-hover cursor-pointer" data-bs-toggle="modal" data-bs-target="#developmentPage">Ofertas do dia</div>
 		        </li>
 
 		        <li className="nav-item ms-2">
-		          <a className="nav-link active color-hover" aria-current="page" href="/admin">Mais vendidos</a>
+		          <div className="nav-link active color-hover cursor-pointer" data-bs-toggle="modal" data-bs-target="#developmentPage">Mais vendidos</div>
 		        </li>
 
 		        <li className="nav-item ms-2">
-		          <a className="nav-link active color-hover" aria-current="page" href="/admin">Contato</a>
+		          <div className="nav-link active color-hover cursor-pointer"onClick={() => {window.scrollTo(0, 100000)}}>Contato</div>
 		        </li>
 
 		        <li className="nav-item ms-2">
@@ -49,5 +76,7 @@ export default function SubHeader(props) {
 		    </div>
 		  </div>
 		</nav>
+		<DevelopmentPage /> 
+		</>
 	)
 }

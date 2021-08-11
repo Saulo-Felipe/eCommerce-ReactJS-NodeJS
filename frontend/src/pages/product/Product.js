@@ -53,11 +53,11 @@ export default function Product() {
 		      var response = await api.post('/likes', { idUser: isLogged.id, idProduct: id })				
 
 		      if (response.data.like === true)
-		      	setLikeIcon(<i class="fas fa-heart fa-lg like-this text-danger"></i>)
+		      	setLikeIcon(<i className="fas fa-heart fa-lg like-this text-danger"></i>)
 		      else
-		      	setLikeIcon(<i class="far fa-heart fa-lg like-this"></i>)
+		      	setLikeIcon(<i className="far fa-heart fa-lg like-this"></i>)
 				} else
-		      setLikeIcon(<i class="far fa-heart fa-lg like-this"></i>)
+		      setLikeIcon(<i className="far fa-heart fa-lg like-this"></i>)
 
 		  //Get Suggestion
 		  	var suggestion = await api.post('/product-suggestion', { productID: id })
@@ -106,9 +106,9 @@ export default function Product() {
 			var starsArray = []
 			for (var c=0; c < 5; c++) {
 				if (c + 0.5 < allRating.note) {
-					starsArray.push(<span class="material-icons-outlined">star</span>)
+					starsArray.push(<span className="material-icons-outlined">star</span>)
 				} else 
-					starsArray.push(<span class="material-icons-outlined">grade</span>)
+					starsArray.push(<span className="material-icons-outlined">grade</span>)
 				
 			}
 			setProductStars(starsArray)
@@ -143,11 +143,11 @@ export default function Product() {
 
       if (response.data.like === false) {
         await api.post('/new-like', { idUser: idUser.id, idProduct: id, type: 'like' })
-        setLikeIcon(<i class="fas fa-heart fa-lg like-this text-danger"></i>)
+        setLikeIcon(<i className="fas fa-heart fa-lg like-this text-danger"></i>)
         setLike(like+1)
       } else {
         await api.post('/new-like', { idUser: idUser.id, idProduct: id, type: 'dislike' })
-        setLikeIcon(<i class="far fa-heart fa-lg like-this"></i>)
+        setLikeIcon(<i className="far fa-heart fa-lg like-this"></i>)
         setLike(like-1)
       }
     }

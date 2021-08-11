@@ -40,13 +40,13 @@
 	padding: 15px;
 	justify-content: space-between;
 	align-items: center;
-	transition: all 0.5s;
+	transition: all 0.3s;
 	cursor: pointer;
 	z-index: 1;
 }
 
 .card-cart-product:hover {
-	transform: translateX(-65px);
+	width: calc(100% - 50px);
 }
 
 .card-cart-image {
@@ -103,9 +103,11 @@
     width: min-content;
 }
 
-@media screen and (min-width: 992px) {
-
+.card-cart-description {
+ 
+ 
 }
+
 
 @media screen and (max-width: 991px) {
 	.card-cart-product {

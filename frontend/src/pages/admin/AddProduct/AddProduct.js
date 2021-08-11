@@ -233,7 +233,7 @@ export default function AddProduct() {
                 return <div className="categorie-checked" key={categorie.id} onClick={() => removeSelectedCategory(categorie.id, categorie.category_name)}>
                   <div className="categorie-checked-name">{categorie.category_name}</div>
                   <div className="categorie-checked-close">
-                    <i class="fas fa-times"></i>
+                    <i className="fas fa-times"></i>
                   </div>
                 </div>
               })

@@ -109,6 +109,10 @@
 	box-shadow: 0px 0px 0px !important;
 }
 
+.product-description > p {
+	white-space: break-spaces;
+	padding-left: 20px;
+}
 
 @media screen and (max-width: 991px) {
 	.product-container {

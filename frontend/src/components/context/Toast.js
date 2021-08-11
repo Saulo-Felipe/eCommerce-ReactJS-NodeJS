@@ -25,15 +25,15 @@ const Toast = (props) => {
 	}
 
 	return (
-		<div class="position-fixed bottom-0 end-0 p-3" style={{Zindex: '11'}} onMouseEnter={() => resetTime()}>
-		  <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-		    <div class="toast-header">
-		      <img src="..." class="rounded me-2" alt="..." />
-		      <strong class="me-auto">{props.title}</strong>
+		<div className="position-fixed bottom-0 end-0 p-3" style={{Zindex: '11'}} onMouseEnter={() => resetTime()}>
+		  <div id="liveToast" className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+		    <div className="toast-header">
+		      <img src="..." className="rounded me-2" alt="..." />
+		      <strong className="me-auto">{props.title}</strong>
 		      <small>{props.time}</small>
-		      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" onClick={() => removeToast()}></button>
+		      <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close" onClick={() => removeToast()}></button>
 		    </div>
-		    <div class="toast-body">
+		    <div className="toast-body">
 		      {props.content}
 		    </div>
 		  </div>

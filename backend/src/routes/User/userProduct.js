@@ -37,6 +37,20 @@ userProduct.post('/product', async(request, response) => {
     }
 })
 
+userProduct.post('/all-categories', async(request, response) => {
+    try {
+
+        var [result] = await sequelize.query('SELECT * FROM categories')
+
+        return response.json({ result: result })
+
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: 'Error ao listar cliente.' })
+    }
+})
+
 userProduct.post('/get-categories-of-product', async(request, response) => {
     try {
         const { IDs } = request.body
@@ -96,8 +110,6 @@ userProduct.post('/product-suggestion', async (request, response) => {
 
                 return response.json({ result: suggestion})
             }
-
-
         }
 
     }
@@ -159,7 +171,7 @@ userProduct.post('/cart-products', async (request, response) => {
         const { userID } = request.body
 
         var [result] = await sequelize.query(`
-            SELECT products.id, product_name,  price, cover FROM products
+            SELECT products.id, product_name,  price, cover, description FROM products
             INNER JOIN cart_user ON cart_user.product_id = products.id
             INNER JOIN clients ON clients.id = cart_user.user_id
             WHERE clients.id = ${ userID }
@@ -174,22 +186,62 @@ userProduct.post('/cart-products', async (request, response) => {
 
 })
 
-userProduct.post('/new-cart-product', async (request, response) => {
+userProduct.post('/verify-product-cart', async(request, response) => {
     try {
+        const { userID, productID } = request.body
 
-        var { userID, productID } = request.body
-
-        console.log('Valor de ids: ', userID, productID)
-
-        await sequelize.query(`
-            INSERT INTO cart_user (user_id, product_id) VALUES (${userID}, ${productID})
+        var [result] = await sequelize.query(`
+            SELECT products.id FROM products
+            INNER JOIN cart_user ON cart_user.product_id = products.id
+            INNER JOIN clients ON clients.id = cart_user.user_id
+            WHERE clients.id = ${ userID } AND products.id = ${ productID }            
         `)
+
+        if (result.length === 0) return response.json({ inside: false })
+
+        else response.json({ inside: true })
 
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
         return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })         
     }
+})
+
+userProduct.post('/new-cart-product', async (request, response) => {
+    try {
+
+        var { userID, productID } = request.body
+
+        await sequelize.query(`
+            INSERT INTO cart_user (user_id, product_id) VALUES (${userID}, ${productID})
+        `)
+
+        return response.json({ success: true })
+
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })         
+    }
+})
+
+userProduct.post('/remove-cart-product', async(request, response) => {
+    try {
+        var { userID, productID } = request.body
+
+        await sequelize.query(`
+            DELETE FROM cart_user WHERE user_id = ${ userID } AND product_id = ${ productID }
+        `)
+
+        return response.json({ success: true })
+
+    }
+    catch(error) {
+        console.log('\n\n\n=========================| Error |=====================\n', error)
+        return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })         
+    }
+
 })
 
 

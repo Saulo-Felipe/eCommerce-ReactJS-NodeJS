@@ -12,3 +12,24 @@ export default function noMatch() {
 		</div>
 	)
 }
+
+const DevelopmentPage = () => {
+
+	return (
+		<div className="modal fade" id="developmentPage" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div className="modal-dialog">
+		    <div className="modal-content">
+		      <div className="modal-header">
+		        <h5 className="modal-title" id="exampleModalLabel">Essa página ainda está em desenvolvimento!</h5>
+		        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div className="modal-body text-center">
+		        <img src={require("../../images/construct.png").default} alt="development Page" />
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	)
+}
+
+export { DevelopmentPage }

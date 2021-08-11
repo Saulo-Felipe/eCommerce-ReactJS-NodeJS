@@ -213,15 +213,15 @@ export default function UserProfile(props) {
 					<button className="btn btn-success mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
 				</div>
 
-				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  <div class="modal-dialog body-modal-profile">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <h5 class="modal-title" id="exampleModalLabel">Atualize suas informações pessoais</h5>
-				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div className="modal-dialog body-modal-profile">
+				    <div className="modal-content">
+				      <div className="modal-header">
+				        <h5 className="modal-title" id="exampleModalLabel">Atualize suas informações pessoais</h5>
+				        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				      </div>
 					  <div className="text-center text-danger">{errors}</div>
-				      <div class="modal-body profile-edit-modal-body">
+				      <div className="modal-body profile-edit-modal-body">
 				        
 						<div className="d-flex p-3 background-blue-transparent row-user-configs">
 							<h6 className="w-50 profile-title-information">Nome Completo: </h6>
@@ -285,9 +285,9 @@ export default function UserProfile(props) {
 						</div>
 
 				      </div>
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary close-modal-configs-user" data-bs-dismiss="modal">Cancelar</button>
-				        <button type="button" class="btn btn-primary" onClick={saveChages}>Salvar Alterações</button>
+				      <div className="modal-footer">
+				        <button type="button" className="btn btn-secondary close-modal-configs-user" data-bs-dismiss="modal">Cancelar</button>
+				        <button type="button" className="btn btn-primary" onClick={saveChages}>Salvar Alterações</button>
 				      </div>
 				    </div>
 				  </div>

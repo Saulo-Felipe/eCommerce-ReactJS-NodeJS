@@ -5,6 +5,7 @@ import api from '../../services/api'
 import { useLike } from '../context/Likes'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import { Toast } from '../context/Toast'
+import { useCart } from '../context/Cart'
 
 export default function Card(props) {
 
@@ -13,12 +14,20 @@ export default function Card(props) {
   const [logs, setLogs] = useState()
   const [rating, setRating] = useState(0)
   const [stars, setStars] = useState([])
+  const [isLogged, setIsLogged] = useState({id: null})
+  const [insideCartBtn, setInsideCartBtn] = useState(<div onClick={addToCart} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
+  const { cart, setCart } = useCart()
 
   useEffect(() => {
+
     (async () => {
       var idUser = await isAuthenticated()
 
-      if (idUser != null) {
+      setIsLogged(idUser)
+
+      if (idUser !== null) {
+        insideTheCart(idUser.id, props.id) // verify inside the cart
+
         var response = await api.post('/likes', { idUser: idUser.id, idProduct: props.id })
 
         if (response.data.like === true) {
@@ -60,19 +69,18 @@ export default function Card(props) {
   }, [])
 
   async function LikeOrDeslike() {
-    var idUser = await isAuthenticated()
-    if (idUser === null) {
+    if (isLogged.id === null) {
       alert("Você precisa estar logado para dar like em produtos.")
       setLogs(<Toast title={"Test aqui"} content={"Conteudo aqui tudo certo"}/>)
     } else {
-      var response = await api.post('/likes', { idUser: idUser.id, idProduct: props.id })
+      var response = await api.post('/likes', { idUser: isLogged.id, idProduct: props.id })
 
       if (response.data.like === false) {
-        await api.post('/new-like', { idUser: idUser.id, idProduct: props.id, type: 'like' })
+        await api.post('/new-like', { idUser: isLogged.id, idProduct: props.id, type: 'like' })
         setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
         setLike(like+1)
       } else {
-        await api.post('/new-like', { idUser: idUser.id, idProduct: props.id, type: 'dislike' })
+        await api.post('/new-like', { idUser: isLogged.id, idProduct: props.id, type: 'dislike' })
         setLikeIcon(<span className="material-icons-outlined">favorite_border</span>)
         setLike(like-1)
       }
@@ -80,16 +88,46 @@ export default function Card(props) {
   }
 
 
-  async function addToCart(productID) {
-    var idUser = await isAuthenticated()
-    if (idUser === null) return alert("Você precisa está logado para adicionar itens ao carrinho.")
+  async function insideTheCart(idUser, idProduct) {
+    var isInside = await api.post('/verify-product-cart', { userID: idUser, productID: idProduct })
 
-    var response = await api.post('/new-cart-product', { productID: productID, userID: idUser.id })
+    if (isInside.data.error) return alert('Erro ao verificar se item está no carrinho.')
 
-    if (response.data.error) return alert('Erro ao inserir produto no carrinho.')
+    if (isInside.data.inside === true)
+      setInsideCartBtn(<div onClick={addToCart} className="product-add-card bg-danger"><i className="fas fa-cart-plus"></i>Remover do Carrinho</div>) 
+
+    else
+      setInsideCartBtn(<div onClick={addToCart} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
+  }
 
 
+  async function addToCart() {
+    const user = await isAuthenticated()
+    if (user === null) return alert("Você precisa está logado para adicionar itens ao carrinho.")
+    //Loading
+    setInsideCartBtn(
+      <div  className="product-add-card bg-warning" disabled>
+        <i className="fas fa-cart-plus"></i>Carregando...
+        <div className="m-0 ms-3 spinner-border text-primary spinner-border-sm" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      </div>
+    )
 
+    const {data} = await api.post('/verify-product-cart', { userID: user.id, productID: props.id })
+
+    if (data.inside === true) {
+      var response = await api.post('/remove-cart-product', { productID: props.id, userID: user.id })
+      if (response.data.error) return alert('Erro ao remover produto no carrinho.')
+      setInsideCartBtn(<div onClick={addToCart} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
+      setCart(cart-1)
+    }
+    else {
+      var response = await api.post('/new-cart-product', { productID: props.id, userID: user.id })
+      if (response.data.error) return alert('Erro ao inserir produto no carrinho.')
+      setInsideCartBtn(<div onClick={addToCart} className="product-add-card bg-danger"><i className="fas fa-cart-plus"></i>Remover do Carrinho</div>) 
+      setCart(cart+1)
+    }
   }
 
   return (
@@ -128,7 +166,7 @@ export default function Card(props) {
           
         </div>
       </Link>
-      <div onClick={() => addToCart(props.id)} className="product-add-card"><i class="fas fa-cart-plus"></i>Adicione ao Carrinho</div>
+      { insideCartBtn }
     </div>
   )
 }

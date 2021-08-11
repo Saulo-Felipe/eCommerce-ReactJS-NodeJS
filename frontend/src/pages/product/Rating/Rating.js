@@ -29,9 +29,9 @@ export default function Rating(props) {
 		var starsArray = []
 		for (var c=0; c < 5; c++) {
 			if (c + 0.5 < allRating.note) {
-				starsArray.push(<span class="material-icons-outlined">star</span>)
+				starsArray.push(<span className="material-icons-outlined">star</span>)
 			} else {
-				starsArray.push(<span class="material-icons-outlined">grade</span>)
+				starsArray.push(<span className="material-icons-outlined">grade</span>)
 			}
 		}
 		setProductStars(starsArray)
@@ -52,6 +52,7 @@ export default function Rating(props) {
 		}
 		setLimitAmount(value.length)
 
+
 		setRating({
 			comment: value,
 			rating: rating.rating
@@ -68,6 +69,7 @@ export default function Rating(props) {
 				setTimeout(() => setError(), 3000)
 			} else if (rating.rating === 0) {
 				setError("Clique nas estrelas para votar")
+
 				setTimeout(() => setError(), 3000)
 			} else {
 				setLoading(<div><img src={require("../../../images/Infinity-loading.gif").default} alt="loading" width="80px"/></div>)
@@ -106,9 +108,9 @@ export default function Rating(props) {
 						response.data.result[c].rating = []
 					}
 					if (count < amountCount) {
-						response.data.result[c].rating.push(<i class="fas fa-star ms-1"></i>)						
+						response.data.result[c].rating.push(<i className="fas fa-star ms-1"></i>)						
 					} else {
-						response.data.result[c].rating.push(<i class="far fa-star ms-1"></i>)						
+						response.data.result[c].rating.push(<i className="far fa-star ms-1"></i>)						
 					}
 				}
 		}
@@ -133,11 +135,6 @@ export default function Rating(props) {
 				allStars[c].classList.remove('fas')				
 			}
 		} 
-
-		setRating({
-			comment: "",
-			rating: 0
-		})
 
 	}
 
@@ -170,11 +167,11 @@ export default function Rating(props) {
 					<button className="btn btn-outline-primary" onClick={submitNewComment}>Adicionar comentário</button>
 
 					<div className="mt-3">
-						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(1)}/>
-						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(2)}/>
-						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(3)}/>
-						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(4)}/>
-						<i class="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(5)}/>
+						<i className="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(1)}/>
+						<i className="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(2)}/>
+						<i className="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(3)}/>
+						<i className="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(4)}/>
+						<i className="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(5)}/>
 					</div>
 					<div className="text-danger text-center">{errors}</div>
 					{loading}

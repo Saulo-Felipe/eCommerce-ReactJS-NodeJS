@@ -3,6 +3,7 @@ const cors = require('cors')
 const session = require('express-session')
 const passport = require('passport')
 const flash = require('connect-flash')
+const helmet = require('helmet')
 require('dotenv').config()
 
 //Routes
@@ -13,11 +14,14 @@ require('dotenv').config()
   const adminCategory = require('./routes/Admin/Categories.js')
   const userProduct = require('./routes/User/userProduct.js')
 
+
 require('./passportConfigs/auth')(passport)
 
 const app = express()
 
 //Middleware
+  app.use(helmet())
+
   app.use(session({
     secret: "ecommerce",
     resave: true,

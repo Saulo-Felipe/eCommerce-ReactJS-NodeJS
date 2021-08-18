@@ -19,7 +19,7 @@ require('./passportConfigs/auth')(passport)
 
 const app = express()
 
-//Middlewaree
+//Middleware
   app.use(helmet())
 
   app.use(session({

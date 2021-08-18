@@ -1,0 +1,17 @@
+0000000000000000000000000000000000000000 136c7d84b3b38e12fe550f9a18edb3e2b7c273de saulofelipe <saulofelipe@penguin.(none)> 1626128163 -0300	clone: from https://github.com/Saulo-Felipe/eCommerce-ReactJS-NodeJS
+136c7d84b3b38e12fe550f9a18edb3e2b7c273de 9843dbb8d7abe7679f4f0edb10e3a89e87376aed = <saulofelipe234567@gmail.com> 1626140889 -0300	commit: Update adress confirmation
+9843dbb8d7abe7679f4f0edb10e3a89e87376aed 7eda131e271972a0386f55dbb0b0c251df1576cb = <saulofelipe234567@gmail.com> 1626265796 -0300	commit: fix require images
+7eda131e271972a0386f55dbb0b0c251df1576cb ef0cff7504bdbb80c8492e2332183eb78dfaa7ad = <saulofelipe234567@gmail.com> 1626395717 -0300	commit: get images from backend and add security login with passport
+ef0cff7504bdbb80c8492e2332183eb78dfaa7ad 3e8aeba9a26ae204ccaf7f5dc83c146fbedef648 = <saulofelipe234567@gmail.com> 1626580362 -0300	commit: add login with security passport and fix frontend
+3e8aeba9a26ae204ccaf7f5dc83c146fbedef648 8f019f808a32a175ba1c6a9bc6c89243c18cdd64 = <saulofelipe234567@gmail.com> 1626750516 -0300	commit: add page of pproducts
+8f019f808a32a175ba1c6a9bc6c89243c18cdd64 a685b3487d4339df0ff1420002815c28e7f43203 = <saulofelipe234567@gmail.com> 1627100777 -0300	commit: fix details
+a685b3487d4339df0ff1420002815c28e7f43203 1db420b208338524782940784d237fa8d76d0008 = <saulofelipe234567@gmail.com> 1627185651 -0300	commit: fix mobile version and images names no repeat
+1db420b208338524782940784d237fa8d76d0008 33f681397e567ab5a16243bb5b90ed9ace005346 = <saulofelipe234567@gmail.com> 1627244327 -0300	commit: fix mobile version 1.0
+33f681397e567ab5a16243bb5b90ed9ace005346 57d8ef1149398752eeaccb25c488ae174f2dbfb8 = <saulofelipe234567@gmail.com> 1627408183 -0300	commit: add rating and fix small bugs
+57d8ef1149398752eeaccb25c488ae174f2dbfb8 1c59bf09b593081bfbf04818226e1bc7cd1b02d4 = <saulofelipe234567@gmail.com> 1627507741 -0300	commit: building reviews page
+1c59bf09b593081bfbf04818226e1bc7cd1b02d4 e247308d383357933f114b7bd457842cb45cd194 = <saulofelipe234567@gmail.com> 1627598978 -0300	commit: add reting
+e247308d383357933f114b7bd457842cb45cd194 3658897ba6d220bd521f63b375e501dd6a0bb4bf = <saulofelipe234567@gmail.com> 1627898844 -0300	commit: modifying the cards
+3658897ba6d220bd521f63b375e501dd6a0bb4bf b3c54b9236ab372a85e4018740039078efb1765d = <saulofelipe234567@gmail.com> 1628173014 -0300	commit: building cart page
+b3c54b9236ab372a85e4018740039078efb1765d ef0aa23dd9d4bc3c72fa9533b3edfcbc796b8e78 = <saulofelipe234567@gmail.com> 1628395286 -0300	commit: building cart shopping
+ef0aa23dd9d4bc3c72fa9533b3edfcbc796b8e78 6d3d583678d14c4a59e169b311d498f2c8ec8e59 = <saulofelipe234567@gmail.com> 1628697618 -0300	commit: correcting errors
+6d3d583678d14c4a59e169b311d498f2c8ec8e59 5804b42846c9c464e07878f9d261b31af5171955 = <saulofelipe234567@gmail.com> 1629221875 -0300	commit: test idea gitpod

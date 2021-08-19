@@ -5,15 +5,32 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 const uniqid = require('uniqid')
+const jwt = require('jsonwebtoken')
 
 
-client.post('/get-user', async(request, response) => {
+client.post('/get-user', (request, response) => {
     try {
-        console.log('Está logado?', request.isAuthenticated())
-        if (request.user)
-            return response.json({ user: request.user })
-        else
+        const { token } = request.body
+
+        if (token) {
+            jwt.verify(token, process.env.SECRETE_TOKEN, async(err, decoded) => {
+                if (err) {
+
+                    return response.json({ token_isValid: false })
+                } else {
+                    const [user] = await sequelize.query(`
+                        SELECT id, user_name, email, phone, cpf, profile_photo, "isAdmin"
+                        FROM clients
+                        WHERE id = ${ decoded.userId }
+                    `)
+                    return response.json({ user: user })
+                }
+            })
+        }
+        else {
+            console.log('nenhum token encontrado: ', request.token_login)
             return response.json({ user: null })
+        }
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)

@@ -18,7 +18,6 @@ import Dashboard from './pages/admin/dashboard/Dashboard'
 import AddProduct from './pages/admin/AddProduct/AddProduct'
 import AddCategory from './pages/admin/AddCategory/AddCategory'
 
-
 function App() {
 
   const [isLogged, setIsLogged] = React.useState(false)

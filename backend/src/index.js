@@ -15,15 +15,13 @@ require('dotenv').config()
   const userProduct = require('./routes/User/userProduct.js')
 
 
-require('./passportConfigs/auth')(passport)
-
 const app = express()
 
 //Middleware
   app.use(helmet())
 
   app.use(session({
-    secret: "ecommerce",
+  secret: "ecommerce",
     resave: true,
     saveUninitialized: true
   }))

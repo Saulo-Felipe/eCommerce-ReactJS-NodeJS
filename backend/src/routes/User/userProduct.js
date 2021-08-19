@@ -2,7 +2,6 @@ const express = require('express')
 const userProduct = express.Router()
 const sequelize = require('../../database/connect')
 
-
 userProduct.post('/most-popular-products', async (request, response) => {
 	try {
 		const [mostPopular] = await sequelize.query(`
@@ -25,7 +24,7 @@ userProduct.post('/most-popular-products', async (request, response) => {
 
 userProduct.post('/product', async(request, response) => {
     try {
-        const {id} = request.body
+        const { id } = request.body
 
         var [product] = await sequelize.query(`SELECT * FROM products WHERE id = ${id}`)
 
@@ -39,11 +38,9 @@ userProduct.post('/product', async(request, response) => {
 
 userProduct.post('/all-categories', async(request, response) => {
     try {
-
         var [result] = await sequelize.query('SELECT * FROM categories')
 
         return response.json({ result: result })
-
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
@@ -88,7 +85,7 @@ userProduct.post('/product-suggestion', async (request, response) => {
         `)
 
         if (categories.length === 0) {
-
+            return response.json({ result: [] })
         } else {
 
             var filterCategories = String(categories.map((category, index) => `categories.id = ${ category.id } ${ index === categories.length - 1 ? '' : 'OR' }` ))
@@ -105,13 +102,11 @@ userProduct.post('/product-suggestion', async (request, response) => {
             `)
 
             if (suggestion.length === 0) {
-
+                return response.json({ result: [] })
             } else {
-
                 return response.json({ result: suggestion})
             }
         }
-
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
@@ -163,7 +158,6 @@ userProduct.post('/new-rating', async(request, response) => {
         return response.json({ error: "Erro interno, por favor tente novamente mais tarde." })         
     }
 
-
 })
 
 userProduct.post('/cart-products', async (request, response) => {
@@ -200,7 +194,6 @@ userProduct.post('/verify-product-cart', async(request, response) => {
         if (result.length === 0) return response.json({ inside: false })
 
         else response.json({ inside: true })
-
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)

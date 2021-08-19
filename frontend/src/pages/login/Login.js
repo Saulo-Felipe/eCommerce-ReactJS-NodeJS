@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import api from '../../services/api'
 
   
 function Modal() {
 
   const [login, setLogin] = useState({ email: null, password: null })
-  const History = useHistory()
   const [loading, setLoading] = useState()
   const [logs, setLogs] = useState()
 
@@ -42,12 +41,11 @@ function Modal() {
         var response = await api.post("/login", login)
         setLoading()
 
-        
-
         if (response.data.error || response.data.message) {
           setLogs(<div className="mb-2 text-center text-danger">{response.data.error || response.data.message}</div>) 
         } else {
           setLogs(<div className="mb-2 text-center text-success">Login realziado com sucesso, redirecionando...</div>) 
+          localStorage.setItem('token_login', response.data.token)
           setTimeout(() => window.location.reload(), 1000)
         }
       }

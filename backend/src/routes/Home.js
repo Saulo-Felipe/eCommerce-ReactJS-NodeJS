@@ -3,12 +3,13 @@ const router = express.Router()
 const sequelize = require('../database/connect')
 const bcrypt = require('bcrypt')
 const path = require('path')
-const passport = require('passport')
+const jwt = require('jsonwebtoken')
+
 
 
 router.get('/', async(request, response) => {
   try {
-    var [AllProducts, others] = await sequelize.query('SELECT * FROM products LIMIT 9')
+    var [AllProducts] = await sequelize.query('SELECT * FROM products LIMIT 9')
 
     return response.send(AllProducts)
   }
@@ -20,33 +21,33 @@ router.get('/', async(request, response) => {
 
 router.get('/images/:image_name/:id/:type', async(request, response) => {
     try {
-        if (request.params.id === "null" && request.params.type === "profile")
-            return response.sendFile(path.join(__dirname, '../images/profile-images/user.png'))
+      if (request.params.id === "null" && request.params.type === "profile")
+          return response.sendFile(path.join(__dirname, '../images/profile-images/user.png'))
 
-        if (request.params.type === "profile") {
-            const [VerifyImage] = await sequelize.query(`
-                SELECT profile_photo, id from clients WHERE profile_photo = '${request.params.image_name}'
-            `)
-            if (VerifyImage.length === 0) return response.json({ noFile: true })
-            return response.sendFile(path.join(__dirname,`../images/profile-images/${request.params.image_name}`))
-        }
-        else if (request.params.type === "product") {
-            const [verifyProductImage] = await sequelize.query(`
-                SELECT cover, id from products WHERE cover = '${request.params.image_name}'
-            `)
-            if (verifyProductImage.length === 0) return response.json({ noFile: true })
-            return response.sendFile(path.join(__dirname,`../images/product-images/${ request.params.image_name }`))
-        } else if (request.params.type === "multiples") {
-            const [allImages] = await sequelize.query(`
-                SELECT images FROM products WHERE id = ${request.params.id}
-            `)
+      if (request.params.type === "profile") {
+        const [VerifyImage] = await sequelize.query(`
+          SELECT profile_photo, id from clients WHERE profile_photo = '${request.params.image_name}'
+        `)
+        if (VerifyImage.length === 0) return response.json({ noFile: true })
+        return response.sendFile(path.join(__dirname,`../images/profile-images/${request.params.image_name}`))
+      }
+      else if (request.params.type === "product") {
+        const [verifyProductImage] = await sequelize.query(`
+          SELECT cover, id from products WHERE cover = '${request.params.image_name}'
+        `)
+        if (verifyProductImage.length === 0) return response.json({ noFile: true })
+        return response.sendFile(path.join(__dirname,`../images/product-images/${ request.params.image_name }`))
+      } else if (request.params.type === "multiples") {
+        const [allImages] = await sequelize.query(`
+          SELECT images FROM products WHERE id = ${request.params.id}
+        `)
 
-            if (allImages.length === 0) return response.json({noFile: true})
+        if (allImages.length === 0) return response.json({noFile: true})
 
 
-            return response.sendFile(path.join(__dirname, `../images/product-images/${request.params.image_name}`))
-        }
-        else return response.json({ noFile: true })
+        return response.sendFile(path.join(__dirname, `../images/product-images/${request.params.image_name}`))
+      }
+      else return response.json({ noFile: true })
 
     } catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)
@@ -136,24 +137,27 @@ router.post('/register', async(request, response) => {
 })
 
 
-router.post('/login', (request, response, next) => {
+router.post('/login', async(request, response) => {
   try {
-    passport.authenticate("local", (error, user, info) => {
+    const login = request.body
+    const [user] = await sequelize.query(`SELECT * FROM clients WHERE email = '${login.email}'`)
 
-      if (error)
-        return response.json({ message: error })
-      else if (info)
-        return response.json({ message: info.message })
-      else if (user){
-        request.logIn(user, (err) => {
-          if (err) return next(err)
-        })
-        return response.json({ loggedIn: true })
-      }
-      else 
-        return response.json({ message: "Erro interno ao realizar Login, tente novamente mais tarde." })
+    if (user.length === 0)
+      return response.json({ message: 'Esse email não pertence a nenhum usuário.' })
 
-    })(request, response, next)
+    bcrypt.compare(login.password, user[0].password, (error, success) => {
+        if (success) {
+            const token = jwt.sign({ userId: user[0].id }, process.env.SECRETE_TOKEN, { expiresIn: 30 })
+
+            request.token_login = token
+
+            return response.json({ auth: true, token: token })
+
+        } else {
+            return response.json({ message: 'Senha incorreta!' })
+        }
+    })
+
   }
   catch(error) {
     console.log('\n\n\n=========================| Error |=====================\n', error)
@@ -163,15 +167,15 @@ router.post('/login', (request, response, next) => {
 
 
 router.post('/logout', (request, response) => {
-    try {
-        request.session.destroy(err => {
-            return
-        })
-    }
-    catch(error) {
-        console.log('\n\n\n=========================| Error |=====================\n', error)
-        return response.json({ error: 'Error ao fazer logout, tente novamente em instantes...' })
-    }
+  try {
+    request.session.destroy(err => {
+      return response.json({ logout: true })
+    })
+  }
+  catch(error) {
+    console.log('\n\n\n=========================| Error |=====================\n', error)
+    return response.json({ error: 'Error ao fazer logout, tente novamente em instantes...' })
+  }
 })
 
 

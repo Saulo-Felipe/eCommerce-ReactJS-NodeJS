@@ -59,12 +59,8 @@ export default function LeftMenuMobile() {
   }, [])
 
   async function logout() {
-    var response = await api.post('/logout')
-
-    if (response.data.error)
-      return alert('Erro ao fazer logout')
-
-    window.location.href = "/"
+    localStorage.removeItem('token_login')
+    return window.location.href = "/"
   }
 
 	return (

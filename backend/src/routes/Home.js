@@ -81,8 +81,6 @@ router.post('/search', async(request, response)=> {
             OFFSET ${pagePositon * 9} 
             LIMIT 9 
         `)
-
-        console.log('retornando resultado de pesqusia: ', result, 'AND', countPage)
         
         return response.status(200).json({result: result, countPage: countPage.length})
     }
@@ -147,7 +145,7 @@ router.post('/login', async(request, response) => {
 
     bcrypt.compare(login.password, user[0].password, (error, success) => {
         if (success) {
-            const token = jwt.sign({ userId: user[0].id }, process.env.SECRETE_TOKEN, { expiresIn: 30 })
+            const token = jwt.sign({ userId: user[0].id }, process.env.SECRETE_TOKEN, { expiresIn: '1h' })
 
             request.token_login = token
 
@@ -164,20 +162,5 @@ router.post('/login', async(request, response) => {
     return response.json({ error: "erro ao realizar Login." })
   }
 })
-
-
-router.post('/logout', (request, response) => {
-  try {
-    request.session.destroy(err => {
-      return response.json({ logout: true })
-    })
-  }
-  catch(error) {
-    console.log('\n\n\n=========================| Error |=====================\n', error)
-    return response.json({ error: 'Error ao fazer logout, tente novamente em instantes...' })
-  }
-})
-
-
 
 module.exports = router

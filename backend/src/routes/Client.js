@@ -45,7 +45,6 @@ client.post('/profile', async(request, response) => {
 
         var [result] = await sequelize.query(`SELECT * FROM clients WHERE id = ${id}`)
 
-        console.log('result: ', result)
         if (result.length === 0) {
             return response.json({ error: "erro ao procurar usuario." })
         } else {        

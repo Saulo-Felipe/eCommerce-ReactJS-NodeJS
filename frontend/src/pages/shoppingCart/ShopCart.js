@@ -9,7 +9,6 @@ export default  function ShoptCart() {
 
 	const [products, setProducts] = useState([])
 	const [isMobile, setIsMobile] = useState(false)
-	const [removeLoading, setRemoveLoading] = useState(false)
 	const [loading, setLoading] = useState()
 	const [amount, setAmount] = useState(0)
 

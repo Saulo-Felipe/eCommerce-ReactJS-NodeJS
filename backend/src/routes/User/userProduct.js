@@ -89,7 +89,6 @@ userProduct.post('/product-suggestion', async (request, response) => {
         } else {
 
             var filterCategories = String(categories.map((category, index) => `categories.id = ${ category.id } ${ index === categories.length - 1 ? '' : 'OR' }` ))
-            console.log('Filtros: ', filterCategories)
 
             var [suggestion] = await sequelize.query(`
                 SELECT products.product_name, products.price, products.cover, products.id FROM products

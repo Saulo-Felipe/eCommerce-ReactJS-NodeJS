@@ -57,9 +57,9 @@ export default function Card(props) {
       var mapRating = []
       for (var c=0; c < 5; c++) {
         if (c + 0.5 < countRating) {
-          mapRating = [...mapRating, <span className="material-icons-outlined star">star</span>]
+          mapRating = [...mapRating, <span key={c} className="material-icons-outlined star">star</span>]
         } else {
-          mapRating = [...mapRating, <span className="material-icons-outlined star">star_border</span>]
+          mapRating = [...mapRating, <span key={c} className="material-icons-outlined star">star_border</span>]
         }
       }
 

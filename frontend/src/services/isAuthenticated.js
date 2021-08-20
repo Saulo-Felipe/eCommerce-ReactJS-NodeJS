@@ -11,7 +11,6 @@ export var isAuthenticated = async function() {
             return null
         } else {
             var user = response.data.user[0]
-            console.log('Teste: ', user)
             return user
         }
     } else {

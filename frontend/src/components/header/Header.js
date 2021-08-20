@@ -9,6 +9,7 @@ import SubHeader from './SubHeader'
 import { useLike } from '../context/Likes'
 import { useProfilePhoto } from '../context/ProfilePhoto'
 import { useCart } from '../context/Cart'
+import CartPreview from './cart-preview/CartPreview'
 
 export default function Header() {
   const { setLike, like } = useLike()
@@ -42,14 +43,11 @@ export default function Header() {
 
       // Get amount cart product ^^
         setIsLogged(response)
-        
-        localStorage.setItem("isLoggedIn", true)
-        
+                
         setUserName(response.user_name)
         setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${response.profile_photo || "user.png"}/${response.id}/profile`)
       } else {
         setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
-        localStorage.setItem("isLoggedIn", false)
       }
 
     //Get Liked Products
@@ -117,9 +115,8 @@ export default function Header() {
   }, [])
 
   async function logout() {
-    var Logout = await api.post('/logout')
-
-    if (Logout.data && Logout.data.error) return alert('Erro ao sair da conta, tente novamente em instantes...')
+    localStorage.removeItem('token_login')
+    return window.location.href = "/"
   }
 
   const [search, setSearch] = useState()
@@ -258,8 +255,13 @@ export default function Header() {
                     </div>
                   </Link>
 
-                  <ul className="dropdown-menu dropdown-menu-lg-end cart-active-menu" aria-labelledby="navbarDropdown" data-bs-popper="none">
-                    <li><Link className="dropdown-item" to={"/my-shopping-cart"}>Ir para carrinho</Link></li>
+                  <ul className="dropdown-menu dropdown-menu-lg-end cart-active-menu show p-4" aria-labelledby="navbarDropdown" data-bs-popper="none">
+                    <li>
+                      {/*<Link className="dropdown-item" to={"/my-shopping-cart"}>
+                        
+                      </Link>*/}
+                      <CartPreview />
+                    </li>
                   </ul>
                 </li>
 

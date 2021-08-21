@@ -41,8 +41,8 @@
     transition: all 0.5s linear;
 }
 
-.preview-expand-cart:hover {
-    background-color: rgba(135, 206, 250, 0.301);
+.href-hover:hover {
+    color: blue !important;
 }
 
 .preview-expand-cart:hover i {

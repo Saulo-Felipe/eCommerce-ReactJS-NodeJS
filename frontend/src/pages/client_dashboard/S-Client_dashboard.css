@@ -21,12 +21,7 @@
 	margin-top: -80px;
 	transition: all 0.5s;
 }
-.card-line-image {
-	background-size: cover;
-	background-position: center;
-	width: 160px;
-	height: 160px;
-}
+
 .card-line-content {
 	padding: 20px;
 }
@@ -190,9 +185,6 @@
 	} 
 	.card-line-content {
 		padding: 0;
-	}
-	.card-line-image {
-		margin: auto;
 	}
 	.favorite-content {
 		margin: 1.5rem !important;

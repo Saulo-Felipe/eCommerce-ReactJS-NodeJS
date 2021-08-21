@@ -13,10 +13,14 @@ export default  function ShoptCart() {
 	const [amount, setAmount] = useState(0)
 
 	async function refreshCart() {
+		setLoading(<div className="text-center"><img height="100px" src={require("../../images/Infinity-loading.gif").default} alt="loading..." /></div>)
+
 		var user = await isAuthenticated()
 		if (user === null) return alert('Usuario não autenticado') 
 
 		var response = await api.post('cart-products', { userID: user.id })
+
+		setLoading()
 
 		if (response.data.error) return alert('Erro ao buscar produtos do carrinho.')
 
@@ -39,6 +43,20 @@ export default  function ShoptCart() {
 
 		refreshCart()
 
+		var scrollToTopElement = document.querySelector('.go-to-top-cart')
+
+		document.addEventListener('scroll', () => {
+			if (window.pageYOffset > 1000) {
+				scrollToTopElement.style.left = "97%"
+			} else {
+				scrollToTopElement.style.left = "110%"
+			}
+		})
+
+		scrollToTopElement.addEventListener('click', () => {
+			window.scrollTo(0, 0)
+		})
+
 	}, [])
 
 	async function removeToCart(productID) {
@@ -51,11 +69,13 @@ export default  function ShoptCart() {
 
 		var response = await api.post('/remove-cart-product', { userID: user.id, productID })
 
+		setLoading()
+
+
 		if (response.data.error) return alert('Erro ao remover produto do carrinho!')
 
 		refreshCart()
 		allRemoveBtns.forEach((item) => { item.removeAttribute('disabled') })
-		setLoading()
 	}
 
 	return (
@@ -69,7 +89,6 @@ export default  function ShoptCart() {
 				</div>
 				<small className="w-100 text-end">Home <i className="fas fa-chevron-right"></i> Loja <i className="fas fa-chevron-right"></i> Carrinho</small>
 			</div>
-
 
 			<div className="page-cart-content d-flex">
 				<div className="page-cart-products ms-3 mt-2">
@@ -101,23 +120,12 @@ export default  function ShoptCart() {
 									<div className=" card-cart-amount-container me-3 transform-X">
 									    <div className="mb-2">Quantidade: </div>
 										<input className="form-control card-cart-product-amount" defaultValue="1" type="number" />
-										{
-											isMobile === true 
-											? <button className="cart-remove-product mt-3 btn btn-outline-danger d-flex" onClick={() => {removeToCart(item.id)}}><span className="material-icons-outlined">delete</span> Remover</button>
-											: <></>
-										}										
+											<button className="cart-remove-product mt-3 btn btn-outline-danger d-flex" onClick={() => {removeToCart(item.id)}}><span className="material-icons-outlined">delete</span> Remover</button>
 									</div>
-
-									{
-										isMobile === false
-										? <button className="cart-remove-product btn btn-outline-danger" onClick={() => {removeToCart(item.id)}}><span className="material-icons-outlined">delete</span></button>
-										: <></>
-									}
 								</div>
 							</div>
 						)
 					}
-
 
 				
 
@@ -178,6 +186,10 @@ export default  function ShoptCart() {
 			    </div>
 			  </div>
 			</div>
+
+			<div className="go-to-top-cart">
+				<i class="fas fa-chevron-up"></i>
+			</div>	
 
 		</div>
 

@@ -28,8 +28,8 @@ export default function Favorite(props) {
     // ==========| Active color on actual page |==========
     
     (async() => {
-      var isLogged = await isAuthenticated()
       setLoadingLikes(<div className="text-center mt-5"><div className="spinner-border mx-auto" role="status"><span className="visually-hidden">Loading...</span></div></div>)
+      var isLogged = await isAuthenticated()
       const response = await api.post('/likes', { id: isLogged.id, type: 'get all likes' })
       setLoadingLikes()
 
@@ -68,8 +68,7 @@ export default function Favorite(props) {
         ? <h1>Nenhum Produto Salvo</h1>
         : FavoriteProducts.map((product) => 
           <div className="card-line d-flex mb-3" key={product.id}>
-            <div className="card-line-image" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${product.cover}/${product.id}/product)`}}>
-            </div>
+            <img width="160px" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${product.cover}/${product.id}/product`}/>
             <div className="card-line-content">
               <div className="mini-title-products">{product.product_name}</div>
               <div className="d-flex">
@@ -80,7 +79,7 @@ export default function Favorite(props) {
                     ? product.categories.length === 0 ?
                       <div className="categorie-of-favorite-product ms-1"> Nenhuma categoria cadastrada</div> :
                       product.categories.map((item) => <div className="categorie-of-favorite-product ms-1"><a href="/" className="me-2 text-decoration-none"> {item} </a></div> )
-                    : ""
+                    : <></>
                   }
                 </div>
               </div>

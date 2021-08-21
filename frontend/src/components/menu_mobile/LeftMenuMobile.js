@@ -14,11 +14,13 @@ export default function LeftMenuMobile() {
   const [search, setSearch] = useState()
   const [isLogged, setIsLogged] = useState(null)
   const { profilePhoto, setProfilePhoto } = useProfilePhoto()
+  const [isSave, setIsSave] = useState()
 
 
   function changedSearch(InputValueSearch) {
     setSearch(InputValueSearch.target.value)
   }
+
   useEffect(() => {
 
     (async() => {
@@ -29,8 +31,17 @@ export default function LeftMenuMobile() {
       window.addEventListener('load', () => {
         var MobileLeftMenu = document.querySelector('.LeftSearch-favorite')
         function removeMenu() {
-          MobileLeftMenu.style.left = "-110%"
-          document.querySelector('body').style.overflow = "scroll"
+          if (document.querySelector('.confirm-new-photo') === null) {
+            MobileLeftMenu.style.left = "-110%"
+            document.querySelector('body').style.overflow = "scroll"
+          } else {
+            var save = window.confirm('Deseja salvar as alterações?')
+            if (save === true) {
+              document.querySelector('.confirm-new-photo').click()
+            } else {
+              document.querySelector('.cancel-new-photo').click()
+            }
+          }
         }
         function addMenu() {
           MobileLeftMenu.style.left = "0%"
@@ -57,6 +68,56 @@ export default function LeftMenuMobile() {
     }
 
   }, [])
+
+  function configsImageMobile() {
+    console.log(isSave)
+    var icon = document.querySelector('.edit-photo-icon')
+    var menu = document.querySelector('.dropdown-configs-photo')
+
+    if (getComputedStyle(menu, null).display === "block") {
+      icon.style.transform = "translate(-100%, -100%) rotate(0deg)"
+      menu.style.display = "none"
+    } else {
+      icon.style.transform = "translate(-100%, -100%) rotate(45deg)"
+      menu.style.display = "block"
+    }
+  }
+
+  async function previewPhotoChange(file) {
+    var preview = URL.createObjectURL(file)
+    setProfilePhoto(`${preview}`)
+
+    setIsSave(
+      <div className="d-flex justify-content-center">
+        <button className="btn-small-modify btn-primary me-2 confirm-new-photo" onClick={() => submitNewPhoto(file)}>Salvar Alterações</button>
+        <button className="btn-small-modify btn-secondary cancel-new-photo" onClick={cancelNewPhoto}>Cancelar</button>
+      </div>
+    )
+  }
+
+  async function submitNewPhoto(file) {
+    var formData = new FormData()
+
+    formData.append('id', isLogged.id)
+    formData.append('image-profile', file)
+
+    setIsSave()
+    var response = await api.post('/change-profile-photo', formData, {
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
+      }
+    })
+    
+    if (response.data.error) return alert('Erro ao alterar foto de perfil')
+  } 
+
+  function cancelNewPhoto() {
+    console.log(isLogged)
+    setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${isLogged.profile_photo || "user.png"}/${isLogged.id}/profile`)
+    setIsSave()
+
+    document.querySelector('#photo-edit').value = ""
+  }
 
   async function logout() {
     localStorage.removeItem('token_login')
@@ -86,17 +147,23 @@ export default function LeftMenuMobile() {
               :
                 <>
                   <div className="d-flex header-top-favorite">
-                    <div className="border-on-image-profile-favorite ">
-                      <div className="favorite-perfil-photo" style={{backgroundImage: `url(${profilePhoto})`}}>
 
-                      </div>
+                    <div className="border-on-image-profile-favorite ">
+                      <i class="fas fa-cog edit-photo-icon" onClick={configsImageMobile}></i>
+                      <div className="favorite-perfil-photo" style={{backgroundImage: `url(${profilePhoto})`}}></div>
+                      <div className="dropdown-configs-photo">
+                        <label for="photo-edit"><div onClick={configsImageMobile}>Alterar Foto de perfil</div></label>
+                        <input type="file" id="photo-edit" className="d-none" onChange={(change) => previewPhotoChange(change.target.files[0])}/>
+                      </div>                      
                     </div>
 
                     <div className="informations-favorite-page">
                       <div className="favorite-name">Jubileu Amarelo</div>
                       <div className="favorite-email">jubileuAmarelo@gmail.com</div>
                     </div>
+
                   </div>
+                  {isSave}
                 </>
             }
             
@@ -116,36 +183,39 @@ export default function LeftMenuMobile() {
               </div>
               <div className="collapse" id="other-alternatives-menu-mobile">
 
-                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
+                <Link to={"/"} className="no-href-decoration ALL_close-menu-mobile">
                   <div className="normal-alternative">
                     <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">home</div>
                     <div className="title-norma-alternative title-buy icon-dashboard"> Home</div>
                   </div>
                 </Link>
 
-                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
-                  <div className="normal-alternative">
+                <Link className="no-href-decoration ALL_close-menu-mobile" data-bs-toggle="modal" data-bs-target="#developmentPage">
+                  <div className="d-flex normal-alternative">
                     <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">dashboard</div>
-                    <div className="title-norma-alternative title-buy icon-dashboard"> Categorias</div>
+                    <div className="ps-2 title-norma-alternative title-buy icon-dashboard"> Categorias</div>
+                    <div className="notify-all-types"><div>BETA</div></div>
                   </div>
                 </Link>
 
 
-                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
-                  <div className="normal-alternative">
+                <Link className="no-href-decoration ALL_close-menu-mobile" data-bs-toggle="modal" data-bs-target="#developmentPage">
+                  <div className="d-flex normal-alternative">
                     <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">local_offer</div>
-                    <div className="title-norma-alternative title-buy icon-dashboard"> Ofertas do Dia</div>
+                    <div className="ps-2 title-norma-alternative title-buy icon-dashboard"> Ofertas do Dia</div>
+                    <div className="notify-all-types"><div>BETA</div></div>
                   </div>
                 </Link>
 
-                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
-                  <div className="normal-alternative">
+                <Link className="no-href-decoration ALL_close-menu-mobile" data-bs-toggle="modal" data-bs-target="#developmentPage">
+                  <div className="d-flex normal-alternative">
                     <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">credit_score</div>
-                    <div className="title-norma-alternative title-buy icon-dashboard"> Mais vendidos</div>
+                    <div className="ps-2 title-norma-alternative title-buy icon-dashboard"> Mais vendidos</div>
+                    <div className="notify-all-types"><div>BETA</div></div>
                   </div>
                 </Link>
 
-                <Link to={"/client_dashboard/Compras"} className="no-href-decoration ALL_close-menu-mobile">
+                <Link className="no-href-decoration ALL_close-menu-mobile" onClick={() => window.scrollTo(0, 10000) }>
                   <div className="normal-alternative">
                     <div className="material-icons-outlined icon-normal-alternative icon-buy icon-dashboard">alternate_email</div>
                     <div className="title-norma-alternative title-buy icon-dashboard"> Contato</div>
@@ -199,16 +269,16 @@ export default function LeftMenuMobile() {
 
                 <hr/>
 
-                <div className="normal-alternative">
+                <div className="normal-alternative ALL_close-menu-mobile">
                   <div className="material-icons-outlined icon-normal-alternative">location_on</div>
-                  <div className="title-norma-alternative"> Endereços</div>
+                  <div className="title-norma-alternative " data-bs-toggle="modal" data-bs-target="#launchCityModal"> Endereços</div>
                 </div>
 
                 <hr/>
 
                 <div className="normal-alternative">
                   <div className="material-icons-outlined icon-normal-alternative">credit_card</div>
-                  <div className="title-norma-alternative"> Metodos de pagamento</div>
+                  <div className="title-norma-alternative" onClick={() => window.scrollTo(0, 10000)}> Metodos de pagamento</div>
                 </div>
                 
               </div>
@@ -229,6 +299,20 @@ export default function LeftMenuMobile() {
           </div>
         : ""
       }
+      <div class="modal fade" id="launchCityModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Onde fica nossos estabelecimentos?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2729.864847736827!2d-35.6093926234757!3d-7.289857627584452!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ac147d221306db%3A0x6eec50140f93f949!2sPrefeitura%20Municipal%20de%20Ing%C3%A1!5e0!3m2!1spt-BR!2sbr!4v1629478517273!5m2!1spt-BR!2sbr" width="100%" height="450" style={{border: '0'}} allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </>
 
 	)

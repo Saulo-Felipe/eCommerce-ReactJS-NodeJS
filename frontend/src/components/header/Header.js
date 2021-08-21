@@ -158,7 +158,6 @@ export default function Header() {
             {/*=========|   options top menu-mobile   |==========*/}
 
 
-
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
               <div className="d-flex form-search">
@@ -255,11 +254,8 @@ export default function Header() {
                     </div>
                   </Link>
 
-                  <ul className="dropdown-menu dropdown-menu-lg-end cart-active-menu show p-4" aria-labelledby="navbarDropdown" data-bs-popper="none">
+                  <ul className="shadow dropdown-menu dropdown-menu-lg-end cart-active-menu p-4" aria-labelledby="navbarDropdown" data-bs-popper="none">
                     <li>
-                      {/*<Link className="dropdown-item" to={"/my-shopping-cart"}>
-                        
-                      </Link>*/}
                       <CartPreview />
                     </li>
                   </ul>

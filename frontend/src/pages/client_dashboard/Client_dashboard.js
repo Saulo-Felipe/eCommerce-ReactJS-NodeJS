@@ -47,6 +47,8 @@ export default function ClientDashboard(props) {
   }
 
   async function saveChanges(file) {
+    setSaveEditImage("")
+
     var isLogged = await isAuthenticated()
 
     var formData = new FormData()
@@ -62,7 +64,6 @@ export default function ClientDashboard(props) {
 
     if (response.data.error) return alert('Error encontrado')
 
-    setSaveEditImage("")
   }
 
   async function discardChanges() {

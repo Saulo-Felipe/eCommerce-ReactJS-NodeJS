@@ -103,11 +103,9 @@
     width: min-content;
 }
 
-.card-cart-description {
- 
- 
+.go-to-top-cart {
+	display: none;
 }
-
 
 @media screen and (max-width: 991px) {
 	.card-cart-product {
@@ -143,5 +141,26 @@
 	}
 	.card-cart-price {
 		font-size: 1.5rem !important;
+	}
+	.cart-remove-product {
+		width: max-content;
+		height: auto;
+		margin-right: 0;
+	}
+	.go-to-top-cart {
+		display: block;
+		position: fixed;
+		top: 99%;
+		left: 110%;
+		transition: all 0.5s;
+		transform: translate(-100%, -100%);
+		border: solid 1px gray;
+		border-radius: 50%;
+		background-color: gray;
+		width: 30px;
+		height: 30px;
+		text-align: center;
+		line-height: 28px;
+		color: white;
 	}
 }

@@ -5,6 +5,37 @@
 	text-align: right;
 	width: 80%;
 }
+.border-on-image-profile-favorite  {
+    position: relative;
+}
+.edit-photo-icon {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    transform: translate(-100%, -100%) rotate(-90deg);
+    z-index: 2;
+    font-size: 1.5rem;
+    transition: all 0.5s;
+}
+.modal-bottom {
+    top: 100%;
+    transform: translateY(-100%);
+}
+.btn-small-modify {
+    border: none;
+    padding: 5px;
+}
+.dropdown-configs-photo {
+    position: relative;
+    right: -90px;
+    top: 10px;
+    width: max-content;
+    padding: 7px;
+    background-color: darkslateblue;
+    color: white;
+    display: none;
+    transition: all 0.5s;
+}
 .like-amount-notify > div {
 	border-radius: 50%;
     background-color: tomato;
@@ -17,6 +48,24 @@
     left: 90%;
     transform: translateX(-100%);
 }
+
+.notify-all-types {
+    width: -webkit-fill-available;
+}
+
+.notify-all-types > div {
+	border-radius: 5px;
+    background-color: rgb(255, 179, 0);
+    color: white;
+    height: 25px;
+    width: 50px;
+    text-align: center;
+    line-height: 25px;
+    position: relative;
+    left: 100%;
+    transform: translateX(-100%);
+}
+
 .LeftSearch-favorite  {
     overflow: scroll;
 }
@@ -32,4 +81,11 @@
 .LeftSearch-favorite::-webkit-scrollbar-thumb {
     width: 0px ;
     opacity: 0 ;
+}
+
+
+@media screen and (max-width: 991px) {
+    .title-norma-alternative {
+        width: -webkit-fill-available;
+    }
 }

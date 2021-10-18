@@ -7,7 +7,6 @@ import Register from './pages/register/Register'
 import Search from './pages/search/Search'
 import Footer from './components/footer/Footer'
 import ClientDashboard from './pages/client_dashboard/Client_dashboard'
-import { Cart } from './components/context/Cart'
 import { ProfilePhoto } from './components/context/ProfilePhoto'
 import LeftMenuMobile from './components/menu_mobile/LeftMenuMobile'
 import Product from './pages/product/Product'
@@ -15,6 +14,7 @@ import NoMatch from './pages/noMatch/NoMatch'
 import ShopCart from './pages/shoppingCart/ShopCart'
 import Dashboard from './pages/admin/dashboard/Dashboard'
 import AddProduct from './pages/admin/AddProduct/AddProduct'
+import EditProduct from './pages/admin/EditProduct/EditProduct'
 import AddCategory from './pages/admin/AddCategory/AddCategory'
 
 function App() {
@@ -39,7 +39,6 @@ function App() {
     <>
       <BrowserRouter>
         <ProfilePhoto>
-        <Cart>
           <LeftMenuMobile />
           <Header />
           <Switch>
@@ -75,6 +74,7 @@ function App() {
                         <Route path="/admin/new-category"> <AddCategory/> </Route>
                         <Route path="/admin/dashboard"> <Dashboard /> </Route>
                         <Route path="/admin/new-product"> <AddProduct /> </Route>                      
+                        <Route path="/admin/product/edit/:id/:description"> <EditProduct /> </Route>                      
                       </>
                     : <Route path="*" ><NoMatch /></Route>
                   }
@@ -88,7 +88,6 @@ function App() {
             </Route>
 
           </Switch>
-        </Cart>
         </ProfilePhoto>
       </BrowserRouter>
       <Footer/>

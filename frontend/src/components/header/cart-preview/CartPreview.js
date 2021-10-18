@@ -4,27 +4,32 @@ import { isAuthenticated } from '../../../services/isAuthenticated'
 import './CartPreview.css'
 import { Link } from 'react-router-dom'
 
+import { useSelector } from 'react-redux' 
+import { selectCart } from '../../../store/slices/cartSlice'
+import { useDispatch } from 'react-redux'
+import { changeCartValue, changePrice } from '../../../store/slices/cartSlice'
+
 export default function CartPreview() {
-    const [cart, setCart] = useState([])
-    const [totalCart, setTotalCart] = useState(0)
+    const { cartValue, totalPrice } = useSelector(selectCart)
+    const dispatch = useDispatch()
+
 
     useEffect(() => {
         (async() => {
             var user = await isAuthenticated()
             if (user !== null) {
                 var { data } = await api.post('cart-products', { userID: user.id })
-                
+
                 if (data.error) return alert('Erro ao listar produtos do carrinho.')
-    
-                setCart(data.result)
+
+                dispatch(changeCartValue(data.result))
 
                 var amountCart = 0
                 for (var c=0; c < data.result.length; c++) {
                     amountCart += Number(data.result[c].price)
                 }
-                setTotalCart(amountCart.toFixed(2))
+                dispatch(changePrice(amountCart.toFixed(2)))
             }
-
         })();
     }, [])
 
@@ -34,7 +39,7 @@ export default function CartPreview() {
             <div className="m-2 mt-0">Seus Produtos estão salvos aqui :)</div>
             <div className="preview-allproducts">   
                 {
-                    cart.map(item => 
+                    cartValue.map(item => 
                         <div className="preview-product">
                             <div className="preview-image-container">
                                 <img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.cover}/${item.id}/product`} alt="cover" />
@@ -52,7 +57,7 @@ export default function CartPreview() {
             <div className="pt-4">
                 <div className="preview-footer-content">
                     <div>
-                        <div><span className="text-secondary">Subtotal: </span>R${totalCart}</div> 
+                        <div><span className="text-secondary">Subtotal: </span>R${totalPrice}</div> 
                     </div>
                     <div>
                         <Link className="no-href-decoration" to={"/my-shopping-cart"}>

@@ -7,7 +7,6 @@ import { isAuthenticated } from '../../services/isAuthenticated'
 import api from '../../services/api'
 import SubHeader from './SubHeader'
 import { useProfilePhoto } from '../context/ProfilePhoto'
-import { useCart } from '../context/Cart'
 import CartPreview from './cart-preview/CartPreview'
 
 import { useSelector } from 'react-redux'
@@ -17,13 +16,14 @@ import { useDispatch } from 'react-redux'
 import { changeLikeCount } from '../../store/slices/likeSlice'
 import { changeCartCount } from '../../store/slices/cartSlice'
 
+
 export default function Header() {
   const [userName, setUserName] = useState()
   const { profilePhoto, setProfilePhoto } = useProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
   const [isLogged, setIsLogged] = useState(null)
 
   const { likeCount } = useSelector(selectLike)
-  const { cartCount } = useSelector(selectCart)
+  const { cartCount, totalPrice } = useSelector(selectCart)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -155,8 +155,8 @@ export default function Header() {
               </div>
               {
                 isLogged
-                ? <div className="navbar-brand active-menu-mobile-left"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
-                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
+                ? <div className="navbar-brand active-menu-mobile-left"><div className="header-profile-img"><img src={`${profilePhoto}`} alt="User"  height="40" /></div></div>
+                : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img className="header-profile-img" src={`${profilePhoto}`} alt="User"  height="40" /></div>
               }
               <Link to="/my-shopping-cart" className="cart-href no-href-decoration">
                 <span className="quant-cart">{cartCount}</span>
@@ -217,7 +217,9 @@ export default function Header() {
                       <div className="nav-link active d-flex flex-row " role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <div>
                           <div className="navbar-brand">
-                            <img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" />
+                            <div className="header-profile-img">
+                              <img  src={`${profilePhoto}`} alt="User" height="40" />
+                            </div>
                           </div>
                         </div>
                         <Link to={`/profile/${isLogged.id}`} className="toYourProfile">
@@ -240,7 +242,9 @@ export default function Header() {
                       <a className="nav-link active d-flex flex-row " aria-current="page" href="/" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                         <div>
                           <div className="navbar-brand">
-                            <img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" />
+                            <div className="header-profile-img">
+                              <img src={`${profilePhoto}`} alt="User" height="40" />
+                            </div>
                           </div>
                         </div>
                         <div className="my-account">
@@ -260,7 +264,7 @@ export default function Header() {
                     </div>
                     <div className="my-account">
                       <small className="login-small">Meu Carrinho</small>
-                      <div className="dropdown-toggle">$299,99</div>
+                      <div className="dropdown-toggle">${totalPrice}</div>
                     </div>
                   </Link>
 

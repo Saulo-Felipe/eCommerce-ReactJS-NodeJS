@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { DevelopmentPage } from '../../pages/noMatch/NoMatch'
 import api from '../../services/api'
+import { isAuthenticated } from '../../services/isAuthenticated'
 
 export default function SubHeader(props) {
 
 	const [categories, setCategories] = useState([])
+	const [isLogged, setIsLogged] = useState(null)
 
 	useEffect(() => {
-
 		(async() => {
 
 			var response = await api.post('/all-categories')

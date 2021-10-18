@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import api from '../../../services/api'
 import { isAuthenticated } from '../../../services/isAuthenticated'
-import { like, useLike } from '../../../components/context/Likes'
+
+import { useSelector } from 'react-redux'
+import { selectLike } from '../../../store/slices/likeSlice'
+import { useDispatch } from 'react-redux'
+import { changeLikeCount } from '../../../store/slices/likeSlice'
 
 export default function Favorite(props) {
   const [FavoriteProducts, setFavoriteProducts] = useState([])
-  const { like, setLike } = useLike()
   const [loading, setLoading] = useState([])
   const [loadingLikes, setLoadingLikes] = useState([])
 
-  useEffect(() => {
+  const { likeCount } = useSelector(selectLike)
+  const dispatchLike = useDispatch()
 
+  useEffect(() => {
 
     props.hooks.setConfigs({
       PagePosition: 'Favoritos',
@@ -58,7 +63,7 @@ export default function Favorite(props) {
 
 
     setFavoriteProducts(res.data.result)
-    setLike(like-1)
+    dispatchLike(changeLikeCount(likeCount-1))
   }
 
 	return (

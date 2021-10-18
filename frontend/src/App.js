@@ -7,7 +7,6 @@ import Register from './pages/register/Register'
 import Search from './pages/search/Search'
 import Footer from './components/footer/Footer'
 import ClientDashboard from './pages/client_dashboard/Client_dashboard'
-import { Like } from './components/context/Likes'
 import { Cart } from './components/context/Cart'
 import { ProfilePhoto } from './components/context/ProfilePhoto'
 import LeftMenuMobile from './components/menu_mobile/LeftMenuMobile'
@@ -21,7 +20,7 @@ import AddCategory from './pages/admin/AddCategory/AddCategory'
 function App() {
 
   const [isLogged, setIsLogged] = React.useState(false)
-  const [isAdmin, setIsAdmin] = React.useState(true)
+  const [isAdmin, setIsAdmin] = React.useState(false)
 
   React.useEffect(() => {
     (async() => {
@@ -39,7 +38,6 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Like>
         <ProfilePhoto>
         <Cart>
           <LeftMenuMobile />
@@ -92,7 +90,6 @@ function App() {
           </Switch>
         </Cart>
         </ProfilePhoto>
-        </Like>
       </BrowserRouter>
       <Footer/>
     </>

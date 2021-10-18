@@ -2,21 +2,29 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './S-Card.css'
 import api from '../../services/api'
-import { useLike } from '../context/Likes'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import { Toast } from '../context/Toast'
 import { useCart } from '../context/Cart'
 
+import { useDispatch } from 'react-redux'
+import { changeLikeCount } from '../../store/slices/likeSlice'
+import { changeCartCount } from '../../store/slices/cartSlice'
+import { useSelector } from 'react-redux'
+import { selectLike } from '../../store/slices/likeSlice'
+import { selectCart } from '../../store/slices/cartSlice'
+
 export default function Card(props) {
 
+  const dispatch = useDispatch()
+  const { likeCount } = useSelector(selectLike)
+
   const [likeIcon, setLikeIcon] = useState()
-  const { like, setLike } = useLike()
   const [logs, setLogs] = useState()
   const [rating, setRating] = useState(0)
   const [stars, setStars] = useState([])
   const [isLogged, setIsLogged] = useState({id: null})
-  const [insideCartBtn, setInsideCartBtn] = useState(<div onClick={addToCart} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
-  const { cart, setCart } = useCart()
+  const [insideCartBtn, setInsideCartBtn] = useState(<div onClick={() => AddToCart()} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
+
 
   useEffect(() => {
 
@@ -78,30 +86,20 @@ export default function Card(props) {
       if (response.data.like === false) {
         await api.post('/new-like', { idUser: isLogged.id, idProduct: props.id, type: 'like' })
         setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
-        setLike(like+1)
+        dispatch(changeLikeCount(likeCount+1))
       } else {
         await api.post('/new-like', { idUser: isLogged.id, idProduct: props.id, type: 'dislike' })
         setLikeIcon(<span className="material-icons-outlined">favorite_border</span>)
-        setLike(like-1)
+        dispatch(changeLikeCount(likeCount-1))
       }
     }
   }
 
+  async function AddToCart() {
+    console.log("Atualizando cart")
+    const { cartCount } = useSelector(selectCart)
+    console.log("COunt dentro: ", cartCount)
 
-  async function insideTheCart(idUser, idProduct) {
-    var isInside = await api.post('/verify-product-cart', { userID: idUser, productID: idProduct })
-
-    if (isInside.data.error) return alert('Erro ao verificar se item está no carrinho.')
-
-    if (isInside.data.inside === true)
-      setInsideCartBtn(<div onClick={addToCart} className="product-add-card bg-danger"><i className="fas fa-cart-plus"></i>Remover do Carrinho</div>) 
-
-    else
-      setInsideCartBtn(<div onClick={addToCart} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
-  }
-
-
-  async function addToCart() {
     const user = await isAuthenticated()
     if (user === null) return alert("Você precisa está logado para adicionar itens ao carrinho.")
     //Loading
@@ -119,16 +117,32 @@ export default function Card(props) {
     if (data.inside === true) {
       var response = await api.post('/remove-cart-product', { productID: props.id, userID: user.id })
       if (response.data.error) return alert('Erro ao remover produto no carrinho.')
-      setInsideCartBtn(<div onClick={addToCart} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
-      setCart(cart-1)
+      setInsideCartBtn(<div onClick={() => AddToCart()} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
+      console.log(`Vou mudar de ${cartCount} para ${cartCount-1}`)
+      dispatch(changeCartCount(cartCount-1))
     }
     else {
       var response = await api.post('/new-cart-product', { productID: props.id, userID: user.id })
       if (response.data.error) return alert('Erro ao inserir produto no carrinho.')
-      setInsideCartBtn(<div onClick={addToCart} className="product-add-card bg-danger"><i className="fas fa-cart-plus"></i>Remover do Carrinho</div>) 
-      setCart(cart+1)
+      setInsideCartBtn(<div onClick={() => AddToCart()} className="product-add-card bg-danger"><i className="fas fa-cart-plus"></i>Remover do Carrinho</div>)       
+      console.log(`Vou mudar de ${cartCount} para ${cartCount+1}`)
+      dispatch(changeCartCount(cartCount+1))
     }
   }
+
+
+  async function insideTheCart(idUser, idProduct) {
+    var isInside = await api.post('/verify-product-cart', { userID: idUser, productID: idProduct })
+
+    if (isInside.data.error) return alert('Erro ao verificar se item está no carrinho.')
+
+    if (isInside.data.inside === true)
+      setInsideCartBtn(<div onClick={() => AddToCart()} className="product-add-card bg-danger"><i className="fas fa-cart-plus"></i>Remover do Carrinho</div>) 
+
+    else
+      setInsideCartBtn(<div onClick={() => AddToCart()} className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
+  }
+
 
   return (
     <div className="primaryCard">

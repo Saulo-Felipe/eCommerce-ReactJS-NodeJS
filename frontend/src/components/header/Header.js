@@ -6,17 +6,25 @@ import LogoTipo from './logo-example.png'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import api from '../../services/api'
 import SubHeader from './SubHeader'
-import { useLike } from '../context/Likes'
 import { useProfilePhoto } from '../context/ProfilePhoto'
 import { useCart } from '../context/Cart'
 import CartPreview from './cart-preview/CartPreview'
 
+import { useSelector } from 'react-redux'
+import { selectLike } from '../../store/slices/likeSlice'
+import { selectCart } from '../../store/slices/cartSlice'
+import { useDispatch } from 'react-redux'
+import { changeLikeCount } from '../../store/slices/likeSlice'
+import { changeCartCount } from '../../store/slices/cartSlice'
+
 export default function Header() {
-  const { setLike, like } = useLike()
   const [userName, setUserName] = useState()
   const { profilePhoto, setProfilePhoto } = useProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
   const [isLogged, setIsLogged] = useState(null)
-  const { cart, setCart } = useCart()
+
+  const { likeCount } = useSelector(selectLike)
+  const { cartCount } = useSelector(selectCart)
+  const dispatch = useDispatch()
 
   useEffect(() => {
 
@@ -38,10 +46,11 @@ export default function Header() {
 
         if (amountCart.data.error) return alert('Erro ao listar produtos do carrinho.')
 
-        setCart(amountCart.data.result.length)
+        console.log("Atualizando header")
+        dispatch(changeCartCount(amountCart.data.result.length))
 
 
-      // Get amount cart product ^^
+        // Get amount cart product ^^
         setIsLogged(response)
                 
         setUserName(response.user_name)
@@ -53,8 +62,9 @@ export default function Header() {
     //Get Liked Products
       if (response != null) {
         const gettingLikes = await api.post('/likes', { type: "get all likes", id: response.id })
+
         if (!gettingLikes.data.error) {
-          setLike(gettingLikes.data.result.length)
+          dispatch(changeLikeCount(gettingLikes.data.result.length))
         } else {
           alert(gettingLikes.data.error)
         }
@@ -149,7 +159,7 @@ export default function Header() {
                 : <div className="navbar-brand" aria-current="page" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img className="header-profile-img" src={`${profilePhoto}`} alt="User" width="40" height="40" /></div>
               }
               <Link to="/my-shopping-cart" className="cart-href no-href-decoration">
-                <span className="quant-cart">{cart}</span>
+                <span className="quant-cart">{cartCount}</span>
                 <span className="material-icons-outlined cart-mobile">
                   shopping_cart
                 </span>
@@ -166,7 +176,7 @@ export default function Header() {
                   <abbr title="Favoritos">
                     <Link to={'/client_dashboard/favorites/'} className="p-2 nav-link active icon-favorite-href d-flex no-href-decoration" aria-current="page">
                       <div className="material-icons">favorite_border</div>
-                      <div className="header-amountLikes">{like}</div>
+                      <div className="header-amountLikes">{likeCount}</div>
                     </Link>
                   </abbr>
                 </div>
@@ -195,7 +205,7 @@ export default function Header() {
                   <abbr title="Favoritos">
                     <Link to={'/client_dashboard/favorites/'} className="position-relative nav-link active icon-favorite-href d-flex no-href-decoration" aria-current="page">
                       <div className="material-icons">favorite_border</div>
-                      <div className="header-amountLikes">{like}</div>
+                      <div className="header-amountLikes">{likeCount}</div>
                     </Link>
                   </abbr>
                 </li>
@@ -246,7 +256,7 @@ export default function Header() {
                   <Link to="/my-shopping-cart" className="nav-link active d-flex flex-row cart-active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <div className="position-relative">
                       <div className="material-icons-outlined icon-cart">shopping_cart</div>
-                      <div className="amount-products-cart">{cart}</div>
+                      <div className="amount-products-cart">{cartCount}</div>
                     </div>
                     <div className="my-account">
                       <small className="login-small">Meu Carrinho</small>

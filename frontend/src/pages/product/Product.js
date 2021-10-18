@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react'
 import {useParams} from 'react-router-dom'
 import api from '../../services/api'
 import './S-Product.css'
-import { useLike } from '../../components/context/Likes'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import { Toast } from '../../components/context/Toast'
 import Rating from './Rating/Rating'
 import Carousel from '../../components/carousel/Carousel'
 import Card from '../../components/card/Card'
+
+import { useDispatch } from 'react-redux'
+import { changeLikeCount } from '../../store/slices/likeSlice'
+import { useSelector } from 'react-redux'
+import { selectLike } from '../../store/slices/likeSlice'
 
 
 export default function Product() {
@@ -17,11 +21,13 @@ export default function Product() {
 	const [imageFiles, setImageFiles] = useState([])
 	const [selectedImage, setSelectedImage] = useState()
 	const [likeIcon, setLikeIcon] = useState()
-	const {like, setLike} = useLike()
 	const [msgAlert, setMsgAlert] = useState()
 	const [productSuggestion, setProductSuggestion] = useState([])
 	const [allRating, setAllRating] = useState({ note: 0, totalRating: 0 })
 	const [productStars, setProductStars] = useState([])
+
+	const dispatchLike = useDispatch()
+	const { likeCount } = useSelector(selectLike)
 
 
 	useEffect(() => {
@@ -144,11 +150,11 @@ export default function Product() {
       if (response.data.like === false) {
         await api.post('/new-like', { idUser: idUser.id, idProduct: id, type: 'like' })
         setLikeIcon(<i className="fas fa-heart fa-lg like-this text-danger"></i>)
-        setLike(like+1)
+        dispatchLike(changeLikeCount(likeCount+1))
       } else {
         await api.post('/new-like', { idUser: idUser.id, idProduct: id, type: 'dislike' })
         setLikeIcon(<i className="far fa-heart fa-lg like-this"></i>)
-        setLike(like-1)
+        dispatchLike(changeLikeCount(likeCount-1))
       }
     }
 	}

@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useLike } from '../context/Likes'
 import './S-LeftMenuMobile.css'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import api from '../../services/api'
 import { useProfilePhoto } from '../context/ProfilePhoto'
 
+import { useSelector } from 'react-redux'
+import { selectLike } from '../../store/slices/likeSlice'
 
 export default function LeftMenuMobile() {
 
-  const {like, setLike} = useLike()
   const [mobile, setMobile] = useState(false)
   const [search, setSearch] = useState()
   const [isLogged, setIsLogged] = useState(null)
   const { profilePhoto, setProfilePhoto } = useProfilePhoto()
   const [isSave, setIsSave] = useState()
 
+  const { likeCount } = useSelector(selectLike)
 
   function changedSearch(InputValueSearch) {
     setSearch(InputValueSearch.target.value)
@@ -241,7 +242,7 @@ export default function LeftMenuMobile() {
                     <div className="material-icons-outlined icon-normal-alternative icon-favorite icon-dashboard">volunteer_activism</div>
                     <div className="d-flex title-norma-alternative active-favorite title-favorite icon-dashboard">
                       <div>Favoritos</div>
-                      <div className="like-amount-notify"><div>{like}</div></div>
+                      <div className="like-amount-notify"><div>{likeCount}</div></div>
                     </div>
                   </div>
                 </Link>

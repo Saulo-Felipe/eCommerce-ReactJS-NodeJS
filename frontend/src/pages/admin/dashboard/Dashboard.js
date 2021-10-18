@@ -40,7 +40,7 @@ export default function Dashboard() {
         </div>
       </nav>
       <section className="admin-content-dashboard">
-        <h1>Dashboard content hereleiqowueowqueoqwueqwoieuiwqeuoqwuew</h1>
+        <h1>Dashboard content</h1>
       </section>
     </section>
     </>

@@ -53,7 +53,78 @@ adminProducts.post('/new-product', upload, async (request, response) => {
     ('${body.name}', ${body.price}, ${body.amount}, '${cover}', '${images}', '${body.description.replace(/'/, "")}')
   `)
 
-  return response.json({ ola: "teste" })
+  return response.json({ status: true })
+})
+
+adminProducts.post('/get-product', async (request, response) => {
+  try {
+    const { id, description } = request.body
+
+    var [result] = await sequelize.query(`SELECT * FROM products WHERE id = ${id}`)
+
+    if (result.length === 0) 
+      return response.json({ status: false })
+    else
+      return response.json({ status: true, result }) 
+  }
+  catch(error) {
+    console.log('\n\n\n=========================| Error |=====================\n', error)
+    return response.json({ error: 'Error interno.' })
+  }
+})
+
+adminProducts.post('/edit-product', upload, async(request, response) => {
+  try {
+    
+    var cover = request.coverName
+    var images = ""
+    var body = request.body
+  
+    for (var c in request.images) {
+      images += ` ${request.images[c]}`
+    }
+
+    var [oldPrice] = await sequelize.query(`SELECT price FROM products WHERE id = ${body.id}`)
+    
+    await sequelize.query(`
+      UPDATE products SET 
+      product_name = '${body.name}',
+      price = ${body.price},
+      amount = ${body.amount},
+      cover = '${cover}',
+      images = '${images}',
+      description = '${body.description.replace(/'/, "")}',
+      sale = ${Number(body.price) < Number(oldPrice[0].price) ? true : false }
+      WHERE id = ${body.id}
+    `)
+  
+    return response.json({ status: true })
+
+  }
+  catch(error) {
+    console.log('\n\n\n=========================| Error |=====================\n', error)
+    return response.json({ error: 'Error interno.' })
+  }
+})
+
+adminProducts.post('/categoriesInProduct', async(request, response) => {
+  try {
+    const { id } = request.body
+
+    var [result] = await sequelize.query(`
+      SELECT categories.id, categories.category_name FROM categories
+      INNER JOIN category_product ON categories.id = category_product.category_id
+      INNER JOIN products ON category_product.product_id = products.id
+      WHERE products.id = ${id}    
+    `)
+
+    return response.json({ result })
+
+  }
+  catch(error) {
+    console.log('\n\n\n=========================| Error |=====================\n', error)
+    return response.json({ error: 'Error interno.' })
+  }
 })
 
 

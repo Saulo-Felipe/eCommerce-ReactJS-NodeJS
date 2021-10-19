@@ -6,15 +6,23 @@ import './S-Home.css'
 import PopCategory from './PopularCategory/PopCategory'
 import LeftPopCategory from './PopularCategory/Left-PopCategory'
 import Carousel from '../../components/carousel/Carousel'
-
+import { isAuthenticated } from '../../services/isAuthenticated'
 
 export default function Home() {
   const [products, setProduct] = useState([])
   const [loading, setLoading] = useState(<div className="spinner-grow text-primary" role="status" style={{width: "3rem", height: "3rem"}}><span className="visually-hidden">Loading...</span></div>)
   const [mostPopular, setMostPopular] = useState([])
+  const [isAdmin, setIsAdmin] = useState(false)
+  
 
   useEffect(() => {
     (async () => {
+      var isLogged = await isAuthenticated()
+
+      if (isLogged !== null && Number(isLogged.isAdmin) === 1) {
+        setIsAdmin(true)
+      }
+
       var response = await api.get('/')
       setLoading()
       setProduct(response.data)
@@ -44,6 +52,7 @@ export default function Home() {
 
   }, [])
 
+
   return (
     <>
       <CarouselBootstrap/>
@@ -56,7 +65,19 @@ export default function Home() {
         {loading}
         {
           products.map((item) => {
-            return (<Card key={item.id} title={item.product_name} cover={item.cover} price={item.price} id={item.id} />)
+            return (
+              <Card 
+                key={item.id} 
+                title={item.product_name} 
+                cover={item.cover} 
+                description={item.description}
+                price={item.price} 
+                id={item.id} 
+                sale={item.sale}
+                createdAt={item.createdAt}
+                isAdmin={isAdmin}
+              />
+            )
           })
         }
       </Carousel>
@@ -70,7 +91,19 @@ export default function Home() {
         {loading}
         {
           mostPopular.map((item) => {
-            return (<Card key={item.id} title={item.product_name} cover={item.cover} price={item.price} id={item.id} />)
+            return (
+              <Card 
+                key={item.id} 
+                title={item.product_name} 
+                description={item.description}
+                cover={item.cover} 
+                price={item.price} 
+                id={item.id} 
+                sale={item.sale}
+                createdAt={item.createdAt}
+                isAdmin={isAdmin}
+              />
+            )
           })
         }
       </Carousel> 

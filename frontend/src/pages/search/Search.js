@@ -5,6 +5,7 @@ import api from '../../services/api'
 import Card from '../../components/card/Card'
 import Accordion from './accordion/Accordion'
 import LoadingGIF from './images/loading.gif'
+import { isAuthenticated } from '../../services/isAuthenticated'
 
 export default function Search() {
   const search = useParams()
@@ -15,10 +16,16 @@ export default function Search() {
   const [Filters, setFilters] = useState({ minPrice: 0, maxPrice: 0 })
   const [count, setCount] = useState(1)
   const [countPages, setCountPages] = useState()
+  const [isAdmin, setIsAdmin] = useState(false)
 
 
   useEffect(() => {
     (async function search() {
+
+      var isLogged = await isAuthenticated()
+
+      if (isLogged !== null && Number(isLogged.isAdmin) === 1)
+        setIsAdmin(true)
 
       document.querySelector('.search-loading').style.display = "block"
       document.querySelector('.search-loading-page').style.display = "block"
@@ -158,7 +165,17 @@ export default function Search() {
                 ? <h1 className="noResult">Nenhum Result encontrado para Pesquisa: {value}</h1>
                 : searchResult.map((product) => {
                   return(
-                    <Card title={product.product_name} price={product.price} cover={product.cover} key={product.id} id={product.id}/>
+                    <Card 
+                      title={product.product_name} 
+                      price={product.price} 
+                      cover={product.cover} 
+                      description={product.description}
+                      key={product.id} 
+                      id={product.id}
+                      sale={product.sale}
+                      createdAt={product.createdAt}
+                      isAdmin={isAdmin}
+                    />
                   )
                 })
             }

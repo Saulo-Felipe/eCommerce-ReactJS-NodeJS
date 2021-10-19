@@ -115,7 +115,7 @@ export default function AddProduct() {
 
   useEffect(() => {
     (async () => {
-      setLoading(<div><img className="text-center" src={require("../../../images/loading.gif").default} width="100px" /></div>)
+      setLoading(<div><img className="text-center" src={require("../../../images/loading.gif").default} width="100px" alt="carregando" /></div>)
       var {data} = await api.post('/admin/get-product-Categories')
       setLoading()
       if (data.error) return alert('Error encontrado')
@@ -127,7 +127,7 @@ export default function AddProduct() {
 
   async function searchCategory(changes) {
     var category = changes.target.value
-    setLoading(<div className="text-center"><img src={require("../../../images/loading.gif").default} width="100px" /></div>)
+    setLoading(<div className="text-center"><img src={require("../../../images/loading.gif").default} width="100px" alt="carregando 2x" /></div>)
     var response = await api.post('/admin/categories', { type: "especific category", category })
     setLoading()
 
@@ -150,8 +150,8 @@ export default function AddProduct() {
 
     } else {
       var unSelectCategory = selectedCategories
-      for (var item of unSelectCategory) {
-        if (item.category_name === categoryName) {
+      for (var c of unSelectCategory) {
+        if (c.category_name === categoryName) {
           unSelectCategory = unSelectCategory.filter(category => category.category_name.indexOf(categoryName))
         }
       }
@@ -162,8 +162,8 @@ export default function AddProduct() {
   }
 
   function removeSelectedCategory(id, categoryName) {
-    for (var item of selectedCategories) {
-      if (item.id === id) {
+    for (var element of selectedCategories) {
+      if (element.id === id) {
         setSelectedCategories(selectedCategories.filter(category => category.category_name.indexOf(categoryName)))
       }
     }

@@ -91,8 +91,8 @@ export default function Rating(props) {
 		if (response.data.error) return alert('Erro ao buscar comentários')
 
 		var countRating = 0
-		for (var c=0; c < response.data.result.length; c++) {
-			countRating += response.data.result[c].rating
+		for (var i=0; i < response.data.result.length; i++) {
+			countRating += response.data.result[i].rating
 		}
 
 		setAllRating({

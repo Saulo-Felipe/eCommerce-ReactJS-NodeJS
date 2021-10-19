@@ -62,7 +62,13 @@
   font-size: 0.7rem;
   border-radius: 7px;
   padding: 3px 4px 3px 4px;
-  margin: 8px;
+  margin: 8px
+}
+.btn-edit-product {
+  position: absolute;
+  z-index: 1;
+  top: 185px;
+  left: 175px;
 }
 
 .product-promotion {
@@ -74,7 +80,6 @@
   border-radius: 7px;
   padding: 3px 4px 3px 4px;
   margin: 8px;
-  left: 40px;
 }
 .product-content {
   padding: 7px;

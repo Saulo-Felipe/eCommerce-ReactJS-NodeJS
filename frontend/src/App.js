@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
+import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import {isAuthenticated} from './services/isAuthenticated'
 import Home from './pages/home/Home'
 import Header from './components/header/Header'
@@ -74,7 +74,7 @@ function App() {
                         <Route path="/admin/new-category"> <AddCategory/> </Route>
                         <Route path="/admin/dashboard"> <Dashboard /> </Route>
                         <Route path="/admin/new-product"> <AddProduct /> </Route>                      
-                        <Route path="/admin/product/edit/:id/:description"> <EditProduct /> </Route>                      
+                        <Route path="/admin/product/edit/:paramsId/:paramsDescription"> <EditProduct /> </Route>                      
                       </>
                     : <Route path="*" ><NoMatch /></Route>
                   }

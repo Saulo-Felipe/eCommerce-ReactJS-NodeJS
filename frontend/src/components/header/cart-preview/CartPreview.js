@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import api from '../../../services/api'
 import { isAuthenticated } from '../../../services/isAuthenticated'
 import './CartPreview.css'
@@ -40,7 +40,7 @@ export default function CartPreview() {
             <div className="preview-allproducts">   
                 {
                     cartValue.map(item => 
-                        <div className="preview-product">
+                        <div className="preview-product" key={item.id}>
                             <div className="preview-image-container">
                                 <img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.cover}/${item.id}/product`} alt="cover" />
                             </div>
@@ -60,12 +60,12 @@ export default function CartPreview() {
                         <div><span className="text-secondary">Subtotal: </span>R${totalPrice}</div> 
                     </div>
                     <div>
-                        <Link className="no-href-decoration" to={"/my-shopping-cart"}>
-                            <div className="preview-expand-cart">Expandir Carrinho <i class="fas fa-chevron-right"></i></div>
+                        <Link to={"/my-shopping-cart"} className="no-href-decoration" >
+                            <div className="preview-expand-cart">Expandir Carrinho <i className="fas fa-chevron-right"></i></div>
                         </Link>
                     </div>   
                 </div>
-                <button className="btn btn-primary form-control" data-bs-toggle="modal" data-bs-target="#developmentPage"><i class="fas fa-cart-arrow-down"></i> Finalizar Compras</button>
+                <button className="btn btn-primary form-control" data-bs-toggle="modal" data-bs-target="#developmentPage"><i className="fas fa-cart-arrow-down"></i> Finalizar Compras</button>
             </div>
         </div>
     )

@@ -73,7 +73,7 @@ export default function Favorite(props) {
         ? <h1>Nenhum Produto Salvo</h1>
         : FavoriteProducts.map((product) => 
           <div className="card-line d-flex mb-3" key={product.id}>
-            <img width="160px" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${product.cover}/${product.id}/product`}/>
+            <img width="160px" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${product.cover}/${product.id}/product`} alt="product"/>
             <div className="card-line-content">
               <div className="mini-title-products">{product.product_name}</div>
               <div className="d-flex">

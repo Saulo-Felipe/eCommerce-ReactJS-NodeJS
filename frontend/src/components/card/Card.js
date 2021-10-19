@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import './S-Card.css'
 import api from '../../services/api'
 import { isAuthenticated } from '../../services/isAuthenticated'
-import { Toast } from '../context/Toast'
 
 import { useDispatch } from 'react-redux'
 import { changeLikeCount } from '../../store/slices/likeSlice'
@@ -20,7 +19,6 @@ export default function Card(props) {
 
 
   const [likeIcon, setLikeIcon] = useState()
-  const [logs, setLogs] = useState()
   const [rating, setRating] = useState(0)
   const [stars, setStars] = useState([])
   const [isLogged, setIsLogged] = useState({id: null})
@@ -80,7 +78,7 @@ export default function Card(props) {
   async function LikeOrDeslike() {
     if (isLogged.id === null) {
       alert("Você precisa estar logado para dar like em produtos.")
-      setLogs(<Toast title={"Test aqui"} content={"Conteudo aqui tudo certo"}/>)
+
     } else {
       var response = await api.post('/likes', { idUser: isLogged.id, idProduct: props.id })
 
@@ -115,14 +113,13 @@ export default function Card(props) {
       var response = await api.post('/remove-cart-product', { productID: props.id, userID: user.id })
       if (response.data.error) return alert('Erro ao remover produto no carrinho.')
       setInsideCartBtn(<div className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
-      console.log(`Vou mudar de ${cartCount} para ${cartCount-1}`)
       dispatch(changeCartCount(cartCount-1))
     }
+    
     else {
       var response = await api.post('/new-cart-product', { productID: props.id, userID: user.id })
       if (response.data.error) return alert('Erro ao inserir produto no carrinho.')
       setInsideCartBtn(<div className="product-add-card bg-danger"><i className="fas fa-cart-plus"></i>Remover do Carrinho</div>)       
-      console.log(`Vou mudar de ${cartCount} para ${cartCount+1}`)
       dispatch(changeCartCount(cartCount+1))
     };
 
@@ -155,13 +152,45 @@ export default function Card(props) {
       setInsideCartBtn(<div className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)
   }
 
+  function actualDate() {
+    var data = new Date()
+    var dia = String(data.getDate()).padStart(2, '0')
+    var mes = String(data.getMonth() + 1).padStart(2, '0')
+    var ano = data.getFullYear()
+    return ano + '-' + mes + '-' + dia      
+  }
+  
+  function difference(createdAt) {
+    var currentDate = new Date(actualDate())
+    createdAt = new Date(createdAt)
+    const date1utc = Date.UTC(createdAt.getFullYear(), createdAt.getMonth(), createdAt.getDate());
+    const date2utc = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    var day = 1000*60*60*24;
+    if ((date2utc - date1utc) / day <= 7)
+      return true
+    else 
+      return false
+  }
+    
+  var isNew = difference(props.createdAt)
 
   return (
     <div className="primaryCard">
-
+      {
+        props.isAdmin === true ? <Link to={`/admin/product/edit/${props.id}/${props.description}`}><i className="far fa-edit btn-edit-product"></i></Link> : ""
+      }
       <div className="product-alerts">
-        <div className="product-new">Novo</div>
-        <div className="product-promotion">Promoção</div>
+        {
+          isNew === true
+          ? <div className="product-new">Novo</div>
+          : ""
+        }
+        {
+          props.sale === true 
+          ? <div className="product-promotion" style={ isNew === true ? {left: '40px'} : {left: '0px'}}>Promoção</div>
+          : ""
+        }
+        
       </div>
       
       <div className="heartLike" onClick={() => LikeOrDeslike()}>{likeIcon}</div>

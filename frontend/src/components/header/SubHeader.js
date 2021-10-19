@@ -7,10 +7,14 @@ import { isAuthenticated } from '../../services/isAuthenticated'
 export default function SubHeader(props) {
 
 	const [categories, setCategories] = useState([])
-	const [isLogged, setIsLogged] = useState(null)
+	const [isAdmin, setIsAdmin] = useState(null)
 
 	useEffect(() => {
 		(async() => {
+			var isLogged = await isAuthenticated()
+
+			if (isLogged !== null && Number(isLogged.isAdmin) === 1)
+				setIsAdmin(true)
 
 			var response = await api.post('/all-categories')
 
@@ -54,7 +58,7 @@ export default function SubHeader(props) {
 		      <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
 		        <li className="nav-item ms-3">
-		          <Link className="nav-link active color-hover" aria-current="page" to="/">Home</Link>
+		          <Link to="/" className="nav-link active color-hover" aria-current="page">Home</Link>
 		        </li>
 
 		        <li className="nav-item ms-2">
@@ -72,10 +76,14 @@ export default function SubHeader(props) {
 				<li className="nav-item ms-2" data-bs-toggle="modal" data-bs-target="#launchCityModal">
 		          <div className="nav-link active color-hover cursor-pointer" >Localização</div>
 		        </li>
-
-		        <li className="nav-item ms-2">
-		          <Link to="/admin/dashboard" className="nav-link active color-hover">Dashboard (admin)</Link>
-		        </li>
+				{
+					isAdmin === true 
+					? <li className="nav-item ms-2">
+						<Link to="/admin/dashboard" className="nav-link active color-hover">Dashboard (admin)</Link>
+				  	</li> 
+					: ""
+  
+				}
 		      </ul>
 
 		    </div>

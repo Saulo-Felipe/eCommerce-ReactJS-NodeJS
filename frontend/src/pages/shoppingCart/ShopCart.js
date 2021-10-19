@@ -8,7 +8,6 @@ import { isAuthenticated } from '../../services/isAuthenticated'
 export default  function ShoptCart() {
 
 	const [products, setProducts] = useState([])
-	const [isMobile, setIsMobile] = useState(false)
 	const [loading, setLoading] = useState()
 	const [amount, setAmount] = useState(0)
 
@@ -35,11 +34,6 @@ export default  function ShoptCart() {
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
-
-		if (window.matchMedia("(max-width: 991px)").matches)
-			setIsMobile(true)
-		else 
-			setIsMobile(false);
 
 		refreshCart()
 
@@ -188,7 +182,7 @@ export default  function ShoptCart() {
 			</div>
 
 			<div className="go-to-top-cart">
-				<i class="fas fa-chevron-up"></i>
+				<i className="fas fa-chevron-up"></i>
 			</div>	
 
 		</div>

@@ -39,7 +39,7 @@ adminCategory.post('/delete-category', async (request, response) => {
   try {
     const {id} = request.body
 
-    var [result] = await sequelize.query(`DELETE FROM categories WHERE id = ${id}`)
+    await sequelize.query(`DELETE FROM categories WHERE id = ${id}`)
 
     return response.json({ message: "Categoria deletada com sucesso." })
   }

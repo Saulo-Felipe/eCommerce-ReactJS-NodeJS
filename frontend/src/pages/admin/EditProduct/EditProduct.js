@@ -4,8 +4,8 @@ import api from '../../../services/api'
 import { useParams } from 'react-router-dom'
 
 export default function EditProduct() {
-  const { id } = useParams()
-  const { description } = useParams()
+  const { paramsId } = useParams()
+  const { paramsDescription } = useParams()
   
   
   const [productInfo, setProductInfo] = useState({
@@ -22,6 +22,12 @@ export default function EditProduct() {
   const [CategoriesToProducts, setCategoriesToProducts] = useState([])
   const [loadingAdd, setLoadingAdd] = useState()
   const [productAvalible, setProductAvalible] = useState(true)
+  const [defaultProduct, setDefaultProduct] = useState({
+    name: '',
+    amount: '',
+    description: '',
+    price: ''
+  })
 
   function handleChangeFom(values) {
     var id = values.target.id
@@ -85,9 +91,48 @@ export default function EditProduct() {
   }
 
   async function startState() {
-    if (isNaN(Number(id)) === false) {
+    if (isNaN(Number(paramsId)) === false) {
+      var {data} = await api.post('/admin/get-product', { id: paramsId, description: paramsDescription })
+      
+      if (data.error) return alert("Erro interno, por favor tente novamente")
+
+      if (data.status === false) {
+        setProductAvalible(false)
+      } else {
+        var productState = data.result[0]
+
+        setDefaultProduct({
+          name: productState.product_name,
+          amount: productState.amount,
+          description: productState.description,
+          price: productState.price
+        })
+
+        setProductInfo({
+          name: productState.product_name,
+          amount: productState.amount,
+          cover: productInfo.cover,
+          description: productState.description,
+          images: productInfo.images,
+          price: productState.price 
+        })
+
+        var result = await api.post('/admin/categoriesInProduct', { id: paramsId })
+
+        var categoryState = result.data.result
+
+        var arrayCategories = []
+        var idCategories = []
+        for (var state of categoryState) {
+          arrayCategories.push({id: state.id, category_name: state.category_name})
+          idCategories.push(state.id)
+        }
+        addCategory(true, idCategories, arrayCategories)
+
+      }
 
     } else {
+      console.log("Entrei no else")
       setProductAvalible(false)
     }
   }
@@ -109,16 +154,17 @@ export default function EditProduct() {
           formData.append(c, productInfo[c])
         }
       }
+      formData.append('id', paramsId)
 
       setLoadingAdd(<div className="text-center"><img src={require('../../../images/loading.gif').default} alt="Loading gif" width="100px"/></div>)
-      var res = await api.post('/admin/new-product', formData, {
+      var res = await api.post('/admin/edit-product', formData, {
         headers: {
           'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
         }
       })
       if (res.data.error) return alert('Erro ao adicionar produto, tente novamente ou entre em contato com o proprietario.')
 
-      var response = await api.post('/admin/relationship', { CategoriesToProducts: CategoriesToProducts })
+      var response = await api.post('/admin/relationship', { CategoriesToProducts: CategoriesToProducts, type: 'edit' })
       
       if (response.data.error) alert('Erro interno, por favor tente mais tarde.')
       setLoadingAdd()
@@ -128,7 +174,7 @@ export default function EditProduct() {
 
   useEffect(() => {
     (async () => {
-      setLoading(<div><img className="text-center" src={require("../../../images/loading.gif").default} width="100px" /></div>)
+      setLoading(<div><img className="text-center" src={require("../../../images/loading.gif").default} width="100px" alt="loading" /></div>)
       var {data} = await api.post('/admin/get-product-Categories')
       setLoading()
       if (data.error) return alert('Error encontrado')
@@ -142,7 +188,7 @@ export default function EditProduct() {
 
   async function searchCategory(changes) {
     var category = changes.target.value
-    setLoading(<div className="text-center"><img src={require("../../../images/loading.gif").default} width="100px" /></div>)
+    setLoading(<div className="text-center"><img src={require("../../../images/loading.gif").default} width="100px" alt="loading 2x"/></div>)
     var response = await api.post('/admin/categories', { type: "especific category", category })
     setLoading()
 
@@ -151,7 +197,15 @@ export default function EditProduct() {
   }
 
   function addCategory(changes, id, categoryName) {
-    if (changes.target.checked === true) {
+    if (changes === true) {
+      var ids = id
+      var stateCategories = categoryName
+
+      setSelectedCategories(stateCategories)
+      setCategoriesToProducts(ids)
+
+    } else if (changes.target.checked === true) {
+      console.log("Fui chamado para: ", categoryName)
 
       var confirm = true
       for (var item of selectedCategories)
@@ -165,8 +219,8 @@ export default function EditProduct() {
 
     } else {
       var unSelectCategory = selectedCategories
-      for (var item of unSelectCategory) {
-        if (item.category_name === categoryName) {
+      for (var count of unSelectCategory) {
+        if (count.category_name === categoryName) {
           unSelectCategory = unSelectCategory.filter(category => category.category_name.indexOf(categoryName))
         }
       }
@@ -177,8 +231,8 @@ export default function EditProduct() {
   }
 
   function removeSelectedCategory(id, categoryName) {
-    for (var item of selectedCategories) {
-      if (item.id === id) {
+    for (var element of selectedCategories) {
+      if (element.id === id) {
         setSelectedCategories(selectedCategories.filter(category => category.category_name.indexOf(categoryName)))
       }
     }
@@ -192,15 +246,15 @@ export default function EditProduct() {
        productAvalible === true ?
        <div className="container mt-3 mb-5">
         <div className="newProduct">
-          <h5 className="mt-3 mb-3">Criar um novo produto</h5>
+          <h5 className="mt-3 mb-3">Edição de Produto</h5>
           <div className="form-controler">
             <label htmlFor="name">Nome do Produto</label>
-            <input autoComplete="off" id="name" className="formProduct form-control" onChange={handleChangeFom} required/>
+            <input autoComplete="off" id="name" className="formProduct form-control" defaultValue={defaultProduct.name} onChange={handleChangeFom} required/>
 
             <div className="validation-form d-flex flex-box mt-2">
               <div className="validade me-2">
                 <label htmlFor="amountProduct">Quantidade do Produto: </label>
-                <input autoComplete="off" id="amountProduct" type="number" className="form-control" required pattern="[1-99999]+$" onChange={handleChangeFom}/>
+                <input autoComplete="off" id="amountProduct" type="number" className="form-control" defaultValue={defaultProduct.amount} required pattern="[1-99999]+$" onChange={handleChangeFom}/>
               </div>
               <div className="validade">
                 <label htmlFor="amountProduct">Capa do produto: </label>
@@ -210,7 +264,7 @@ export default function EditProduct() {
             </div>
 
             <label htmlFor="descriptionProduct" className="mt-2">Descrição do produto: </label>
-            <textarea id="descriptionProduct" className="form-control " onChange={handleChangeFom} required></textarea>
+            <textarea id="descriptionProduct" className="form-control " defaultValue={defaultProduct.description} onChange={handleChangeFom} required></textarea>
 
             <label htmlFor="multipleImages" className="mt-2">Imagens do produto: </label>
             <input autoComplete="off" type="file" id="multipleImages" className="form-control " onChange={handleChangeFom} multiple required/>
@@ -220,7 +274,7 @@ export default function EditProduct() {
             <label htmlFor="price" className="mt-2">Preço do produto: </label>
             <div className="input-group mb-3">
               <span className="input-group-text" id="basic-addon1">R$</span>
-              <input autoComplete="off" type="number" className="form-control " id="price" min="0" onChange={handleChangeFom} required aria-describedby="basic-addon1"></input>
+              <input autoComplete="off" type="number" className="form-control " id="price" min="0" defaultValue={defaultProduct.price} onChange={handleChangeFom} required aria-describedby="basic-addon1"></input>
             </div>
 
           </div>
@@ -259,7 +313,7 @@ export default function EditProduct() {
 
           {loadingAdd}
 
-          <button className="btn btn-success mt-2" onClick={submitProduct}>Finalizar Cadastro</button>
+          <button className="btn btn-success mt-2" onClick={submitProduct}>Finalizar edição</button>
         </div>
       </div>
      :

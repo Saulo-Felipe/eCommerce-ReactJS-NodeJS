@@ -3,7 +3,6 @@ import {useParams} from 'react-router-dom'
 import api from '../../services/api'
 import './S-Product.css'
 import { isAuthenticated } from '../../services/isAuthenticated'
-import { Toast } from '../../components/context/Toast'
 import Rating from './Rating/Rating'
 import Carousel from '../../components/carousel/Carousel'
 import Card from '../../components/card/Card'
@@ -21,10 +20,10 @@ export default function Product() {
 	const [imageFiles, setImageFiles] = useState([])
 	const [selectedImage, setSelectedImage] = useState()
 	const [likeIcon, setLikeIcon] = useState()
-	const [msgAlert, setMsgAlert] = useState()
 	const [productSuggestion, setProductSuggestion] = useState([])
 	const [allRating, setAllRating] = useState({ note: 0, totalRating: 0 })
 	const [productStars, setProductStars] = useState([])
+    const [isAdmin, setIsAdmin] = useState(false)
 
 	const dispatchLike = useDispatch()
 	const { likeCount } = useSelector(selectLike)
@@ -45,7 +44,7 @@ export default function Product() {
 				for (var c in imgs) {
 					if (imgs[c].length !== 0)
 						imgHTML.push(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${imgs[c]}/${data.result.id}/multiples`)
-					if (c == 1) 
+					if (c === 1) 
 						setSelectedImage(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${imgs[c]}/${data.result.id}/	multiples`)
 				}
 				setImageFiles(imgHTML)
@@ -54,6 +53,9 @@ export default function Product() {
 
 			//Get likes
 				var isLogged = await isAuthenticated()
+
+                if (isLogged !== null && Number(isLogged.isAdmin) === 1)
+                    setIsAdmin(true)
 
 				if (isLogged !== null) {
 		      var response = await api.post('/likes', { idUser: isLogged.id, idProduct: id })				
@@ -73,7 +75,7 @@ export default function Product() {
 	  		var allSuggestion = suggestion.data.result
 		  	if (allSuggestion) {
 
-					for (var c=0; c < allSuggestion.length; c++) {
+					for (var count=0; count < allSuggestion.length; count++) {
 
 				    var position = JSON.stringify(allSuggestion).indexOf(JSON.stringify(allSuggestion[c]))
 
@@ -81,12 +83,12 @@ export default function Product() {
 			        var quant = 0
 			        
 			        for (var e=0; e < allSuggestion.length; e++) {
-		            if (JSON.stringify(allSuggestion[c]) === JSON.stringify(allSuggestion[e]))
+		            if (JSON.stringify(allSuggestion[count]) === JSON.stringify(allSuggestion[e]))
 		              quant++
 			        }
 			        
 			        if (quant > 1) {
-			          delete allSuggestion[c]
+			          delete allSuggestion[count]
 			        }
 				    }
 
@@ -139,7 +141,6 @@ export default function Product() {
 	}
 
 	async function changeLike() {
-		setMsgAlert(<Toast title={"Você deu um likes"} time={Date.now()} content={"Você gosta bastante de dar likes, não é mesmo?"} />)		
 		
     var idUser = await isAuthenticated()
     if (idUser === null) {
@@ -170,7 +171,7 @@ export default function Product() {
 		    			<div className={`product-one-image-select ${index === 0 ? "selected" : "no-selected"}`} 
 		    				onClick={() => changeSelect(item, index)}
 		    			>
-		    				<img  src={`${item}`}  alt={`image ${Date.now()}`} />
+		    				<img  src={`${item}`}  alt={`produto ${Date.now()}`} />
 		    			</div>
 		    		)
 		    	}
@@ -231,8 +232,13 @@ export default function Product() {
 							key={product.id} 
 							title={product.product_name} 
 							cover={product.cover} 
+                            description={product.description}
 							price={product.price} 
 							id={product.id}
+							sale={product.sale}
+							createdAt={product.createdAt}
+                            isAdmin={isAdmin}
+
 						/>
 					})
 				}
@@ -246,7 +252,6 @@ export default function Product() {
 
 			<Rating rating={{ allRating, setAllRating }}/>
 
-			{msgAlert}
 		</div>
 	)
 }

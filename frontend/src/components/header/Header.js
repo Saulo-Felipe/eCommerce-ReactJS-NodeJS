@@ -46,7 +46,6 @@ export default function Header() {
 
         if (amountCart.data.error) return alert('Erro ao listar produtos do carrinho.')
 
-        console.log("Atualizando header")
         dispatch(changeCartCount(amountCart.data.result.length))
 
 
@@ -231,9 +230,9 @@ export default function Header() {
                       </div>
 
                       <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><Link className="dropdown-item" to="/client_dashboard/user-profile">Minha Conta</Link></li>
-                        <li><Link className="dropdown-item" to="/my-shopping-cart">Carrinho</Link></li>
-                        <li><Link className="dropdown-item" to="/client_dashboard/user-profile">Configurações</Link></li>
+                        <li><Link to="/client_dashboard/user-profile" className="dropdown-item">Minha Conta</Link></li>
+                        <li><Link to="/my-shopping-cart" className="dropdown-item">Carrinho</Link></li>
+                        <li><Link to="/client_dashboard/user-profile" className="dropdown-item">Configurações</Link></li>
                         <li><a className="dropdown-item" href="/" onClick={() => logout()}>Sair</a></li>
                       </ul>
                     </li>

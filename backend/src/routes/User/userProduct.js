@@ -77,35 +77,25 @@ userProduct.post('/product-suggestion', async (request, response) => {
     try {
         const { productID } = request.body
 
-        const [categories] = await sequelize.query(`
+        var [categoryId] = await sequelize.query(`
             SELECT categories.id FROM products
             INNER JOIN category_product ON products.id = category_product.product_id
             INNER JOIN categories ON categories.id = category_product.category_id
             WHERE products.id = ${ productID }
         `)
-
-        if (categories.length === 0) {
+        
+        if (categoryId.length === 0) {
             return response.json({ result: [] })
-        } else {
-
-            var filterCategories = String(categories.map((category, index) => `categories.id = ${ category.id } ${ index === categories.length - 1 ? '' : 'OR' }` ))
-
-            var [suggestion] = await sequelize.query(`
-                SELECT products.product_name, products.price, products.cover, products.id FROM products
-                INNER JOIN category_product ON category_product.product_id = products.id
-                INNER JOIN categories ON categories.id = category_product.category_id
-                WHERE 
-                ${
-                    filterCategories.replace(/,/g, " ")
-                }
-            `)
-
-            if (suggestion.length === 0) {
-                return response.json({ result: [] })
-            } else {
-                return response.json({ result: suggestion})
-            }
         }
+
+        var [result] = await sequelize.query(`
+            SELECT * FROM products
+            INNER JOIN category_product ON products.id = category_product.product_id
+            INNER JOIN categories ON categories.id = category_product.category_id
+            WHERE categories.id = ${categoryId[0].id}        
+        `)
+
+        return response.json({ result })
     }
     catch(error) {
         console.log('\n\n\n=========================| Error |=====================\n', error)

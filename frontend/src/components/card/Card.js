@@ -195,7 +195,7 @@ export default function Card(props) {
       
       <div className="heartLike" onClick={() => LikeOrDeslike()}>{likeIcon}</div>
       
-      <Link to={`/product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
+      <Link to={`product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
       
         <div className="secondayCard">
           

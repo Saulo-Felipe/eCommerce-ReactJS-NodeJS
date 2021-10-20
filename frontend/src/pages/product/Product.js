@@ -18,12 +18,12 @@ export default function Product() {
 	const {id} = useParams()
 	const [product, setProduct] = useState({ product_name: "" })
 	const [imageFiles, setImageFiles] = useState([])
-	const [selectedImage, setSelectedImage] = useState()
+	const [selectedImage, setSelectedImage] = useState("")
 	const [likeIcon, setLikeIcon] = useState()
 	const [productSuggestion, setProductSuggestion] = useState([])
 	const [allRating, setAllRating] = useState({ note: 0, totalRating: 0 })
 	const [productStars, setProductStars] = useState([])
-    const [isAdmin, setIsAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
 	const dispatchLike = useDispatch()
 	const { likeCount } = useSelector(selectLike)
@@ -42,62 +42,55 @@ export default function Product() {
 				var imgs = data.result.images.split(" ")
 				var imgHTML = []
 				for (var c in imgs) {
-					if (imgs[c].length !== 0)
+					if (imgs[c].length !== 0) {
 						imgHTML.push(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${imgs[c]}/${data.result.id}/multiples`)
-					if (c === 1) 
-						setSelectedImage(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${imgs[c]}/${data.result.id}/	multiples`)
+						console.log('AQUI: ', imgs[c])
+					}
+					if (Number(c) === 1 && imgs[c].length !== 0) {
+						setSelectedImage(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${imgs[c]}/${data.result.id}/multiples`)
+						console.log("ENtrei")
+					}  else {
+						console.log("Entrei no else, valor do c: ", c)
+					}
 				}
+				
+				console.log("FinalY: ", imgs)
 				setImageFiles(imgHTML)
 			}
 
 
 			//Get likes
-				var isLogged = await isAuthenticated()
+			var isLogged = await isAuthenticated()
 
-                if (isLogged !== null && Number(isLogged.isAdmin) === 1)
-                    setIsAdmin(true)
+			if (isLogged !== null && Number(isLogged.isAdmin) === 1)
+				setIsAdmin(true)
 
-				if (isLogged !== null) {
-		      var response = await api.post('/likes', { idUser: isLogged.id, idProduct: id })				
+			if (isLogged !== null) {
+				var response = await api.post('/likes', { idUser: isLogged.id, idProduct: id })				
 
-		      if (response.data.like === true)
-		      	setLikeIcon(<i className="fas fa-heart fa-lg like-this text-danger"></i>)
-		      else
-		      	setLikeIcon(<i className="far fa-heart fa-lg like-this"></i>)
-				} else
-		      setLikeIcon(<i className="far fa-heart fa-lg like-this"></i>)
+				if (response.data.like === true)
+					setLikeIcon(<i className="fas fa-heart fa-lg like-this text-danger"></i>)
+				else
+					setLikeIcon(<i className="far fa-heart fa-lg like-this"></i>)
+			} else
+				setLikeIcon(<i className="far fa-heart fa-lg like-this"></i>)
 
 		  //Get Suggestion
-		  	var suggestion = await api.post('/product-suggestion', { productID: id })
+			var suggestion = await api.post('/product-suggestion', { productID: id })
 
-		  	if (suggestion.data.error) return alert("Erro ao buscar produtos similares")
+			if (suggestion.data.error) return alert("Erro ao buscar produtos similares")
 
-	  		var allSuggestion = suggestion.data.result
-		  	if (allSuggestion) {
+			var allSuggestion = suggestion.data.result
+			var filterSuggestions = []
 
-					for (var count=0; count < allSuggestion.length; count++) {
-
-				    var position = JSON.stringify(allSuggestion).indexOf(JSON.stringify(allSuggestion[c]))
-
-				    if (position !== -1) {
-			        var quant = 0
-			        
-			        for (var e=0; e < allSuggestion.length; e++) {
-		            if (JSON.stringify(allSuggestion[count]) === JSON.stringify(allSuggestion[e]))
-		              quant++
-			        }
-			        
-			        if (quant > 1) {
-			          delete allSuggestion[count]
-			        }
-				    }
-
-					}
+			for (c in allSuggestion) {
+				if (allSuggestion[c].product_id !== Number(id)) {
+					filterSuggestions.push(allSuggestion[c])
 				}
+			}
+			setProductSuggestion(filterSuggestions)
 
-				setProductSuggestion(allSuggestion)
-
-		// Carousel
+			// Carousel
 		  var next = document.querySelectorAll(".next-carousel")
 		  var prev = document.querySelectorAll(".prev-carousel")
 		  var scrollCarousel = document.querySelectorAll(".carousel-scroll")
@@ -114,9 +107,9 @@ export default function Product() {
 			var starsArray = []
 			for (var c=0; c < 5; c++) {
 				if (c + 0.5 < allRating.note) {
-					starsArray.push(<span className="material-icons-outlined">star</span>)
+					starsArray.push(<span key={c} className="material-icons-outlined">star</span>)
 				} else 
-					starsArray.push(<span className="material-icons-outlined">grade</span>)
+					starsArray.push(<span key={c} className="material-icons-outlined">grade</span>)
 				
 			}
 			setProductStars(starsArray)
@@ -170,6 +163,7 @@ export default function Product() {
 		    		imageFiles.map((item, index) =>
 		    			<div className={`product-one-image-select ${index === 0 ? "selected" : "no-selected"}`} 
 		    				onClick={() => changeSelect(item, index)}
+							key={index}
 		    			>
 		    				<img  src={`${item}`}  alt={`produto ${Date.now()}`} />
 		    			</div>
@@ -178,7 +172,7 @@ export default function Product() {
 		    </div>
 
 		    <div className="the-image-selected-container">
-		    	<img src={`${selectedImage}`} alt="product selected" />
+		    	<img src={selectedImage} alt="product selected" />
 		    </div>
 
 		    <div className="information-about-product-container">
@@ -227,17 +221,17 @@ export default function Product() {
 			</h3>
 			<Carousel>
 				{
-					productSuggestion.map(product => {
+					productSuggestion.map((product, index) => {
 						return <Card 
-							key={product.id} 
+							key={index} 
 							title={product.product_name} 
 							cover={product.cover} 
-                            description={product.description}
+              description={product.description}
 							price={product.price} 
 							id={product.id}
 							sale={product.sale}
 							createdAt={product.createdAt}
-                            isAdmin={isAdmin}
+            	isAdmin={isAdmin}
 
 						/>
 					})

@@ -3,6 +3,7 @@ import './S-Rating.css'
 import api from '../../../services/api'
 import { useParams } from 'react-router-dom'
 import { isAuthenticated } from '../../../services/isAuthenticated'
+import { v4 as uuid } from 'uuid'
 
 
 export default function Rating(props) {
@@ -29,9 +30,9 @@ export default function Rating(props) {
 		var starsArray = []
 		for (var c=0; c < 5; c++) {
 			if (c + 0.5 < allRating.note) {
-				starsArray.push(<span className="material-icons-outlined">star</span>)
+				starsArray.push(<span key={uuid()} className="material-icons-outlined">star</span>)
 			} else {
-				starsArray.push(<span className="material-icons-outlined">grade</span>)
+				starsArray.push(<span key={uuid()} className="material-icons-outlined">grade</span>)
 			}
 		}
 		setProductStars(starsArray)
@@ -102,17 +103,17 @@ export default function Rating(props) {
 
 		for (var c=0; c < response.data.result.length; c++) {
 			// update comments
-				var amountCount = response.data.result[c].rating
-				for (var count=0; count < 5; count++) {
-					if (typeof response.data.result[c].rating !==  "object") {
-						response.data.result[c].rating = []
-					}
-					if (count < amountCount) {
-						response.data.result[c].rating.push(<i className="fas fa-star ms-1"></i>)						
-					} else {
-						response.data.result[c].rating.push(<i className="far fa-star ms-1"></i>)						
-					}
+			var amountCount = response.data.result[c].rating
+			for (var count=0; count < 5; count++) {
+				if (typeof response.data.result[c].rating !==  "object") {
+					response.data.result[c].rating = []
 				}
+				if (count < amountCount) {
+					response.data.result[c].rating.push(<i className="fas fa-star ms-1"></i>)						
+				} else {
+					response.data.result[c].rating.push(<i className="far fa-star ms-1"></i>)						
+				}
+			}
 		}
 
 		setAllComments(response.data.result)		
@@ -160,7 +161,7 @@ export default function Rating(props) {
 				<div className="new-comment mt-3 shadow p-5">
 					<h3>Deixe sua opinião :)</h3>
 					<label htmlFor="comment-input">Comentário</label>
-					<textarea className="form-control" id="comment-input" onChange={commentChanges} maxlength="200"></textarea>
+					<textarea className="form-control" id="comment-input" onChange={commentChanges} maxLength="200"></textarea>
 					<div className={`float-end ${colorComment}`}> {limitAmount} / 200</div>
 
 					<br />
@@ -184,34 +185,35 @@ export default function Rating(props) {
 							? <h1>Esse produto ainda não possui nenhuma Avaliação.</h1>
 							: allComments.map((item, index) => {
 								return (
-									<>
+									<div key={index}>
 										<hr className="m-4 line-comment"/>
 
 										<div className="comment">
-									    <div className="d-flex _comment-informations">
-											<div className="img-user-comment">
-												<img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.profile_photo}/${item.id}/profile`} alt="" />							
-											</div>
-											<div className="user-name-comment ms-2 d-flex">
-												<div>{item.user_name}</div>
-												<div className="text-warning ms-3 ">
-													{
-														item.rating.map(starElement => starElement)
-													}
+											<div className="d-flex _comment-informations">
+												<div className="img-user-comment">
+													<img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.profile_photo}/${item.id}/profile`} alt="" />							
+												</div>
+												<div className="user-name-comment ms-2 d-flex">
+													<div>{item.user_name}</div>
+													<div className="text-warning ms-3 ">
+														{
+															item.rating.map(starElement => starElement)
+														}
+													</div>
 												</div>
 											</div>
-										</div>
 
-										<div className="d-flex mb-2">
-											<div className="content-comment">
-												{item.comment}
+											<div className="d-flex mb-2">
+												<div className="content-comment">
+													{item.comment}
+												</div>
 											</div>
-										</div>
-										
-										<small className="text-secondary">{item.comment_data}</small>
+											
+											<small className="text-secondary">{item.comment_data}</small>
 
+										</div>
 									</div>
-								</>)
+								)
 							})
 					}
 				</div>

@@ -4,6 +4,7 @@ const multer = require('multer')
 const path = require('path')
 const sequelize = require('../../database/connect')
 const uniqid = require('uniqid')
+const fs = require('fs')
 
 
 
@@ -18,7 +19,10 @@ var storage = multer.diskStorage({
     callback(null, path.join(__dirname, '../../images/product-images/'))
   },
   filename: (request, file, callback) => {
+    console.log("file: ", file)
+
     var FileOriginal = (file.originalname.replace(/\./g, "") + uniqid() + "." + file.mimetype.replace(/image\//g, "")).replace(/ /g, "")
+
 
     if (file.fieldname === "cover")
       request.coverName = FileOriginal
@@ -30,7 +34,7 @@ var storage = multer.diskStorage({
       else
         request.images.push(FileOriginal)
       }
-
+    
     callback(null, FileOriginal)
   }
 })
@@ -75,7 +79,6 @@ adminProducts.post('/get-product', async (request, response) => {
 
 adminProducts.post('/edit-product', upload, async(request, response) => {
   try {
-    
     var cover = request.coverName
     var images = ""
     var body = request.body
@@ -84,7 +87,28 @@ adminProducts.post('/edit-product', upload, async(request, response) => {
       images += ` ${request.images[c]}`
     }
 
-    var [oldPrice] = await sequelize.query(`SELECT price FROM products WHERE id = ${body.id}`)
+    var [oldValues] = await sequelize.query(`SELECT price, cover, images FROM products WHERE id = ${body.id}`)
+
+    console.log("Valores antigo:", oldValues)
+    console.log("Replace: ", oldValues[0].images.split(" "))
+    
+    var removeImages = oldValues[0].images.split(" ")
+    for (var count of removeImages) {
+      if (count.length !== 0 && count !== " " && count !== "") {
+
+        fs.unlink(path.join(__dirname, `../../images/product-images/${count}`), (err) => {
+          if (err) throw err;
+          console.log("Imagens deletadas")
+        })
+      }
+    }
+
+    var deleteCover = oldValues[0].cover
+    fs.unlink(path.join(__dirname, `../../images/product-images/${deleteCover}`), (err) => {
+      if (err) throw err;
+      console.log("Cover deletado: ", deleteCover)
+    })
+
     
     await sequelize.query(`
       UPDATE products SET 
@@ -94,9 +118,11 @@ adminProducts.post('/edit-product', upload, async(request, response) => {
       cover = '${cover}',
       images = '${images}',
       description = '${body.description.replace(/'/, "")}',
-      sale = ${Number(body.price) < Number(oldPrice[0].price) ? true : false }
+      sale = ${Number(body.price) < Number(oldValues[0].price) ? true : false }
       WHERE id = ${body.id}
     `)
+
+
   
     return response.json({ status: true })
 

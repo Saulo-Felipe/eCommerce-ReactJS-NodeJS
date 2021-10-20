@@ -111,9 +111,9 @@ export default function EditProduct() {
         setProductInfo({
           name: productState.product_name,
           amount: productState.amount,
-          cover: productInfo.cover,
+          cover: productState.cover,
           description: productState.description,
-          images: productInfo.images,
+          images: productState.images,
           price: productState.price 
         })
 

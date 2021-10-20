@@ -108,7 +108,6 @@ userProduct.post('/rating', async(request, response) => {
     try {
         const { productID } = request.body
 
-
         var [result] = await sequelize.query(`
             SELECT clients.profile_photo, clients.user_name, clients.id, rating.comment, rating.rating, rating.comment_data
             FROM rating 

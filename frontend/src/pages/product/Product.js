@@ -44,17 +44,13 @@ export default function Product() {
 				for (var c in imgs) {
 					if (imgs[c].length !== 0) {
 						imgHTML.push(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${imgs[c]}/${data.result.id}/multiples`)
-						console.log('AQUI: ', imgs[c])
 					}
 					if (Number(c) === 1 && imgs[c].length !== 0) {
 						setSelectedImage(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${imgs[c]}/${data.result.id}/multiples`)
-						console.log("ENtrei")
 					}  else {
-						console.log("Entrei no else, valor do c: ", c)
 					}
 				}
 				
-				console.log("FinalY: ", imgs)
 				setImageFiles(imgHTML)
 			}
 

@@ -107,7 +107,7 @@ export default function EditProduct() {
           description: productState.description,
           price: productState.price
         })
-
+        
         setProductInfo({
           name: productState.product_name,
           amount: productState.amount,
@@ -116,6 +116,7 @@ export default function EditProduct() {
           images: productState.images,
           price: productState.price 
         })
+
 
         var result = await api.post('/admin/categoriesInProduct', { id: paramsId })
 
@@ -132,7 +133,7 @@ export default function EditProduct() {
       }
 
     } else {
-      console.log("Entrei no else")
+
       setProductAvalible(false)
     }
   }
@@ -145,9 +146,10 @@ export default function EditProduct() {
 
       formData.append('cover', productInfo.cover)
 
-      for(var c=0; c < productInfo.images.length; c++) {
-        formData.append('images', productInfo.images[c])
-      }
+      if (typeof productInfo.images !== 'string')
+        for(var c=0; c < productInfo.images.length; c++) {
+          formData.append('images', productInfo.images[c])
+        }
 
       for (let c in productInfo) {
         if (c !== "images" && c !== "cover" ) {
@@ -166,10 +168,11 @@ export default function EditProduct() {
 
       var response = await api.post('/admin/relationship', { CategoriesToProducts: CategoriesToProducts, type: 'edit' })
       
-      if (response.data.error) alert('Erro interno, por favor tente mais tarde.')
+      if (response.data.error) return alert('Erro interno, por favor tente mais tarde.')
       setLoadingAdd()
-      window.location.href = "/"
     }
+    
+    window.location.href = "/"
   }
 
   useEffect(() => {
@@ -205,8 +208,8 @@ export default function EditProduct() {
       setCategoriesToProducts(ids)
 
     } else if (changes.target.checked === true) {
-      console.log("Fui chamado para: ", categoryName)
 
+      
       var confirm = true
       for (var item of selectedCategories)
         if (item.category_name === categoryName)

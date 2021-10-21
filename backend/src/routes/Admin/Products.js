@@ -16,6 +16,7 @@ adminProducts.post('/get-product-Categories', async (request, response) => {
 
 var storage = multer.diskStorage({
   destination: async (request, file, callback) => {
+    console.log("file TEST: ", file)
     callback(null, path.join(__dirname, '../../images/product-images/'))
   },
   filename: (request, file, callback) => {
@@ -80,43 +81,45 @@ adminProducts.post('/get-product', async (request, response) => {
 adminProducts.post('/edit-product', upload, async(request, response) => {
   try {
     var cover = request.coverName
-    var images = ""
+    var images = request.images
     var body = request.body
-  
-    for (var c in request.images) {
-      images += ` ${request.images[c]}`
-    }
-
+    
     var [oldValues] = await sequelize.query(`SELECT price, cover, images FROM products WHERE id = ${body.id}`)
-
-    console.log("Valores antigo:", oldValues)
-    console.log("Replace: ", oldValues[0].images.split(" "))
     
-    var removeImages = oldValues[0].images.split(" ")
-    for (var count of removeImages) {
-      if (count.length !== 0 && count !== " " && count !== "") {
+    if (typeof request.images !== "undefined") {
+      console.log("Entrei no if ")
+      images = ""
 
-        fs.unlink(path.join(__dirname, `../../images/product-images/${count}`), (err) => {
-          if (err) throw err;
-          console.log("Imagens deletadas")
-        })
+      for (var c in request.images) {
+        images += ` ${request.images[c]}`
       }
+
+      var removeImages = oldValues[0].images.split(" ")
+      for (var count of removeImages) {
+        if (count.length !== 0 && count !== " " && count !== "") {
+
+          fs.unlink(path.join(__dirname, `../../images/product-images/${count}`), (err) => {
+            if (err) console.log("Erro na exlusão do cover: ", err)
+            else console.log("Cover removido")
+          })
+        }
+      }
+
+      var deleteCover = oldValues[0].cover
+      fs.unlink(path.join(__dirname, `../../images/product-images/${deleteCover}`), (err) => {
+        if (err) console.log("Erro na exlusão de imagens: ", err)
+        else console.log("Images removidas")
+      })
     }
 
-    var deleteCover = oldValues[0].cover
-    fs.unlink(path.join(__dirname, `../../images/product-images/${deleteCover}`), (err) => {
-      if (err) throw err;
-      console.log("Cover deletado: ", deleteCover)
-    })
 
-    
     await sequelize.query(`
       UPDATE products SET 
       product_name = '${body.name}',
       price = ${body.price},
       amount = ${body.amount},
-      cover = '${cover}',
-      images = '${images}',
+      cover = '${typeof cover === 'undefined' ? oldValues[0].cover : cover }',
+      images = '${typeof images === 'undefined' ? oldValues[0].images : images}',
       description = '${body.description.replace(/'/, "")}',
       sale = ${Number(body.price) < Number(oldValues[0].price) ? true : false }
       WHERE id = ${body.id}

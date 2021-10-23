@@ -76,6 +76,7 @@ export default function Home() {
                 sale={item.sale}
                 createdAt={item.createdAt}
                 isAdmin={isAdmin}
+                oldPrice={item.oldPrice}
               />
             )
           })
@@ -102,6 +103,7 @@ export default function Home() {
                 sale={item.sale}
                 createdAt={item.createdAt}
                 isAdmin={isAdmin}
+                oldPrice={item.oldPrice}
               />
             )
           })

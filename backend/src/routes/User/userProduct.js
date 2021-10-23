@@ -25,9 +25,10 @@ userProduct.post('/most-popular-products', async (request, response) => {
 userProduct.post('/product', async(request, response) => {
     try {
         const { id } = request.body
-
+        console.log("ID recebido: ", id)
         var [product] = await sequelize.query(`SELECT * FROM products WHERE id = ${id}`)
 
+        console.log("Retornando: ", product)
         return response.json({result: product[0]})
     }
     catch(error) {

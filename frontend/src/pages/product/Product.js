@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {useParams} from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import api from '../../services/api'
 import './S-Product.css'
 import { isAuthenticated } from '../../services/isAuthenticated'
@@ -28,12 +28,18 @@ export default function Product() {
 	const dispatchLike = useDispatch()
 	const { likeCount } = useSelector(selectLike)
 
-
+	// Scroll
+	const { pathname } = useLocation()
 	useEffect(() => {
 		window.scrollTo(0, 0);
+	}, [pathname])
+
+	useEffect(() => {
+
 		(async() => {
 			const {data} = await api.post('/product', {id: id})
 
+			console.log("SUA DATA: ", data)
 			if (data.error) return alert("Erro ao buscar dados do produto!")
 
 			setProduct(data.result)
@@ -74,6 +80,8 @@ export default function Product() {
 		  //Get Suggestion
 			var suggestion = await api.post('/product-suggestion', { productID: id })
 
+			console.log("Sem arrumar: ", suggestion.data)
+
 			if (suggestion.data.error) return alert("Erro ao buscar produtos similares")
 
 			var allSuggestion = suggestion.data.result
@@ -84,6 +92,9 @@ export default function Product() {
 					filterSuggestions.push(allSuggestion[c])
 				}
 			}
+
+			console.log("Arrumado:", filterSuggestions)
+
 			setProductSuggestion(filterSuggestions)
 
 			// Carousel
@@ -100,17 +111,18 @@ export default function Product() {
 		})();
 
 		// star rating icons
-			var starsArray = []
-			for (var c=0; c < 5; c++) {
-				if (c + 0.5 < allRating.note) {
-					starsArray.push(<span key={c} className="material-icons-outlined">star</span>)
-				} else 
-					starsArray.push(<span key={c} className="material-icons-outlined">grade</span>)
-				
-			}
-			setProductStars(starsArray)
+		var starsArray = []
+		for (var c=0; c < 5; c++) {
+			if (c + 0.5 < allRating.note) {
+				starsArray.push(<span key={c} className="material-icons-outlined">star</span>)
+			} else 
+				starsArray.push(<span key={c} className="material-icons-outlined">grade</span>)
+			
+		}
+		setProductStars(starsArray)
+		setAllRating(allRating)
 
-	}, [allRating.note])
+	}, [pathname])
 
 	function changeSelect(url, index) {
 		setSelectedImage(url)	
@@ -217,17 +229,18 @@ export default function Product() {
 			</h3>
 			<Carousel>
 				{
-					productSuggestion.map((product, index) => {
+					productSuggestion.map((item, index) => {
 						return <Card 
 							key={index} 
-							title={product.product_name} 
-							cover={product.cover} 
-              description={product.description}
-							price={product.price} 
-							id={product.id}
-							sale={product.sale}
-							createdAt={product.createdAt}
+							title={item.product_name} 
+							cover={item.cover} 
+              description={item.description}
+							price={item.price} 
+							id={item.product_id}
+							sale={item.sale}
+							createdAt={item.createdAt}
             	isAdmin={isAdmin}
+							oldPrice={item.oldPrice}
 
 						/>
 					})

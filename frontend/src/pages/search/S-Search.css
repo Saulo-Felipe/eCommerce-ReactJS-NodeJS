@@ -137,8 +137,6 @@
     }
     .ResultProducts {
       grid-template-columns: 1fr 1fr 1fr 1fr;
-      grid-gap: 7px;
-      row-gap: 27px;
     }
     .ResultProducts  {
       margin: 0;
@@ -183,6 +181,7 @@
   @media screen and (max-width: 550px) {
     .ResultProducts {
       grid-template-columns: 1fr 1fr;
+      padding: 0px;
     }
   }
 

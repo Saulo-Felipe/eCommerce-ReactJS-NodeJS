@@ -76,7 +76,7 @@ export default function Card(props) {
   }, [])
 
   async function LikeOrDeslike() {
-    if (isLogged.id === null) {
+    if (isLogged === null) {
       alert("Você precisa estar logado para dar like em produtos.")
 
     } else {
@@ -195,7 +195,7 @@ export default function Card(props) {
       
       <div className="heartLike" onClick={() => LikeOrDeslike()}>{likeIcon}</div>
       
-      <Link to={`product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
+      <Link to={`/product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
       
         <div className="secondayCard">
           
@@ -208,7 +208,10 @@ export default function Card(props) {
           <hr className="m-0" />
 
           <div className="product-content">
-            <small className="product-old-price text-decoration-line-through text-secondary">R$199.99</small>
+            <small className="product-old-price text-decoration-line-through text-secondary" 
+              style={props.oldPrice !== 0 ? {opacity: 1} : {opacity: 0}} >
+              R${props.oldPrice}
+            </small>
             <div className="product-title">{props.title}</div>
             <div className="product-price fw-light">R${props.price}</div>
 

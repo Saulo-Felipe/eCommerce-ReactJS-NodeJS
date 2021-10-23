@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import './S-Rating.css'
 import api from '../../../services/api'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { isAuthenticated } from '../../../services/isAuthenticated'
 import { v4 as uuid } from 'uuid'
 
 
 export default function Rating(props) {
 	const {id} = useParams()
+	const { pathname } = useLocation()
 
 	const [limitAmount, setLimitAmount] = useState(0)
 	const [colorComment, setColorComment] = useState('text-secondary')
@@ -23,7 +24,7 @@ export default function Rating(props) {
 
 		updateComments()
 
-	}, [])
+	}, [pathname])
 
 	useEffect(() => {
 	// star rating icons
@@ -37,7 +38,7 @@ export default function Rating(props) {
 		}
 		setProductStars(starsArray)
 
-	}, [allRating.note])
+	}, [allRating.note, pathname])
 
 	function commentChanges(change) {
 		var value = change.target.value
@@ -80,7 +81,22 @@ export default function Rating(props) {
 				updateComments()
 
 				if (response.data.error) return alert('Erro ao adicionar comentário!')
+
+				// clear de comment area
+				setRating({
+					comment: "",
+					rating: 0
+				})
+				
+				document.querySelector("#comment-input").value = ""
+
+				var allStars = document.querySelectorAll('.container-stars-vote i')
+				for (var starElement of allStars) {
+					starElement.classList.add('far')
+					starElement.classList.remove('fas')
+				} 
 			}
+
 		} else {
 			alert('Você precisa está logado para comentar')
 		}
@@ -149,7 +165,7 @@ export default function Rating(props) {
 				<h3>Avaliações sobre o Produto: </h3>
 
 				<div className="text-end container-all-rating ms-4">
-					<div className="mt-4 fs-1 fw-light">{allRating.note.toFixed(1)}</div>
+					<div className="mt-4 fs-1 fw-light">{isNaN(allRating.note.toFixed(1)) ? 0 : allRating.note.toFixed(1)}</div>
 					<div className="text-warning">
 						{
 							productStars.map(item => item)
@@ -167,7 +183,7 @@ export default function Rating(props) {
 					<br />
 					<button className="btn btn-outline-primary" onClick={submitNewComment}>Adicionar comentário</button>
 
-					<div className="mt-3">
+					<div className="mt-3 container-stars-vote">
 						<i className="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(1)}/>
 						<i className="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(2)}/>
 						<i className="far fa-star pe-2 star-selected-rating text-warning" onClick={() => submitStarRating(3)}/>

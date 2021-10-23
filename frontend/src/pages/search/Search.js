@@ -175,6 +175,7 @@ export default function Search() {
                       sale={product.sale}
                       createdAt={product.createdAt}
                       isAdmin={isAdmin}
+                      oldPrice={product.oldPrice}
                     />
                   )
                 })

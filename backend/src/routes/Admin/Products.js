@@ -87,7 +87,6 @@ adminProducts.post('/edit-product', upload, async(request, response) => {
     var [oldValues] = await sequelize.query(`SELECT price, cover, images FROM products WHERE id = ${body.id}`)
     
     if (typeof request.images !== "undefined") {
-      console.log("Entrei no if ")
       images = ""
 
       for (var c in request.images) {
@@ -121,14 +120,12 @@ adminProducts.post('/edit-product', upload, async(request, response) => {
       cover = '${typeof cover === 'undefined' ? oldValues[0].cover : cover }',
       images = '${typeof images === 'undefined' ? oldValues[0].images : images}',
       description = '${body.description.replace(/'/, "")}',
-      sale = ${Number(body.price) < Number(oldValues[0].price) ? true : false }
+      sale = ${Number(body.price) < Number(oldValues[0].price) ? true : false },
+      "oldPrice" = ${Number(oldValues[0].price) !== Number(body.price) ? oldValues[0].price : 0}
       WHERE id = ${body.id}
     `)
-
-
   
     return response.json({ status: true })
-
   }
   catch(error) {
     console.log('\n\n\n=========================| Error |=====================\n', error)

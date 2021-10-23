@@ -35,6 +35,7 @@ export default function LeftMenuMobile() {
           if (document.querySelector('.confirm-new-photo') === null) {
             MobileLeftMenu.style.left = "-110%"
             document.querySelector('body').style.overflow = "scroll"
+            console.log("Dando scroll")
           } else {
             var save = window.confirm('Deseja salvar as alterações?')
             if (save === true) {
@@ -113,7 +114,6 @@ export default function LeftMenuMobile() {
   } 
 
   function cancelNewPhoto() {
-    console.log(isLogged)
     setProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${isLogged.profile_photo || "user.png"}/${isLogged.id}/profile`)
     setIsSave()
 

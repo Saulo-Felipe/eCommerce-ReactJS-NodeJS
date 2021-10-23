@@ -30,7 +30,7 @@
   width: 100%;
   height: 100%;
   background-position: center;
-  background-size: 90%;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 .heartLike {
@@ -129,7 +129,11 @@
   .product-add-card  {
     top: 100%;
   }
-  .primaryCard {
-    height: 380px;
+  .primaryCard {  
+    height: 340px;
+  } 
+  .ResultProducts .primaryCard {
+    width: auto;
+
   }
 }

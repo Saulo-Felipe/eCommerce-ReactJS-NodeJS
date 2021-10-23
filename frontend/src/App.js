@@ -16,6 +16,7 @@ import Dashboard from './pages/admin/dashboard/Dashboard'
 import AddProduct from './pages/admin/AddProduct/AddProduct'
 import EditProduct from './pages/admin/EditProduct/EditProduct'
 import AddCategory from './pages/admin/AddCategory/AddCategory'
+import { v4 as uuid } from 'uuid'
 
 function App() {
 
@@ -45,7 +46,7 @@ function App() {
             <Route path="/" component={Home} exact />
             <Route path="/register" component={Register} />
             <Route path="/search/:value" component={Search} />
-            <Route path="/product/:id/:description" component={Product}/>
+            <Route path="/product/:id/:description" component={Product} />
 
             {
               isLogged === true 

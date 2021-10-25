@@ -6,6 +6,7 @@ import { isAuthenticated } from '../../services/isAuthenticated'
 import Rating from './Rating/Rating'
 import Carousel from '../../components/carousel/Carousel'
 import Card from '../../components/card/Card'
+import { v4 as uuid } from 'uuid'
 
 import { useDispatch } from 'react-redux'
 import { changeLikeCount } from '../../store/slices/likeSlice'
@@ -39,7 +40,6 @@ export default function Product() {
 		(async() => {
 			const {data} = await api.post('/product', {id: id})
 
-			console.log("SUA DATA: ", data)
 			if (data.error) return alert("Erro ao buscar dados do produto!")
 
 			setProduct(data.result)
@@ -80,8 +80,6 @@ export default function Product() {
 		  //Get Suggestion
 			var suggestion = await api.post('/product-suggestion', { productID: id })
 
-			console.log("Sem arrumar: ", suggestion.data)
-
 			if (suggestion.data.error) return alert("Erro ao buscar produtos similares")
 
 			var allSuggestion = suggestion.data.result
@@ -93,8 +91,7 @@ export default function Product() {
 				}
 			}
 
-			console.log("Arrumado:", filterSuggestions)
-
+			setProductSuggestion([])
 			setProductSuggestion(filterSuggestions)
 
 			// Carousel
@@ -114,9 +111,9 @@ export default function Product() {
 		var starsArray = []
 		for (var c=0; c < 5; c++) {
 			if (c + 0.5 < allRating.note) {
-				starsArray.push(<span key={c} className="material-icons-outlined">star</span>)
+				starsArray.push(<span key={uuid()} className="material-icons-outlined">star</span>)
 			} else 
-				starsArray.push(<span key={c} className="material-icons-outlined">grade</span>)
+				starsArray.push(<span key={uuid()} className="material-icons-outlined">grade</span>)
 			
 		}
 		setProductStars(starsArray)
@@ -171,7 +168,7 @@ export default function Product() {
 		    		imageFiles.map((item, index) =>
 		    			<div className={`product-one-image-select ${index === 0 ? "selected" : "no-selected"}`} 
 		    				onClick={() => changeSelect(item, index)}
-							key={index}
+								key={index}
 		    			>
 		    				<img  src={`${item}`}  alt={`produto ${Date.now()}`} />
 		    			</div>
@@ -241,7 +238,6 @@ export default function Product() {
 							createdAt={item.createdAt}
             	isAdmin={isAdmin}
 							oldPrice={item.oldPrice}
-
 						/>
 					})
 				}

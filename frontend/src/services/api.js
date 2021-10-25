@@ -5,5 +5,8 @@ const api = axios.create({
   withCredentials: true
 })
 
+api.defaults.headers.common['authorization'] = localStorage.getItem('token_login')
+
+
 
 export default api

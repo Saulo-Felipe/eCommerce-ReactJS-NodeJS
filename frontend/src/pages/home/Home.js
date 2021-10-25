@@ -58,7 +58,7 @@ export default function Home() {
       <CarouselBootstrap/>
 
       <div className="container mt-5">
-        <h3 className="ms-2">Ofertas do dia</h3>
+        <h3 className="ms-2">Recomendações do dia</h3>
       </div>
 
       <Carousel>
@@ -96,8 +96,8 @@ export default function Home() {
               <Card 
                 key={item.id} 
                 title={item.product_name} 
-                description={item.description}
                 cover={item.cover} 
+                description={item.description}
                 price={item.price} 
                 id={item.id} 
                 sale={item.sale}

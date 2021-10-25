@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import api from '../../../services/api'
 import { isAuthenticated } from '../../../services/isAuthenticated'
+import { Link } from 'react-router-dom'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { selectLike } from '../../../store/slices/likeSlice'
-import { useDispatch } from 'react-redux'
 import { changeLikeCount } from '../../../store/slices/likeSlice'
+import { v4 as uuid } from 'uuid'
+
+import './S-Favorite.css'
 
 export default function Favorite(props) {
   const [FavoriteProducts, setFavoriteProducts] = useState([])
@@ -67,33 +70,35 @@ export default function Favorite(props) {
   }
 
 	return (
-		<div className="favorite-content ms-4">
+		<div className="favorite-content ms-4 pe-4">
       {
         FavoriteProducts && FavoriteProducts.length === 0 
         ? <h1>Nenhum Produto Salvo</h1>
-        : FavoriteProducts.map((product) => 
-          <div className="card-line d-flex mb-3" key={product.id}>
-            <img width="160px" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${product.cover}/${product.id}/product`} alt="product"/>
-            <div className="card-line-content">
-              <div className="mini-title-products">{product.product_name}</div>
-              <div className="d-flex">
-                <div className="option-category-favorite">Categorias: </div>
-                <div className="result-category-favorite d-flex"> 
-                  {
-                    product.categories 
-                    ? product.categories.length === 0 ?
-                      <div className="categorie-of-favorite-product ms-1"> Nenhuma categoria cadastrada</div> :
-                      product.categories.map((item) => <div className="categorie-of-favorite-product ms-1"><a href="/" className="me-2 text-decoration-none"> {item} </a></div> )
-                    : <></>
-                  }
+        : FavoriteProducts.map((product) => <>
+          <div className="card-line mb-3" key={uuid()}>
+            <img className="me-4 image-product-favorite" width="140px" src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${product.cover}/${product.id}/product`} alt="product"/>
+            <Link to={`/product/${product.id}/${product.product_name.replace(/%/g, '-')}`} className="no-href-decoration">
+              <div className="card-line-content me-4">
+                <div className="mini-title-products">{product.product_name}</div>
+                <div className="d-flex">
+                  <div className="option-category-favorite">Categorias: </div>
+                  <div className="result-category-favorite"> 
+                    {
+                      product.categories 
+                      ? product.categories.length === 0 ?
+                        <div className="categorie-of-favorite-product ms-1"> Nenhuma categoria cadastrada</div> :
+                        product.categories.map((item) => <div key={uuid()} className="categorie-of-favorite-product ms-1"><a href="/" className="me-2 text-decoration-none"> {item} </a></div> )
+                      : <></>
+                    }
+                  </div>
                 </div>
+                <div className="description-container-favorite">
+                  <span className="option-category-favorite">Descrição: </span>
+                  <small className="product-description-favorite">{product.description}</small>
+                </div>
+                <div className="mini-price-products">R$ {product.price}</div>
               </div>
-              <div className="">
-                <span className="option-category-favorite">Descrição: </span>
-                <small className="">{product.description}</small>
-              </div>
-              <div className="mini-price-products">R$ {product.price}</div>
-            </div>
+            </Link>
             <div className="remove-container">
               <button className="btn btn-outline-danger btn-remove-favorite" onClick={() => removeFavorite(product.id)}>
                 <div className="material-icons remove-favorite-icon">delete_forever</div>
@@ -102,6 +107,8 @@ export default function Favorite(props) {
               </button>
             </div>
           </div>
+          <hr className="m-3"/>
+          </>
         )
       }
       {loadingLikes}

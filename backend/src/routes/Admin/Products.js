@@ -16,12 +16,9 @@ adminProducts.post('/get-product-Categories', async (request, response) => {
 
 var storage = multer.diskStorage({
   destination: async (request, file, callback) => {
-    console.log("file TEST: ", file)
     callback(null, path.join(__dirname, '../../images/product-images/'))
   },
   filename: (request, file, callback) => {
-    console.log("file: ", file)
-
     var FileOriginal = (file.originalname.replace(/\./g, "") + uniqid() + "." + file.mimetype.replace(/image\//g, "")).replace(/ /g, "")
 
 
@@ -99,7 +96,6 @@ adminProducts.post('/edit-product', upload, async(request, response) => {
 
           fs.unlink(path.join(__dirname, `../../images/product-images/${count}`), (err) => {
             if (err) console.log("Erro na exlusão do cover: ", err)
-            else console.log("Cover removido")
           })
         }
       }
@@ -107,7 +103,6 @@ adminProducts.post('/edit-product', upload, async(request, response) => {
       var deleteCover = oldValues[0].cover
       fs.unlink(path.join(__dirname, `../../images/product-images/${deleteCover}`), (err) => {
         if (err) console.log("Erro na exlusão de imagens: ", err)
-        else console.log("Images removidas")
       })
     }
 

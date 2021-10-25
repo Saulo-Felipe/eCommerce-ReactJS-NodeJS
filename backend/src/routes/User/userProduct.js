@@ -4,8 +4,9 @@ const sequelize = require('../../database/connect')
 
 userProduct.post('/most-popular-products', async (request, response) => {
 	try {
+
 		const [mostPopular] = await sequelize.query(`
-			SELECT COUNT(*) AS quantidade, products.product_name, products.id, products.cover, products.price, products.description
+			SELECT COUNT(*) AS quantidade, products.product_name, products.id, products.cover, products.price, products.description, sale, "oldPrice", "createdAt"
 			FROM products
 			INNER JOIN userliked_product ON products.id = userliked_product.id_product_like
 			INNER JOIN clients ON userliked_product.id_user = clients.id
@@ -25,10 +26,8 @@ userProduct.post('/most-popular-products', async (request, response) => {
 userProduct.post('/product', async(request, response) => {
     try {
         const { id } = request.body
-        console.log("ID recebido: ", id)
         var [product] = await sequelize.query(`SELECT * FROM products WHERE id = ${id}`)
 
-        console.log("Retornando: ", product)
         return response.json({result: product[0]})
     }
     catch(error) {

@@ -6,6 +6,7 @@ import Card from '../../components/card/Card'
 import Accordion from './accordion/Accordion'
 import LoadingGIF from './images/loading.gif'
 import { isAuthenticated } from '../../services/isAuthenticated'
+import { v4 as uuid } from 'uuid'
 
 export default function Search() {
   const search = useParams()
@@ -20,32 +21,38 @@ export default function Search() {
 
 
   useEffect(() => {
-    (async function search() {
-
+    function loading() {
+      document.querySelector('.search-loading').style.display = "block"
+      document.querySelector('.search-loading-page').style.display = "block"
+    }
+    function removeLoading() {
+      document.querySelector('.search-loading').style.display = "none"
+      document.querySelector('.search-loading-page').style.display = "none"
+    };
+    (async () => {  
       var isLogged = await isAuthenticated()
 
       if (isLogged !== null && Number(isLogged.isAdmin) === 1)
         setIsAdmin(true)
 
-      document.querySelector('.search-loading').style.display = "block"
-      document.querySelector('.search-loading-page').style.display = "block"
+      loading()
       const resultSearch = await api.post('/search', { search: value, Filters, position: count, pageCountPages: countPages })
-      document.querySelector('.search-loading').style.display = "none"
-      document.querySelector('.search-loading-page').style.display = "none"
+      removeLoading()
 
       setCountPages(resultSearch.data.countPage)
 
       if (resultSearch.data.error)
         setError([resultSearch.data.error])
       else {
+        setSearch([])
         setSearch(resultSearch.data.result)
         setError([])
       }
 
-    })()
+    })();
   }, [search, Filters, count])
 
-  useEffect(() => { setCount(1) }, [search, Filters])
+  useEffect(() => { return setCount(1) }, [search, Filters])
 
   useEffect(() => {
     var menuLeft = document.querySelector('.LeftSearch')
@@ -163,19 +170,19 @@ export default function Search() {
             {
               searchResult.length === 0
                 ? <h1 className="noResult">Nenhum Result encontrado para Pesquisa: {value}</h1>
-                : searchResult.map((product) => {
+                : searchResult.map((item) => {
                   return(
                     <Card 
-                      title={product.product_name} 
-                      price={product.price} 
-                      cover={product.cover} 
-                      description={product.description}
-                      key={product.id} 
-                      id={product.id}
-                      sale={product.sale}
-                      createdAt={product.createdAt}
+                      title={item.product_name} 
+                      price={item.price} 
+                      cover={item.cover} 
+                      description={item.description}
+                      key={uuid()} 
+                      id={item.product_id}
+                      sale={item.sale}
+                      createdAt={item.createdAt}
                       isAdmin={isAdmin}
-                      oldPrice={product.oldPrice}
+                      oldPrice={item.oldPrice}
                     />
                   )
                 })

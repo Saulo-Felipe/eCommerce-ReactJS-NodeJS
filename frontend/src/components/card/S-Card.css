@@ -134,6 +134,9 @@
   } 
   .ResultProducts .primaryCard {
     width: auto;
-
+  }
+  .btn-edit-product {
+    left: 97%;
+    transform: translateX(-100%);
   }
 }

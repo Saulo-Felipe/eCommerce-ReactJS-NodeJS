@@ -1,6 +1,6 @@
-import React from 'react'
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
-import {isAuthenticated} from './services/isAuthenticated'
+import React, { useEffect, useState } from 'react'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { isAuthenticated } from './services/isAuthenticated'
 import Home from './pages/home/Home'
 import Header from './components/header/Header'
 import Register from './pages/register/Register'
@@ -16,14 +16,15 @@ import Dashboard from './pages/admin/dashboard/Dashboard'
 import AddProduct from './pages/admin/AddProduct/AddProduct'
 import EditProduct from './pages/admin/EditProduct/EditProduct'
 import AddCategory from './pages/admin/AddCategory/AddCategory'
-import { v4 as uuid } from 'uuid'
+import { PrivateRouter } from './services/PrivateRoutes'
 
 function App() {
 
-  const [isLogged, setIsLogged] = React.useState(false)
-  const [isAdmin, setIsAdmin] = React.useState(false)
+  const [isLogged, setIsLogged] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
-  React.useEffect(() => {
+
+  useEffect(() => {
     (async() => {
       var response = await isAuthenticated()
 
@@ -35,6 +36,7 @@ function App() {
     })();
   }, [])
 
+  
 
   return (
     <>
@@ -47,6 +49,7 @@ function App() {
             <Route path="/register" component={Register} />
             <Route path="/search/:value" component={Search} />
             <Route path="/product/:id/:description" component={Product} />
+            <PrivateRouter path="/teste" component={() => <h1>Teste de rota</h1>}/>
 
             {
               isLogged === true 

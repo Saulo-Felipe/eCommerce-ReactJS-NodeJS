@@ -274,7 +274,12 @@ abbr[title] {
   height: 40px;
   overflow: hidden;
 }
-
+.w-98 {
+  width: 98vw;
+}
+.w-40 {
+  width: 40%;
+}
 .SubHeader-categories {
   display: flex;
   max-width: 98vw;
@@ -282,17 +287,11 @@ abbr[title] {
   flex-wrap: wrap;
 }
 
-.w-98 {
-  width: 98vw;
-}
-.w-40 {
-  width: 40%;
-}
-
 .subheader-category {
   border-radius: 5px;
   transition: all 0.3s;
   cursor: pointer;
+  height: min-content;
 }
 
 .subheader-category:hover {

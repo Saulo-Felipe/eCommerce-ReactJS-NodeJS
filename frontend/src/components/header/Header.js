@@ -8,11 +8,11 @@ import api from '../../services/api'
 import SubHeader from './SubHeader'
 import { useProfilePhoto } from '../context/ProfilePhoto'
 import CartPreview from './cart-preview/CartPreview'
+import { useLocation } from 'react-router'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { selectLike } from '../../store/slices/likeSlice'
 import { selectCart } from '../../store/slices/cartSlice'
-import { useDispatch } from 'react-redux'
 import { changeLikeCount } from '../../store/slices/likeSlice'
 import { changeCartCount } from '../../store/slices/cartSlice'
 
@@ -21,10 +21,22 @@ export default function Header() {
   const [userName, setUserName] = useState()
   const { profilePhoto, setProfilePhoto } = useProfilePhoto(`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/user.png/null/profile`)
   const [isLogged, setIsLogged] = useState(null)
+  const [search, setSearch] = useState(" ")
 
   const { likeCount } = useSelector(selectLike)
   const { cartCount, totalPrice } = useSelector(selectCart)
   const dispatch = useDispatch()
+
+  const { pathname } = useLocation()
+
+  // Limpar input de pesquisa
+  useEffect(() => {
+    if (pathname.indexOf('search') === -1) {
+      setSearch("")
+      document.querySelector('.input-search').value = ""
+    }
+
+  }, [pathname])
 
   useEffect(() => {
 
@@ -127,8 +139,6 @@ export default function Header() {
     localStorage.removeItem('token_login')
     return window.location.href = "/"
   }
-
-  const [search, setSearch] = useState()
 
   function changedSearch(InputValueSearch) {
     setSearch(InputValueSearch.target.value)

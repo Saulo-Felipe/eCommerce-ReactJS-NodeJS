@@ -1,9 +1,11 @@
 const express = require('express')
 const cors = require('cors')
-const session = require('express-session')
-const passport = require('passport')
 const flash = require('connect-flash')
 const helmet = require('helmet')
+const jwt = require('jsonwebtoken')
+
+const app = express()
+
 require('dotenv').config()
 
 //Routes
@@ -14,20 +16,21 @@ require('dotenv').config()
   const adminCategory = require('./routes/Admin/Categories.js')
   const userProduct = require('./routes/User/userProduct.js')
 
+const verifyToken = function(request, response, next) {
+  const token = request.headers.authorization
 
-const app = express()
+  jwt.verify(token, process.env.SECRETE_TOKEN, async(err, decoded) => {
+    if (err) {
+      return response.json({ token_isValid: false })
+    } else {
+      next()
+    }
+  })
+}
 
 //Middleware
   app.use(helmet())
 
-  app.use(session({
-  secret: "ecommerce",
-    resave: true,
-    saveUninitialized: true
-  }))
-
-  app.use(passport.initialize())
-  app.use(passport.session())
   app.use(flash())
   app.use(express.json())
 
@@ -36,6 +39,9 @@ const app = express()
     credentials: true,
     optionSuccessStatus: 200
   }))
+
+  app.use(verifyToken)
+
 
 //Routes
   app.use('/', router)
@@ -48,4 +54,4 @@ const app = express()
 
 
 
-app.listen(process.env.PORT || 8081, () => {console.log('Server is Running 💻🚀')})
+app.listen(process.env.PORT || 8081, () => console.log('Server is Running 💻🚀'))

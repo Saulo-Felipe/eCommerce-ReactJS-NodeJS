@@ -35,7 +35,6 @@ export default function LeftMenuMobile() {
           if (document.querySelector('.confirm-new-photo') === null) {
             MobileLeftMenu.style.left = "-110%"
             document.querySelector('body').style.overflow = "scroll"
-            console.log("Dando scroll")
           } else {
             var save = window.confirm('Deseja salvar as alterações?')
             if (save === true) {
@@ -72,7 +71,6 @@ export default function LeftMenuMobile() {
   }, [])
 
   function configsImageMobile() {
-    console.log(isSave)
     var icon = document.querySelector('.edit-photo-icon')
     var menu = document.querySelector('.dropdown-configs-photo')
 

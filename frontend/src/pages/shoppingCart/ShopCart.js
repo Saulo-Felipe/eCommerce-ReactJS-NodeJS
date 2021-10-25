@@ -4,8 +4,15 @@ import './S-ShopCart.css'
 import api from '../../services/api'
 import { isAuthenticated } from '../../services/isAuthenticated'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { changeCartCount, changeCartValue } from '../../store/slices/cartSlice'
+import { selectCart } from '../../store/slices/cartSlice'
+
 
 export default  function ShoptCart() {
+
+	const dispatch = useDispatch()
+	const { cartCount } = useSelector(selectCart)
 
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState()
@@ -29,7 +36,23 @@ export default  function ShoptCart() {
 		}
 		setAmount(value)
 
-		setProducts(response.data.result)		
+		dispatch(changeCartValue(response.data.result))
+
+		setProducts(response.data.result)	
+		
+		var fixImageSize = document.querySelectorAll(".card-cart-image img")
+
+		for (var image of fixImageSize) {
+			if (image.width > image.height) {
+				image.style.width = "100%"
+				image.style.height = "auto"
+			} else {
+				image.style.width = "auto"
+				image.style.height = "100%"
+			}
+
+		}
+
 	}
 
 	useEffect(() => {
@@ -65,9 +88,9 @@ export default  function ShoptCart() {
 
 		setLoading()
 
-
 		if (response.data.error) return alert('Erro ao remover produto do carrinho!')
 
+		dispatch(changeCartCount(cartCount-1))
 		refreshCart()
 		allRemoveBtns.forEach((item) => { item.removeAttribute('disabled') })
 	}
@@ -94,10 +117,10 @@ export default  function ShoptCart() {
 							<div className="border card-cart-product d-flex mt-2" key={item.id}>
 								<div className="d-flex h-100">
 									<div className="card-cart-image">
-										<img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.cover}/${item.id}/product`} alt="cover" height="100%" />
+										<img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.cover}/${item.id}/product`} alt="cover" />
 									</div>
 									<div className="ms-3">
-										<div className="fw-light fs-5">
+										<div className="fw-light fs-5 card-cart-name">
 											<Link 
 												to={`/product/${item.id}/${item.product_name.replace(/%/g, '-')}`}
 												className="no-href-decoration"
@@ -110,11 +133,11 @@ export default  function ShoptCart() {
 									</div>
 								</div>
 
-								<div className="d-flex " style={{ alignItems: 'center' }}>
-									<div className=" card-cart-amount-container me-3 transform-X">
-									    <div className="mb-2">Quantidade: </div>
+								<div className="d-flex config-product-cart" style={{ alignItems: 'center' }}>
+									<div className="card-cart-amount-container me-3 transform-X">
+									  <div className="mb-1">Quantidade: </div>
 										<input className="form-control card-cart-product-amount" defaultValue="1" type="number" />
-											<button className="cart-remove-product mt-3 btn btn-outline-danger d-flex" onClick={() => {removeToCart(item.id)}}><span className="material-icons-outlined">delete</span> Remover</button>
+										<button className="cart-remove-product mt-1 btn btn-outline-danger d-flex" onClick={() => {removeToCart(item.id)}}><span className="material-icons-outlined">delete</span> Remover</button>
 									</div>
 								</div>
 							</div>

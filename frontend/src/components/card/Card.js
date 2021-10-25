@@ -4,10 +4,9 @@ import './S-Card.css'
 import api from '../../services/api'
 import { isAuthenticated } from '../../services/isAuthenticated'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { changeLikeCount } from '../../store/slices/likeSlice'
 import { changeCartCount, changeCartValue, changePrice } from '../../store/slices/cartSlice'
-import { useSelector } from 'react-redux'
 import { selectLike } from '../../store/slices/likeSlice'
 import { selectCart } from '../../store/slices/cartSlice'
 
@@ -16,7 +15,6 @@ export default function Card(props) {
   const dispatch = useDispatch()
   const { likeCount } = useSelector(selectLike)
   const { cartCount } = useSelector(selectCart)
-
 
   const [likeIcon, setLikeIcon] = useState()
   const [rating, setRating] = useState(0)
@@ -37,16 +35,15 @@ export default function Card(props) {
 
         var response = await api.post('/likes', { idUser: idUser.id, idProduct: props.id })
 
-        if (response.data.like === true) {
+        if (response.data.like === true)
           setLikeIcon(<span className="material-icons-outlined text-red">favorite</span>)
-        } else {
+        else
           setLikeIcon(<span className="material-icons-outlined ">favorite_border</span>)
-        }
-      } else {
+      } 
+      else
         setLikeIcon(<span className="material-icons-outlined ">favorite_border</span>)
-      }
 
-    // Get rating
+      // Get rating
       var ratingCard = await api.post('/rating', { productID: props.id })
 
       if (ratingCard.data.error) return alert('Erro ao buscar avaliações')
@@ -72,11 +69,13 @@ export default function Card(props) {
 
       setStars(mapRating)
 
-    })()
+    })();
   }, [])
 
   async function LikeOrDeslike() {
-    if (isLogged === null) {
+    const user = await isAuthenticated()
+
+    if (user === null) {
       alert("Você precisa estar logado para dar like em produtos.")
 
     } else {
@@ -107,9 +106,9 @@ export default function Card(props) {
       </div>
     )
 
-    var { data } = await api.post('/verify-product-cart', { userID: user.id, productID: props.id })
+    var verify = await api.post('/verify-product-cart', { userID: user.id, productID: props.id })
 
-    if (data.inside === true) {
+    if (verify.data.inside === true) {
       var response = await api.post('/remove-cart-product', { productID: props.id, userID: user.id })
       if (response.data.error) return alert('Erro ao remover produto no carrinho.')
       setInsideCartBtn(<div className="product-add-card"><i className="fas fa-cart-plus"></i>Adicione ao Carrinho</div>)

@@ -125,9 +125,9 @@ export default function Rating(props) {
 					response.data.result[c].rating = []
 				}
 				if (count < amountCount) {
-					response.data.result[c].rating.push(<i className="fas fa-star ms-1"></i>)						
+					response.data.result[c].rating.push("fas fa-star ms-1")						
 				} else {
-					response.data.result[c].rating.push(<i className="far fa-star ms-1"></i>)						
+					response.data.result[c].rating.push("far fa-star ms-1")						
 				}
 			}
 		}
@@ -213,7 +213,7 @@ export default function Rating(props) {
 													<div>{item.user_name}</div>
 													<div className="text-warning ms-3 ">
 														{
-															item.rating.map(starElement => starElement)
+															item.rating.map(item => <i className={item} key={uuid()}></i>)
 														}
 													</div>
 												</div>

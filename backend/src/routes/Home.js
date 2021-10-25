@@ -56,38 +56,41 @@ router.get('/images/:image_name/:id/:type', async(request, response) => {
 })
 
 router.post('/search', async(request, response)=> {
-    try {
-        //Filter
-            var minPrice = request.body.Filters.minPrice
-            var maxPrice = request.body.Filters.maxPrice === 0 ? 1999999 : request.body.Filters.maxPrice
+  try {
+    //Filter
+    var minPrice = request.body.Filters.minPrice
+    var maxPrice = request.body.Filters.maxPrice === 0 ? 1999999 : request.body.Filters.maxPrice
+    var searchValue = request.body.search
 
-        var pagePositon = request.body.position === 1 ? 0 : request.body.position -1
+    var pagePositon = request.body.position === 1 ? 0 : request.body.position -1
 
-        if (minPrice >= maxPrice) return response.json({ error: 'Insira uma faixa de preço válida' })
+    if (minPrice >= maxPrice) return response.json({ error: 'Insira uma faixa de preço válida' })
 
-        const [countPage] = await sequelize.query(`
-            SELECT * FROM 
-            products WHERE 
-            "product_name" iLIKE 
-            '%${request.body.search}%' 
-            AND price >= ${minPrice} 
-            AND price <= ${maxPrice} 
-        `)
-        const [result] = await sequelize.query(`
-            SELECT * FROM products 
-            WHERE "product_name" iLIKE '%${request.body.search}%' 
-            AND price >= ${minPrice} 
-            AND price <= ${maxPrice} 
-            OFFSET ${pagePositon * 9} 
-            LIMIT 9 
-        `)
-        
-        return response.status(200).json({result: result, countPage: countPage.length})
-    }
-    catch(error) {
-        console.log('\n\n\n=========================| Error |=====================\n', error)
-        return response.json({ error: 'Erro ao selecionar produtos e likes.' })
-    }
+    const [countPage] = await sequelize.query(`
+      SELECT count(*) FROM products 
+      INNER JOIN category_product ON category_product.product_id = products.id
+      INNER JOIN categories ON category_product.category_id = categories.id
+      WHERE "product_name" iLIKE '%${searchValue}%' OR categories.category_name ilike '%${searchValue}%'
+      AND price >= ${minPrice} 
+      AND price <= ${maxPrice} 
+    `)
+    const [result] = await sequelize.query(`
+      SELECT * FROM products 
+      INNER JOIN category_product ON category_product.product_id = products.id
+      INNER JOIN categories ON category_product.category_id = categories.id
+      WHERE "product_name" iLIKE '%${searchValue}%' OR categories.category_name ilike '%${searchValue}%'
+      AND price >= ${minPrice} 
+      AND price <= ${maxPrice} 
+      OFFSET ${pagePositon * 9} 
+      LIMIT 9 
+    `)
+    
+    return response.status(200).json({result: result, countPage: countPage[0].count})
+  }
+  catch(error) {
+    console.log('\n\n\n=========================| Error |=====================\n', error)
+    return response.json({ error: 'Erro ao selecionar produtos e likes.' })
+  }
 })
 
 router.post('/search/filter-category', async(request, response) => {
@@ -145,7 +148,7 @@ router.post('/login', async(request, response) => {
 
     bcrypt.compare(login.password, user[0].password, (error, success) => {
         if (success) {
-            const token = jwt.sign({ userId: user[0].id }, process.env.SECRETE_TOKEN, { expiresIn: '1h' })
+            const token = jwt.sign({ userId: user[0].id }, process.env.SECRETE_TOKEN, { expiresIn: '730d' })
 
             request.token_login = token
 

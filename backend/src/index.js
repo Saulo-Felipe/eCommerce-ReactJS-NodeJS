@@ -19,13 +19,19 @@ require('dotenv').config()
 const verifyToken = function(request, response, next) {
   const token = request.headers.authorization
 
-  jwt.verify(token, process.env.SECRETE_TOKEN, async(err, decoded) => {
-    if (err) {
-      return response.json({ token_isValid: false })
-    } else {
-      next()
-    }
-  })
+  if (request.method !== 'GET' && typeof token !== 'undefined' && token !== 'null' && token.length !== 0) {
+    jwt.verify(token, process.env.SECRETE_TOKEN, async(err, decoded) => {
+      if (err) {
+
+        return response.json({ token_isValid: false })
+      } else {
+        next()
+      }
+    })
+
+  } else {
+    next()
+  }
 }
 
 //Middleware

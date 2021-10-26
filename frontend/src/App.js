@@ -16,7 +16,8 @@ import Dashboard from './pages/admin/dashboard/Dashboard'
 import AddProduct from './pages/admin/AddProduct/AddProduct'
 import EditProduct from './pages/admin/EditProduct/EditProduct'
 import AddCategory from './pages/admin/AddCategory/AddCategory'
-import { PrivateRouter } from './services/PrivateRoutes'
+import { PrivateRoute } from './services/PrivateRoutes'
+import { AdminRoute } from './services/AdminRoute'
 
 function App() {
 
@@ -49,44 +50,17 @@ function App() {
             <Route path="/register" component={Register} />
             <Route path="/search/:value" component={Search} />
             <Route path="/product/:id/:description" component={Product} />
-            <PrivateRouter path="/teste" component={() => <h1>Teste de rota</h1>}/>
 
-            {
-              isLogged === true 
-              ?
-                <>
-                  {
-                    <>
-                      <Route path="/client_dashboard/user-profile" >
-                        <ClientDashboard ChildComponent={"UserProfile"} />
-                      </Route>
-                      <Route path="/client_dashboard/Compras">
-                        <ClientDashboard ChildComponent={"Purchases"} />
-                      </Route>
-                      <Route path="/client_dashboard/favorites">
-                        <ClientDashboard ChildComponent={"Favorite"} />
-                      </Route>
+            <PrivateRoute path="/client_dashboard/user-profile" component={() => <ClientDashboard ChildComponent={"UserProfile"} />} />
+            <PrivateRoute path="/client_dashboard/Compras" component={() => <ClientDashboard ChildComponent={"Purchases"} />} />
+            <PrivateRoute path="/client_dashboard/favorites" component={() => <ClientDashboard ChildComponent={"Favorite"} />} />
+            <PrivateRoute path="/my-shopping-cart" component={ShopCart} />
 
-                      <Route path="/my-shopping-cart" component={ShopCart}/>
-                    </>
-                  }
-
-                  {
-                    isAdmin === true 
-                    ?
-                      <>
-                        <Route path="/admin/new-category"> <AddCategory/> </Route>
-                        <Route path="/admin/dashboard"> <Dashboard /> </Route>
-                        <Route path="/admin/new-product"> <AddProduct /> </Route>                      
-                        <Route path="/admin/product/edit/:paramsId/:paramsDescription"> <EditProduct /> </Route>                      
-                      </>
-                    : <Route path="*" ><NoMatch /></Route>
-                  }
-                </>
-
-              : <Route path="*" ><NoMatch /></Route>
-            }
-
+            <AdminRoute path="/admin/new-category" component={AddCategory} />
+            <AdminRoute path="/admin/dashboard" component={Dashboard} />
+            <AdminRoute path="/admin/new-product" component={AddProduct} />
+            <AdminRoute path="/admin/product/edit/:paramsId/:paramsDescription" component={EditProduct} />
+            
             <Route path="*" >
               <NoMatch />
             </Route>

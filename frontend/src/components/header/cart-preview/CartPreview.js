@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import api from '../../../services/api'
 import { isAuthenticated } from '../../../services/isAuthenticated'
 import './CartPreview.css'
@@ -11,12 +11,14 @@ import { changeCartValue, changePrice } from '../../../store/slices/cartSlice'
 
 export default function CartPreview() {
     const { cartValue, totalPrice } = useSelector(selectCart)
+    const [isLogged, setIsLogged] = useState(false)
     const dispatch = useDispatch()
 
 
     useEffect(() => {
         (async() => {
             var user = await isAuthenticated()
+            setIsLogged(user)
             if (user !== null) {
                 var { data } = await api.post('cart-products', { userID: user.id })
 
@@ -59,8 +61,11 @@ export default function CartPreview() {
                     <div>
                         <div><span className="text-secondary">Subtotal: </span>R${totalPrice}</div> 
                     </div>
-                    <div>
-                        <Link to={"/my-shopping-cart"} className="no-href-decoration" >
+                    <div 
+                        data-bs-toggle={isLogged ? "modal" : ""} 
+                        data-bs-target={isLogged ? "#staticBackdrop" : ""}
+                    >
+                        <Link to={isLogged ? "/my-shopping-cart" : "#"} className="no-href-decoration" >
                             <div className="preview-expand-cart">Expandir Carrinho <i className="fas fa-chevron-right"></i></div>
                         </Link>
                     </div>   

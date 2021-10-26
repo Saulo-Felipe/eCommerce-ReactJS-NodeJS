@@ -192,7 +192,7 @@ export default function Card(props) {
         
       </div>
       
-      <div className="heartLike" onClick={() => LikeOrDeslike()}>{likeIcon}</div>
+      <div className="heartLike" onClick={() => LikeOrDeslike()} data-bs-toggle={isLogged ? "" : "modal"} data-bs-target={isLogged ? "" : "#staticBackdrop"}>{likeIcon}</div>
       
       <Link to={`/product/${props.id}/${props.title.replace(/%/g, '-')}`} className="no-href-decoration">
       
@@ -222,7 +222,7 @@ export default function Card(props) {
           
         </div>
       </Link>
-      <div onClick={() => AddToCart()}>{ insideCartBtn }</div>
+      <div onClick={() => AddToCart()} data-bs-toggle={isLogged ? "" : "modal"} data-bs-target={isLogged ? "" : "#staticBackdrop"}>{ insideCartBtn }</div>
     </div>
   )
 }

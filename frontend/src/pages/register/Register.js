@@ -9,23 +9,28 @@ export default function Register() {
     password: null,
     passwordTwo: null
   })
+  const [msgAlert, setMsgAlert] = useState({type: "", message: "olaa"})
 
   async function NewUser() {
     if (inputValue.name === null || inputValue.email === null || inputValue.password === null || inputValue.passwordTwo === null) {
-      alert("Preencha todos os campos")
+      return setMsgAlert({type: "error", message: "Preencha todos os campos"})
     } else {
       if (inputValue.name.length === 0 || inputValue.email.length === 0 || inputValue.password.length === 0 || inputValue.passwordTwo.length === 0) {
-        alert("preencha todos os dados")
+        return setMsgAlert({type: "error", message: "preencha todos os dados"})
+
+      } else if (inputValue.email.indexOf('@') === -1) {
+        return setMsgAlert({type: 'error', message: "Email inválido"})
+
       } else {
         if (inputValue.password === inputValue.passwordTwo) {
           var response = await api.post('/register', inputValue)
           if (response.data.error) {
-            alert(response.data.error)
+            setMsgAlert({type: "error", message: response.data.error})
           } else {
-            alert('Cadastro realizado com sucesso!')
+            setMsgAlert({type: "success", message: "Cadastro realizado com sucesso! Redirecionando..."})
           }
         } else {
-          alert("as senhas não estão iguais")
+          setMsgAlert({type: "error", message:"as senhas não estão iguais"})
         }
       }
     }
@@ -56,6 +61,10 @@ export default function Register() {
 
           <label htmlFor="password-two ">Repita a senha</label>
           <input autoComplete="off" type="password" id="password-two" className="form-control mb-2" onChange={handleChangeInput} required/>
+
+          <div className={msgAlert.type === "error" ? 'text-danger text-center' : 'text-success text-center'}>
+            {msgAlert.message}
+          </div>
 
           <button type="button" className="btn btn-success mt-2" onClick={() => {NewUser()}}>Finalizar Cadastro</button>
         </form>

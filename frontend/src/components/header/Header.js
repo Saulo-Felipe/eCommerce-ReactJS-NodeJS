@@ -210,9 +210,9 @@ export default function Header() {
                   </abbr>
                 </li>
 
-                <li className="nav-item item-page-favorites pe-0">
+                <li className="nav-item item-page-favorites pe-0" data-bs-toggle={isLogged ? "" : "modal"} data-bs-target={isLogged ? "" : "#staticBackdrop"} >
                   <abbr title="Favoritos">
-                    <Link to={'/client_dashboard/favorites/'} className="position-relative nav-link active icon-favorite-href d-flex no-href-decoration" aria-current="page">
+                    <Link to={'/client_dashboard/favorites/'}  className="position-relative nav-link active icon-favorite-href d-flex no-href-decoration" aria-current="page">
                       <div className="material-icons">favorite_border</div>
                       <div className="header-amountLikes">{likeCount}</div>
                     </Link>
@@ -248,7 +248,7 @@ export default function Header() {
                     </li>
                   :
                    <li className="nav-item item-desktop">
-                      <a className="nav-link active d-flex flex-row " aria-current="page" href="/" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                      <a className="nav-link active d-flex flex-row " aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                         <div>
                           <div className="navbar-brand">
                             <div className="header-profile-img">
@@ -264,7 +264,7 @@ export default function Header() {
                     </li>
                 }
 
-                <li className="nav-item dropdown item-desktop cart-active">
+                <li className="nav-item dropdown item-desktop cart-active" data-bs-toggle={isLogged ? "" : "modal"} data-bs-target={isLogged ? "" : "#staticBackdrop"}>
 
                   <Link to="/my-shopping-cart" className="nav-link active d-flex flex-row cart-active" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <div className="position-relative">

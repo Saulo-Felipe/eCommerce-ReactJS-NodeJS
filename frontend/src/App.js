@@ -18,6 +18,7 @@ import EditProduct from './pages/admin/EditProduct/EditProduct'
 import AddCategory from './pages/admin/AddCategory/AddCategory'
 import { PrivateRoute } from './services/PrivateRoutes'
 import { AdminRoute } from './services/AdminRoute'
+import Checkout from './pages/checkout/Checkout'
 
 function App() {
 
@@ -55,6 +56,8 @@ function App() {
             <PrivateRoute path="/client_dashboard/Compras" component={() => <ClientDashboard ChildComponent={"Purchases"} />} />
             <PrivateRoute path="/client_dashboard/favorites" component={() => <ClientDashboard ChildComponent={"Favorite"} />} />
             <PrivateRoute path="/my-shopping-cart" component={ShopCart} />
+            <PrivateRoute path="/checkout" component={Checkout} />
+
 
             <AdminRoute path="/admin/new-category" component={AddCategory} />
             <AdminRoute path="/admin/dashboard" component={Dashboard} />

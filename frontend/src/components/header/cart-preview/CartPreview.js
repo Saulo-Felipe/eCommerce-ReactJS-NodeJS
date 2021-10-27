@@ -70,7 +70,9 @@ export default function CartPreview() {
                         </Link>
                     </div>   
                 </div>
-                <button className="btn btn-primary form-control" data-bs-toggle="modal" data-bs-target="#developmentPage"><i className="fas fa-cart-arrow-down"></i> Finalizar Compras</button>
+                <Link to="/checkout/address" className="no-href-decoration">
+                    <button className="btn btn-primary form-control"><i className="fas fa-cart-arrow-down"></i> Finalizar Compras</button>
+                </Link>
             </div>
         </div>
     )

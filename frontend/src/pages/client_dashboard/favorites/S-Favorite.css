@@ -25,6 +25,9 @@
 .card-line {
   display: flex;
 }
+.card-line-favorite-image {
+  align-self: center;
+}
 .card-line-content {
   align-self: center;
 }

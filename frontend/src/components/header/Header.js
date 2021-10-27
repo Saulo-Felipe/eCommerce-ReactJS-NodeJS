@@ -36,6 +36,8 @@ export default function Header() {
       document.querySelector('.input-search').value = ""
     }
 
+    window.scrollTo(0, 0);
+
   }, [pathname])
 
   useEffect(() => {

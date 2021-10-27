@@ -56,8 +56,6 @@ export default  function ShoptCart() {
 	}
 
 	useEffect(() => {
-		window.scrollTo(0, 0)
-
 		refreshCart()
 
 		var scrollToTopElement = document.querySelector('.go-to-top-cart')
@@ -170,7 +168,9 @@ export default  function ShoptCart() {
 					</div>
 
 					<div>
-						<button className="mt-4 p-2 btn btn-outline-primary form-control checkout-finish"><span className="material-icons-outlined">credit_card</span> Finalizar Compra</button>
+						<Link to="/checkout/address" className="no-href-decoration">
+							<button className="mt-4 p-2 btn btn-outline-primary form-control checkout-finish"><span className="material-icons-outlined">credit_card</span> Finalizar Compra</button>
+						</Link>
 					</div>
 
 					<div className="text-end text-primary mt-5" data-bs-toggle="modal" data-bs-target="#getCep">Calcular valor de entrega</div>

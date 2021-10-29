@@ -73,17 +73,17 @@ export default function SubHeader(props) {
 		          <div className="nav-link active color-hover cursor-pointer"onClick={() => {window.scrollTo(0, 100000)}}>Contato</div>
 		        </li>
 
-				<li className="nav-item ms-2" data-bs-toggle="modal" data-bs-target="#launchCityModal">
+						<li className="nav-item ms-2" data-bs-toggle="modal" data-bs-target="#launchCityModal">
 		          <div className="nav-link active color-hover cursor-pointer" >Localização</div>
 		        </li>
-				{
-					isAdmin === true 
-					? <li className="nav-item ms-2">
-						<Link to="/admin/dashboard" className="nav-link active color-hover">Dashboard (admin)</Link>
-				  	</li> 
-					: ""
-  
-				}
+						{
+							isAdmin === true 
+							? <li className="nav-item ms-2">
+								<Link to="/admin/dashboard" className="nav-link active color-hover">Dashboard (admin)</Link>
+								</li> 
+							: ""
+			
+						}
 		      </ul>
 
 		    </div>

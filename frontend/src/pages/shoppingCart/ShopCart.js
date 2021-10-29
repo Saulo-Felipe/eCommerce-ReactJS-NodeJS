@@ -5,7 +5,7 @@ import api from '../../services/api'
 import { isAuthenticated } from '../../services/isAuthenticated'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { changeCartCount, changeCartValue } from '../../store/slices/cartSlice'
+import { changeCartCount, changeCartValue, changePrice } from '../../store/slices/cartSlice'
 import { selectCart } from '../../store/slices/cartSlice'
 
 
@@ -37,6 +37,12 @@ export default  function ShoptCart() {
 		setAmount(value)
 
 		dispatch(changeCartValue(response.data.result))
+
+		var amountCart = 0
+		for (var c=0; c < response.data.result.length; c++) {
+			amountCart += Number(response.data.result[c].price)
+		}
+		dispatch(changePrice(amountCart.toFixed(2)))
 
 		setProducts(response.data.result)	
 		

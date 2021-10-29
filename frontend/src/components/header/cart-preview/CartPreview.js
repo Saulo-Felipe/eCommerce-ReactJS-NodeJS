@@ -56,24 +56,31 @@ export default function CartPreview() {
                     )
                 }
             </div>
-            <div className="pt-4">
-                <div className="preview-footer-content">
-                    <div>
-                        <div><span className="text-secondary">Subtotal: </span>R${totalPrice}</div> 
+            
+            {
+                Number(totalPrice) !== 0
+                ? <div className="pt-4">
+                    <div className="preview-footer-content">
+                        <div>
+                            <div><span className="text-secondary">Subtotal: </span>R${totalPrice}</div> 
+                        </div>
+                        <div 
+                            data-bs-toggle={isLogged ? "modal" : ""} 
+                            data-bs-target={isLogged ? "#staticBackdrop" : ""}
+                        >
+                            <Link to={isLogged ? "/my-shopping-cart" : "#"} className="no-href-decoration" >
+                                <div className="preview-expand-cart">Expandir Carrinho <i className="fas fa-chevron-right"></i></div>
+                            </Link>
+                        </div>   
                     </div>
-                    <div 
-                        data-bs-toggle={isLogged ? "modal" : ""} 
-                        data-bs-target={isLogged ? "#staticBackdrop" : ""}
-                    >
-                        <Link to={isLogged ? "/my-shopping-cart" : "#"} className="no-href-decoration" >
-                            <div className="preview-expand-cart">Expandir Carrinho <i className="fas fa-chevron-right"></i></div>
-                        </Link>
-                    </div>   
+                    <Link to="/checkout/address" className="no-href-decoration">
+                        <button className="btn btn-primary form-control"><i className="fas fa-cart-arrow-down"></i> Finalizar Compras</button>
+                    </Link>
                 </div>
-                <Link to="/checkout/address" className="no-href-decoration">
-                    <button className="btn btn-primary form-control"><i className="fas fa-cart-arrow-down"></i> Finalizar Compras</button>
-                </Link>
-            </div>
+                : <div>Para começar, adicione algum produto ao carrinho!</div>
+            }
+
+
         </div>
     )
 

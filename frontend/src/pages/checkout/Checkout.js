@@ -1,47 +1,50 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { changeCartCount, changeCartValue, changePrice, selectCart } from '../../store/slices/cartSlice'
 import { Route, Switch, Link, Redirect, useLocation, useParams } from 'react-router-dom'
 import './S-Checkout.css'
 import { isAuthenticated } from '../../services/isAuthenticated'
 import api from '../../services/api'
+import Address from './subSteps/Address'
+import Pay from './subSteps/Pay'
+import Review from './subSteps/Review'
+import Shipping from './subSteps/Shipping'
 
 
 export default function Checkout() {
 	const [products, setProducts] = useState([])
 
+  const dispatch = useDispatch()
+  const { cartCount, totalPrice } = useSelector(selectCart)
 
 
+  async function refreshCart() {
+    var user = await isAuthenticated()
+    var response = await api.post('cart-products', { userID: user.id })
 
+    if (response.data.error) return alert("Erro ao tentar obter dados.")
 
+    setProducts(response.data.result)
+    dispatch(changeCartValue(response.data.result))
 
+    var amountCart = 0
+    for (var c=0; c < response.data.result.length; c++) {
+        amountCart += Number(response.data.result[c].price)
+    }
+    dispatch(changePrice(amountCart.toFixed(2)))
+
+  }
 
   useEffect(() => {
-    (async() => {
-      var user = await isAuthenticated()
-      var response = await api.post('cart-products', { userID: user.id })
-
-      if (response.data.error) return alert("Erro ao tentar obter dados.")
-
-      setProducts(response.data.result)
-
-    })();
+    refreshCart()
   }, [])
 
-
-
-
-
-
-
+  // Protect invalid Links
   const currentURL = window.location.href
   const allowedURLs = ['address', 'shipping', 'pay', 'review']
   let urlValid = false
 
   const id = useParams()
-  const { pathname } = useLocation()
-
-  useEffect(() => {
-    console.log("ID: ", id)
-  }, [pathname])
 
   for (var url of allowedURLs) {
     if (currentURL.indexOf(url) !== -1) {
@@ -53,6 +56,17 @@ export default function Checkout() {
     return <Redirect to={"/checkout/address/2"} />
   }
 
+	async function removeToCart(productID) {
+		var user = await isAuthenticated()
+
+		var response = await api.post('/remove-cart-product', { userID: user.id, productID })
+
+		if (response.data.error) return alert('Erro ao remover produto do carrinho!')
+
+		dispatch(changeCartCount(cartCount-1))
+    
+		refreshCart()
+	}
 
   return (
     <>
@@ -131,7 +145,7 @@ export default function Checkout() {
       <div class="checkout-content">
         <div class="checkout-content-page">
           <Switch>
-            <Route path="/checkout/address/" component={Adress}/>
+            <Route path="/checkout/address/" component={Address}/>
             <Route path="/checkout/shipping/" component={Shipping}/>
             <Route path="/checkout/pay/" component={Pay}/>
             <Route path="/checkout/review/" component={Review}/>
@@ -139,32 +153,67 @@ export default function Checkout() {
         </div>
 
         <div class="order-summary">
-          <h3 className="text-center m-3">Resumo da compra</h3>
-
+          <h3 className="text-center m-3 mb-4">Resumo da compra</h3>
+          
+          <div className="checkout-product-container">
           {
             products.length === 0 
-            ? <h3>Você não possui nenhum produto no carrinho</h3>
-            : products.map((item) => <>
-              <div class="product-card-container">
-                <div class="product-image-summary">
-                  <img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.cover}/${item.id}/product`} alt="summary-image-product"></img>
-                </div>
+            ? <h4 className="text-center m-3">Você não possui nenhum produto no carrinho</h4>
+            : products.map((item, index) => 
+              <>
+                <div class="product-card-container" key={index}>
+                  <div class="product-image-summary">
+                    <img src={`${process.env.REACT_APP_SERVER_DEVELOPMENT}/images/${item.cover}/${item.id}/product`} alt="summary-image-product"></img>
+                  </div>
 
-                <div className="product-coontent-summary">
-                  <div className="fw-bolder">{item.product_name}</div>
-                  <div style={{color: 'darkblue'}}>R$ {item.price} x1</div>
-                </div>
+                  <div className="product-coontent-summary">
+                    <div className="fw-bolder">{item.product_name}</div>
+                    <div style={{color: 'darkblue'}}>R$ {item.price} x1</div>
+                  </div>
 
-                <div className="checkout-remove-product pe-2">
-                  <i class="fas fa-trash-alt"></i>
+                  <div className="checkout-remove-product pe-2">
+                    <i class="fas fa-trash-alt" onClick={ () =>  removeToCart(item.id)}></i>
+                  </div>
                 </div>
-              </div>
-              <hr className="checkout-product-division"/>
+                <hr className="checkout-product-division"/>
               </>
             )
           }
+          </div>
 
-          <div>Testos e informações acerca aqui</div>
+          <div className="checkout-informations-summary">
+          
+            <div className="one-information-summary">
+              <div>Subtotal: </div>
+              <div>R$ {totalPrice} </div>
+            </div>
+
+            <div className="one-information-summary">
+              <div>Entrega: </div>
+              <div>---- </div>
+            </div>
+
+            <div className="one-information-summary">
+              <div>Taxa de imposto: </div>
+              <div>R$0.50 </div>
+            </div>
+
+            <div className="one-information-summary">
+              <div>Desconto: </div>
+              <div>---- </div>
+            </div>
+
+          </div>
+          
+          <hr className="m-3"/>
+
+          <h3 className="text-center mt-4" style={{color: 'darkblue'}}>R$ {totalPrice}</h3>
+
+          <div className="p-3">
+            <input className="form-control mt-4" placeholder="Código promocional"/>
+            <button className="btn btn-outline-primary form-control mt-3">Aplicar</button>
+          </div>
+
         </div>
   
     </div>
@@ -173,8 +222,7 @@ export default function Checkout() {
   )
 }
 
-
-function changeColorsOfSteps(maxSize) {
+export const changeColorsOfSteps = (maxSize) => {
   var allLines = document.querySelectorAll(".steps-line")
   var allCountStep = document.querySelectorAll('.steps-content')
   
@@ -192,43 +240,4 @@ function changeColorsOfSteps(maxSize) {
     }
   }
   allIcons[maxSize-1].style.opacity = '1'
-}
-
-function Adress() {
-
-  useEffect(() => {
-    changeColorsOfSteps(2)
-  }, [])
-
-  return (
-    <h1>Endereços aqui</h1>
-  )
-}
-function Shipping() {
-  useEffect(() => {
-    changeColorsOfSteps(3)
-  }, [])
-  return (
-    <h1>entrega aqui</h1>
-  )
-}
-function Pay() {
-
-  useEffect(() => {
-    changeColorsOfSteps(4)
-  }, [])
-
-  return (
-    <h1>pagamento aqui</h1>
-  )
-}
-function Review() {
-
-  useEffect(() => {
-    changeColorsOfSteps(5)
-  }, [])
-
-  return (
-    <h1>veriricar aqui</h1>
-  )
 }

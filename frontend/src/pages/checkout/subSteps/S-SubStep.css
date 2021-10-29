@@ -1,0 +1,8 @@
+/* -------- Address --------- */
+.checkout-address-container {
+  display: flex;
+}
+.address-form-container {
+  flex: auto;
+  padding: 10px;
+}

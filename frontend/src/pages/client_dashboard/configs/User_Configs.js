@@ -21,11 +21,11 @@ export default function UserProfile(props) {
 	
 	useEffect(() => {
 
-	    props.hooks.setConfigs({
-	      PagePosigion: 'Configurações',
-	      TitleOne: 'Minha Conta',
-	      TitleTwo: 'Edite suas informações aqui: '
-	    });
+		props.hooks.setConfigs({
+			PagePosigion: 'Configurações',
+			TitleOne: 'Minha Conta',
+			TitleTwo: 'Edite suas informações aqui: '
+		});
 
 		(async () => {
 			var isLogged = await isAuthenticated()

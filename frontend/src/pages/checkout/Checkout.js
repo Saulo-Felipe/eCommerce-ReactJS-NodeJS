@@ -76,7 +76,6 @@ export default function Checkout() {
         <div class="steps">
 
             <div class="step">
-              <Link to="/my-shopping-cart" className="no-href-decoration">
                 <div class="steps-line"></div>
 
                 <div class="steps-content">1</div>
@@ -84,11 +83,9 @@ export default function Checkout() {
                   <i class="fas fa-shopping-cart"></i>
                   Carrinho
                 </div>
-              </Link>
             </div>
 
           <div class="step">
-            <Link to="/checkout/address" className="no-href-decoration">
               <div class="steps-line"></div>
 
               <div class="steps-content">2</div>
@@ -96,11 +93,9 @@ export default function Checkout() {
                 <i class="fas fa-map-marked-alt"></i>
                 Endereço
               </div>
-            </Link>
           </div>
 
           <div class="step">
-            <Link to="/checkout/shipping" className="no-href-decoration">
               <div class="steps-line"></div>
 
               <div class="steps-content">3</div>
@@ -108,12 +103,10 @@ export default function Checkout() {
                 <i class="fas fa-shipping-fast"></i>
                 Metodo de Envio
               </div>
-            </Link>
           </div>
 
 
           <div class="step">
-            <Link to="/checkout/pay" className="no-href-decoration">
               <div class="steps-line"></div>
 
               <div class="steps-content">4</div>
@@ -121,20 +114,17 @@ export default function Checkout() {
                 <i class="far fa-credit-card"></i>
                 Pagamento
               </div>
-            </Link>
           </div>
 
 
           <div class="step">
-            <Link to="/checkout/review" className="no-href-decoration">
-              <div class="steps-line"></div>
+            <div class="steps-line"></div>
 
-              <div class="steps-content">5</div>
-              <div class="step-icons">
-                <i class="fas fa-check"></i>
-                Revisão
-              </div>
-            </Link>
+            <div class="steps-content">5</div>
+            <div class="step-icons">
+              <i class="fas fa-check"></i>
+              Revisão
+            </div>
           </div>
 
 

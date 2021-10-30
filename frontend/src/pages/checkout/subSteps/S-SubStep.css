@@ -6,3 +6,37 @@
   flex: auto;
   padding: 10px;
 }
+
+/* ---------- Shipping ----------- */
+
+.shipping-container {
+  width: 100%;
+}
+.select-shipping-card {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  border-top: solid 1px rgba(128, 128, 128, 0.345);
+  transition: 0.2s;
+}
+input[name="inlineRadioOptions"] {
+  cursor: pointer;
+}
+.select-shipping-card:hover {
+  background-color:rgba(128, 128, 128, 0.1);
+}
+.select-shipping-type {
+  width: 10%;
+}
+.shipping-card-title {
+  width: 40%;
+}
+.shipping-subTitle-card {
+  color: rgba(128, 128, 128, 0.851);
+}
+.shipping-card-time {
+  width: 25%;
+}
+.shipping-card-price {
+  width: 25%;
+}

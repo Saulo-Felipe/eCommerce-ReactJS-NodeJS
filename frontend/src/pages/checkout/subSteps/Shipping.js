@@ -44,13 +44,33 @@ export default function Shipping() {
 
   ])
 
-  shippingOptions.map(item => console.log(item))
   const dispatch = useDispatch()
   const { address } = useSelector(selectAddress)
 
+  function handleChangeInput() {
+
+    var allRadioInputs = document.querySelectorAll('.select-shipping-card input')
+    
+    for (var count in allRadioInputs) {
+      if (allRadioInputs[count].checked === true) {
+        var selectedCard = document.querySelector(`#root > div.checkout-content > div.checkout-content-page > div > div:nth-child(${Number(count)+2})`)
+        var splitedString = selectedCard.innerText.split('\n')
+
+        dispatch(changeAddress([{...address}, {
+          title: splitedString[0],
+          subTitle: splitedString[1],
+          delivaryTime: splitedString[2],
+          price: splitedString[3] 
+        }]))
+
+      }
+    }
+  }
+
   useEffect(() => {
+    handleChangeInput()
     changeColorsOfSteps(3)
-  })
+  }, [])
 
   return (
     <>
@@ -70,8 +90,8 @@ export default function Shipping() {
               <div className="select-shipping-type">
                 {
                   item.price === "25"
-                  ? <input type="radio" name="inlineRadioOptions" defaultChecked className="form-check-input"/>
-                  : <input type="radio" name="inlineRadioOptions" className="form-check-input"/>
+                  ? <input type="radio" name="inlineRadioOptions" defaultChecked className="form-check-input" onChange={(changes) => handleChangeInput(changes.target)}/>
+                  : <input type="radio" name="inlineRadioOptions" className="form-check-input" onChange={(changes) => handleChangeInput(changes.target)}/>
                 }
               </div>
               
@@ -85,8 +105,6 @@ export default function Shipping() {
             </div>
           )
         }
-
-
 
         <div className="d-flex mb-5 mt-5">
             <Link style={{flex: 'auto'}} to={"/checkout/address"} className="no-href-decoration w-auto">

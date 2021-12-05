@@ -40,8 +40,9 @@ export default function Footer() {
 						</div>
 					</div>
 					<span className="span-border-right"></span>
-					<div></div>
-					<div></div>
+					<div className="w-100">
+						<h1 className="mt-4">Footer em Desenvolvimento...</h1>
+					</div>
 				</div>
 			</div>
 			<div className="footer-end">© Saulo Felipe</div>

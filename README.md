@@ -39,10 +39,10 @@ E-commerce construído inteiramente com ReactJS e NodeJS. Este projeto possui um
 
 ## 🎨 Layout <a id="layout"></a>
 
-<a href="https://e-commerce-frontend-saulo.herokuapp.com/"><img src="https://img.shields.io/badge/Site-E--commerce-blue"/></a>
+<a href="https://e-commerce-frontend-olive.vercel.app"><img src="https://img.shields.io/badge/Site-E--commerce-blue"/></a>
 <img src="https://img.shields.io/badge/Backend-NodeJs-green">
 <img src="https://img.shields.io/badge/Frontend-ReactJS-green">
-<p>*O Layout completo do site está disponível <a href="https://e-commerce-frontend-saulo.herokuapp.com/">aqui</a>.</p>
+<p>*O Layout completo do site está disponível <a href="https://e-commerce-frontend-olive.vercel.app">aqui</a>.</p>
 
 <img src="github/layout_08.png">
 <img src="github/layout_07.png">

@@ -5,6 +5,7 @@
 ------------------------------------
 ## Índice
 
+* [Preview](#preview)
 * [Sobre](#sobre)
 * [Funcionalidades](#funcionalidades)
 * [Layout](#layout)
@@ -12,13 +13,18 @@
 * [Tecnologias](#tecnologias)
 * [Autor](#autor)
 * [Licença](#licenca)
-* <a href="https://e-commerce-frontend-saulo.herokuapp.com/" target="_blank"> 🏪 E-commerce com React e Nodejs ---- Concluído ✅ ----</a>
 
 ------------------------------------
 
 ## 💻 Sobre <a id="sobre"></a>
 E-commerce construído inteiramente com ReactJS e NodeJS. Este projeto possui um layout totalmente responsivo e dinâmico. 
 <br>
+
+------------------------------------
+
+## 🚀 Preview <a id="preview"></a>
+
+-> https://e-commerce-frontend-olive.vercel.app
 
 ------------------------------------
 

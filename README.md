@@ -91,7 +91,7 @@ Neste e-commerce, foram utilizadas as seguintes tecnologias:
 
 ## 👨 Autor <a id="autor"></a>
 
-<p align="center">➡️ Criado e desenvolvido por <strong>eu</strong> mesmo 🧑‍💻.</p>
+<p align="center">➡️ Desenvolvido por <strong>eu</strong> mesmo 🧑‍💻.</p>
 
 ------------------------------------
 
